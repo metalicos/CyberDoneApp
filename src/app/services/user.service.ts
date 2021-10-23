@@ -7,13 +7,9 @@ import {Role} from '../security/auth.service';
 export interface AccountDto {
   id: number;
   username: string;
-  password: string;
   firstName: string;
   lastName: string;
   patronymic: string;
-  isNonExpired: boolean;
-  isNonLocked: boolean;
-  isCredentialsNonExpired: boolean;
   isEnabled: boolean;
   roles: Role[];
 }

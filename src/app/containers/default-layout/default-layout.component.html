@@ -4,7 +4,7 @@
   [navbarBrandFull]="{src: 'assets/favicon.png', width: 30, height: 30, alt: 'CyberDone Logo'}"
   [navbarBrandMinimized]="{src: 'assets/favicon.png', width: 30, height: 30, alt: 'CyberDone Logo'}"
   [sidebarToggler]="'lg'"
-  [asideMenuToggler]="'lg'">
+  [asideMenuToggler]="'lg'" [routerLink]="['/']">
   <ul class="nav navbar-nav d-md-down-none">
     <li class="nav-item px-3">
       <a class="nav-link" href="/dashboard">Інфо-панель</a>
@@ -49,13 +49,7 @@
   </app-sidebar>
 
   <main class="main">
-    <cui-breadcrumb>
-      <li class="breadcrumb-menu d-md-down-none">
-        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-          <a class="btn" [routerLink]="['/login']"><i class="icon-graph"></i> Login</a>
-        </div>
-      </li>
-    </cui-breadcrumb>
+    <cui-breadcrumb></cui-breadcrumb>
 
     <div class="container-fluid">
       <router-outlet></router-outlet>

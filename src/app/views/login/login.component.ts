@@ -30,7 +30,7 @@ export class LoginComponent implements OnDestroy {
         this.userAccountSubscription = this.userService.getUserAccount(this.loginUserDto.username).subscribe(user => {
             JSON.stringify(this.tokenStorage.saveUser(user));
             if (this.authService.isAuthorised()) {
-             // this.location.replace('/');
+              // this.location.replace('/');
               this.router.navigate(['/dashboard']);
             }
           }, err => {
