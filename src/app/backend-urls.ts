@@ -6,7 +6,10 @@ export enum DirectionEnum {
 }
 
 export class ServerGlobalConstants {
-  public HEADERS = new HttpHeaders({'Content-Type': 'application/json'});
+  public HEADERS = new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*'
+  });
   public backendServerUrl: string = 'http://192.168.1.100:9090';
 
   public getAccountsUrl_GET: string = this.backendServerUrl + '/accounts';

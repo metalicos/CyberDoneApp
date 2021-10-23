@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {LoginUserDto} from './auth.service';
 
 const TOKEN_KEY = 'AUTH-TOKEN';
 const USER_KEY = 'AUTH-USER';
@@ -12,24 +13,26 @@ export class TokenStorageService {
   }
 
   signOut(): void {
-    window.sessionStorage.clear();
+    localStorage.clear();
   }
 
-  public saveToken(token: string): void {
-    window.sessionStorage.removeItem(TOKEN_KEY);
-    window.sessionStorage.setItem(TOKEN_KEY, token);
+  public saveToken(token: string): string {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.setItem(TOKEN_KEY, token);
+    return JSON.stringify(token);
   }
 
   public getToken(): string {
-    return window.sessionStorage.getItem(TOKEN_KEY);
+    return localStorage.getItem(TOKEN_KEY);
   }
 
-  public saveUser(user): void {
-    window.sessionStorage.removeItem(USER_KEY);
-    window.sessionStorage.setItem(USER_KEY, JSON.stringify(user));
+  public saveUser(user): string {
+    localStorage.removeItem(USER_KEY);
+    localStorage.setItem(USER_KEY, JSON.stringify(user));
+    return JSON.stringify(user);
   }
 
-  public getUser(): any {
-    return JSON.parse(window.sessionStorage.getItem(USER_KEY));
+  public getUser(): LoginUserDto {
+    return JSON.parse(localStorage.getItem(USER_KEY));
   }
 }

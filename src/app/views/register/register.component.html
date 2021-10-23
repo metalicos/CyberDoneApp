@@ -5,45 +5,64 @@
         <div class="col-md-6 mx-auto">
           <div class="card mx-4">
             <div class="card-body p-4">
-              <form>
-                <h1>Register</h1>
-                <p class="text-muted">Create your account</p>
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="icon-user"></i></span>
-                  </div>
-                  <input type="text" class="form-control" placeholder="Username" autocomplete="username" required>
+
+              <h1>Реєстрація</h1>
+
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="icon-user"></i></span>
                 </div>
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">@</span>
-                  </div>
-                  <input type="text" class="form-control" placeholder="Email" autocomplete="email" required>
+                <input id="firstName" type="text" class="form-control" placeholder="Ім'я" required>
+              </div>
+
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="icon-user"></i></span>
                 </div>
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="icon-lock"></i></span>
-                  </div>
-                  <input type="password" class="form-control" placeholder="Password" autocomplete="new-password" required>
+                <input id="lastName" type="text" class="form-control" placeholder="Прізвище" required>
+              </div>
+
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="icon-user"></i></span>
                 </div>
-                <div class="input-group mb-4">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="icon-lock"></i></span>
-                  </div>
-                  <input type="password" class="form-control" placeholder="Repeat password" autocomplete="new-password" required>
+                <input id="patronymic" class="form-control" placeholder="По батькові" required>
+              </div>
+
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">@</span>
                 </div>
-                <button type="button" class="btn btn-block btn-success">Create Account</button>
-              </form>
-            </div>
-            <div class="card-footer p-4">
+                <input id="email" type="text" class="form-control" placeholder="E-mail" required>
+              </div>
+
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="icon-lock"></i></span>
+                </div>
+                <input id="password" type="password" class="form-control" placeholder="Пароль" required>
+              </div>
+
+              <div class="input-group mb-4">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="icon-lock"></i></span>
+                </div>
+                <input id="password-check" type="password" class="form-control" placeholder="Повторіть пароль" required>
+              </div>
+
+              <button type="button" class="btn btn-block btn-dark mb-2">Створити обліковий запис</button>
+
               <div class="row">
-                <div class="col-6">
-                  <button class="btn btn-block btn-facebook" type="button"><span>facebook</span></button>
+                <div class="col-6 text-left">
+                  <button type="button" class="btn btn-link text-dark px-0" [routerLink]="['/login']">У мене вже є обліковий запис...</button>
                 </div>
-                <div class="col-6">
-                  <button class="btn btn-block btn-twitter" type="button"><span>twitter</span></button>
+                <div class="col-6 text-right">
+                  <button type="button" class="btn btn-link text-dark px-0"
+                          [routerLink]="['/change-password']">Забули пароль?
+                  </button>
                 </div>
               </div>
+
             </div>
           </div>
         </div>
