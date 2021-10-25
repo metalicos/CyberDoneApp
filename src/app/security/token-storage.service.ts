@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
-import {LoginUserDto} from './auth.service';
-import {AccountDto} from '../services/user.service';
+import {AccountDto, LoginUserDto} from './auth.service';
 
 const TOKEN_KEY = 'AUTH-TOKEN';
 const USER_KEY = 'AUTH-USER';

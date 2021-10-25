@@ -16,7 +16,7 @@ import {P404Component} from './views/error/404.component';
 import {P500Component} from './views/error/500.component';
 import {LoginComponent} from './views/login/login.component';
 import {RegisterComponent} from './views/register/register.component';
-import {AppAsideModule, AppBreadcrumbModule, AppFooterModule, AppHeaderModule, AppSidebarModule,} from '@coreui/angular';
+import {AppAsideModule, AppBreadcrumbModule, AppFooterModule, AppHeaderModule, AppSidebarModule} from '@coreui/angular';
 
 // Import routing module
 import {AppRoutingModule} from './app.routing';
@@ -29,6 +29,9 @@ import {authInterceptorProviders} from './security/auth.interceptor';
 import {AuthService} from './security/auth.service';
 import {HttpClientModule} from '@angular/common/http';
 import {ForgotPasswordComponent} from './views/forgotPassword/forgot-password.component';
+import {AlertModule} from 'ngx-bootstrap/alert';
+import {HydroponicComponent} from './views/devices/devices-component/hydroponic/hydroponic.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -56,6 +59,8 @@ const APP_CONTAINERS = [
     ChartsModule,
     IconModule,
     IconSetModule.forRoot(),
+    AlertModule,
+    NgbModule,
   ],
   declarations: [
     AppComponent,

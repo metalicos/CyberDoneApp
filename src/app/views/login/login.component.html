@@ -12,11 +12,14 @@
                 </div>
                 <h3 class="text-center text-dark">Вхід в обліковий запис</h3>
 
+                <alert [type]="errorAlert.type" [dismissible]="dismissible" *ngIf="errorAlert">{{errorAlert.msg}}</alert>
+
                 <div class="input-group mb-3">
                   <div class="input-group-prepend">
                     <span class="input-group-text"><i class="icon-user"></i></span>
                   </div>
-                  <input id="email" type="email" class="form-control" [(ngModel)]="loginUserDto.username"
+                  <input id="email" type="email" class="form-control {{emailValidation}}"
+                         [(ngModel)]="loginUserDto.username"
                          placeholder="E-mail" required>
                 </div>
 
@@ -24,13 +27,15 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text"><i class="icon-lock"></i></span>
                   </div>
-                  <input id="password" type="password" class="form-control" [(ngModel)]="loginUserDto.password"
+                  <input id="password" type="password" class="form-control {{passwordValidation}}"
+                         [(ngModel)]="loginUserDto.password"
                          placeholder="Пароль" required>
                 </div>
 
                 <div class="row mb-2">
                   <div class="col-12">
-                    <button type="button" class="btn btn-dark btn-block px-4" (click)="login()">Увійти</button>
+                    <button type="button" class="btn btn-dark btn-block px-4" (click)="login()">Увійти
+                    </button>
                   </div>
                 </div>
 

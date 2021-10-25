@@ -29,7 +29,3 @@ export class ServerGlobalConstants {
 }
 
 export const BACKEND = new ServerGlobalConstants();
-
-
-
-

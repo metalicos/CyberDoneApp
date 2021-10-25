@@ -13,49 +13,49 @@ import {ForgotPasswordComponent} from './views/forgotPassword/forgot-password.co
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'devices',
     pathMatch: 'full',
   },
   {
     path: '404',
     component: P404Component,
     data: {
-      title: 'Page 404'
+      title: 'сторінку не знайдено'
     }
   },
   {
     path: '500',
     component: P500Component,
     data: {
-      title: 'Page 500'
+      title: 'Помилка сервера'
     }
   },
   {
     path: 'login',
     component: LoginComponent,
     data: {
-      title: 'Login CyberDone'
+      title: 'Вхід в обліковий запис'
     }
   },
   {
     path: 'register',
     component: RegisterComponent,
     data: {
-      title: 'Register Page'
+      title: 'Реєстрація'
     }
   },
   {
     path: 'change-password',
     component: ForgotPasswordComponent,
     data: {
-      title: 'Register Page'
+      title: 'Зміна паролю'
     }
   },
   {
     path: '',
     component: DefaultLayoutComponent,
     data: {
-      title: 'Home'
+      title: 'Домівка'
     },
     children: [
       {
@@ -78,18 +78,15 @@ export const routes: Routes = [
         path: 'icons',
         loadChildren: () => import('./views/icons/icons.module').then(m => m.IconsModule)
       },
+
       {
-        path: 'notifications',
-        loadChildren: () => import('./views/notifications/notifications.module').then(m => m.NotificationsModule)
+        path: 'devices',
+        loadChildren: () => import('./views/devices/devices.module').then(m => m.DevicesModule)
       },
       {
-        path: 'theme',
-        loadChildren: () => import('./views/theme/theme.module').then(m => m.ThemeModule)
+        path: 'charts',
+        loadChildren: () => import('./views/chartjs/chartjs.module').then(m => m.ChartJSModule)
       },
-      {
-        path: 'widgets',
-        loadChildren: () => import('./views/widgets/widgets.module').then(m => m.WidgetsModule)
-      }
     ]
   },
   { path: '**', component: P404Component }
