@@ -30,8 +30,8 @@ import {AuthService} from './security/auth.service';
 import {HttpClientModule} from '@angular/common/http';
 import {ForgotPasswordComponent} from './views/forgotPassword/forgot-password.component';
 import {AlertModule} from 'ngx-bootstrap/alert';
-import {HydroponicComponent} from './views/devices/devices-component/hydroponic/hydroponic.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgxEchartsModule} from 'ngx-echarts';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -59,6 +59,9 @@ const APP_CONTAINERS = [
     ChartsModule,
     IconModule,
     IconSetModule.forRoot(),
+    NgxEchartsModule.forRoot({
+      echarts: () => import('echarts')
+    }),
     AlertModule,
     NgbModule,
   ],

@@ -1,0 +1,67 @@
+<button type="button" class="btn btn-dark m-1" (click)="CreateNewAutomationCollapsed.toggle();"
+        [attr.aria-expanded]="!isCreateNewAutomationCollapsed"
+        aria-controls="isPhGraphCollapsed">{{title == null ? 'Створити автоматизацію' : title}} <i
+  class="fa fa-{{isCreateNewAutomationCollapsed?'plus':'close'}}"></i>
+</button>
+
+
+<div class="bg-dark text-white card rounded shadow m-1 p-1" #CreateNewAutomationCollapsed="ngbCollapse"
+     [(ngbCollapse)]="isCreateNewAutomationCollapsed">
+  <div class="">
+    <h6 class="my-1">Назвіть свою автоматизацію</h6>
+    <input class="form-control" type="text" [(ngModel)]="schedule.name" placeholder="Назва">
+  </div>
+  <div class="">
+    <h6 class="my-1">Додайте опис, що робитиме ваша автоматизація</h6>
+    <input class="form-control" type="text" [(ngModel)]="schedule.description" placeholder="Опис">
+  </div>
+  <h6 class="mx-auto my-1">Дні</h6>
+  <div class="alert alert-danger" role="alert" [hidden]="!(!schedule.monday && !schedule.tuesday &&
+    !schedule.wednesday && !schedule.thursday && !schedule.friday && !schedule.saturday && !schedule.sunday)">
+    <strong>Зверніть увагу!</strong> Неможливо створити подію, яка ніколи не відбудеться (виберіть хоча б один день).
+  </div>
+  <div class="btn-group btn-group-toggle my-1">
+    <label class="btn btn-{{schedule.monday?'success':'danger'}} my-auto" ngbButtonLabel placement="top"
+           ngbTooltip="{{schedule.monday?'Вибраний день':'Скасований день'}}">
+      <input type="checkbox" ngbButton [(ngModel)]="schedule.monday">ПН
+    </label>
+    <label class="btn btn-{{schedule.tuesday?'success':'danger'}} my-auto" ngbButtonLabel placement="top"
+           ngbTooltip="{{schedule.tuesday?'Вибраний день':'Скасований день'}}">
+      <input type="checkbox" ngbButton [(ngModel)]="schedule.tuesday">ВТ
+    </label>
+    <label class="btn btn-{{schedule.wednesday?'success':'danger'}} my-auto" ngbButtonLabel placement="top"
+           ngbTooltip="{{schedule.wednesday?'Вибраний день':'Скасований день'}}">
+      <input type="checkbox" ngbButton [(ngModel)]="schedule.wednesday">СР
+    </label>
+    <label class="btn btn-{{schedule.thursday?'success':'danger'}} my-auto" ngbButtonLabel placement="top"
+           ngbTooltip="{{schedule.thursday?'Вибраний день':'Скасований день'}}">
+      <input type="checkbox" ngbButton [(ngModel)]="schedule.thursday">ЧТ
+    </label>
+    <label class="btn btn-{{schedule.friday?'success':'danger'}} my-auto" ngbButtonLabel placement="top"
+           ngbTooltip="{{schedule.friday?'Вибраний день':'Скасований день'}}">
+      <input type="checkbox" ngbButton [(ngModel)]="schedule.friday">ПТ
+    </label>
+    <label class="btn btn-{{schedule.saturday?'success':'danger'}} my-auto" ngbButtonLabel placement="top"
+           ngbTooltip="{{schedule.saturday?'Вибраний день':'Скасований день'}}">
+      <input type="checkbox" ngbButton [(ngModel)]="schedule.saturday">СБ
+    </label>
+    <label class="btn btn-{{schedule.sunday?'success':'danger'}} my-auto" ngbButtonLabel placement="top"
+           ngbTooltip="{{schedule.sunday?'Вибраний день':'Скасований день'}}">
+      <input type="checkbox" ngbButton [(ngModel)]="schedule.sunday">НД
+    </label>
+  </div>
+  <h6 class="my-auto text-center p-1">Година</h6>
+  <ngb-timepicker [(ngModel)]="time" [seconds]="true" [spinners]="true" class="m-auto"></ngb-timepicker>
+
+  <div class="d-flex justify-content-between">
+    <div class="w-50">
+      <h6 class="my-1">Автоматизація</h6>
+      <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="automation" [ngbTypeahead]="search"/>
+    </div>
+    <div class="w-50" [hidden]="isValueTypeEnabled()">
+      <h6 class="my-1">Значення</h6>
+      <input class="form-control" type="text" [(ngModel)]="schedule.value" [placeholder]="schedule.valueType">
+    </div>
+  </div>
+  <button class="btn btn-success my-1" (click)="createSchedule()">Створити</button>
+</div>

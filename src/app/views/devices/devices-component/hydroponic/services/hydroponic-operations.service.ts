@@ -13,6 +13,9 @@ export interface Metadata {
   uuid: string;
   name: string;
   description: string;
+  deviceType: string;
+  accessEnabled: true,
+  userId: number;
 }
 
 @Injectable({

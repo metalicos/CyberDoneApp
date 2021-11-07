@@ -1,1 +1,56 @@
-<p>add-remove-devices-component works!</p>
+<h3>Додати пристрій</h3>
+<div class="card-group">
+  <div class="card">
+    <div class="card-body bg-dark input-group p-0">
+      <h6 class="text-white mx-2 my-auto">Введіть UUID пристрою</h6>
+      <input type="text" class="form-control mx-1" placeholder="d70f8752-2d0d-41ca-a707-eca2f5a27ab7"
+             [(ngModel)]="uuid">
+      <button class="btn btn-dark mx-1" (click)="linkDeviceToUser()">Додати пристрій<i
+        class="fa fa-plus text-white ml-2"></i></button>
+    </div>
+  </div>
+</div>
+
+
+<h3>Мої пристрої</h3>
+
+<div *ngFor="let meta of metadataList">
+  <div class="bg-dark rounded-pill d-none d-md-block text-white">
+    <div class="d-flex justify-content-between align-content-center m-1 p-1">
+      <h6 class="text-left text-warning col-2 my-auto">{{meta.name}}</h6>
+      <h6 class="text-left text-warning col-2 my-auto">{{meta.description}}</h6>
+      <h6 class="text-left my-auto col-3">{{'uuid=' + meta.uuid}}</h6>
+      <h6 class="text-left my-auto col-1">{{''}}</h6>
+      <h6 class="text-center text-warning col-2 my-auto">
+
+      </h6>
+      <h6 class="text-center thead-light col-1 my-auto">
+        {{''}}
+      </h6>
+      <button class="btn btn-sm btn-outline-danger m-auto rounded-circle" (click)="unlinkDevice(meta.uuid)">
+        <i class="fa fa-close text-white" aria-hidden="true"></i></button>
+    </div>
+  </div>
+
+  <div class="bg-dark rounded d-block d-md-none text-white p-2 m-1">
+    <div class="d-flex justify-content-between align-content-center">
+      <div>
+        <h6 class="text-left text-warning">{{meta.name}}</h6>
+        <h6 class="text-left">{{meta.description}}</h6>
+      </div>
+      <button class="btn btn-sm btn-outline-danger rounded my-auto" (click)="unlinkDevice(meta.uuid)">
+        <i class="fa fa-remove text-white" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="d-flex justify-content-between align-content-center">
+      <h6 class="form-label h6 align-self-center my-auto">{{'uuid=' + meta.uuid}}</h6>
+      <h6 class="form-label h6 align-self-center my-auto">{{''}}</h6>
+    </div>
+    <div class="d-flex justify-content-between align-content-center">
+      <h6 class="form-label h6 align-self-center my-auto">
+
+      </h6>
+      <h6 class="form-label h6 align-self-center my-auto">{{''}}</h6>
+    </div>
+  </div>
+</div>

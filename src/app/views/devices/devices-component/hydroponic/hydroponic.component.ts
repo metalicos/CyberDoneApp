@@ -1,8 +1,19 @@
-import {Component, OnInit} from '@angular/core';
-import {HydroponicOneSettings, HydroponicSettingsService} from './services/hydroponic-settings.service';
-import {HydroponicOperationsService, Metadata} from './services/hydroponic-operations.service';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {EChartsOption} from 'echarts';
-import {HydroponicDataService, HydroponicOneData} from './services/hydroponic-data.service';
+import {Observable, OperatorFunction, Subscription} from 'rxjs';
+import {
+  DeviceMetadataDto,
+  DeviceService,
+  HydroponicDataDto,
+  HydroponicSettingsDto,
+  HydroponicTimeDto,
+  RegularScheduleDto
+} from '../../../../services/device.service';
+import {ModalDirective} from 'ngx-bootstrap/modal';
+import {HYDROPONIC_TOPIC_LABEL_MAP} from './schedule/hydroponic-topic-label-map';
+import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
+import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
+import {TIME_ZONE_MAP} from '../../time-zone-map';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -11,22 +22,59 @@ import {HydroponicDataService, HydroponicOneData} from './services/hydroponic-da
   styleUrls: ['./hydroponic.component.css']
 })
 export class HydroponicComponent implements OnInit {
-  uuid: string = '80aeff91-bf00-4d67-a44f-479344820f5c';
-  metadata: Metadata = {id: 1, uuid: this.uuid, name: '', description: ''};
+  subscriptionMap = new Map<string, Subscription>();
+  @ViewChild('phGraph') public phGraph: ModalDirective;
+  @ViewChild('tdsGraph') public tdsGraph: ModalDirective;
+  @ViewChild('tempGraph') public tempGraph: ModalDirective;
+  @Input() metadata: DeviceMetadataDto;
+  scheduleList: RegularScheduleDto[];
+  labelMap: Map<string, string>;
   hidden: string = '';
-  hydroData?: HydroponicOneData;
-  hydroSett?: HydroponicOneSettings;
-  phOptions?: EChartsOption;
+  hydroData: HydroponicDataDto;
+  hydroSett: HydroponicSettingsDto;
+  phOptions: EChartsOption;
   tdsOptions?: EChartsOption;
   tmpOptions?: EChartsOption;
-  chartPointsNumber: number = 10;
-  isPhGraphCollapsed: boolean = true;
-  isTdsGraphCollapsed: boolean = true;
-  isTempGraphCollapsed: boolean = true;
+  chartPointsNumber: number = 30;
+  isChartOpened: boolean = false;
 
-  constructor(public settingService: HydroponicSettingsService,
-              public dataService: HydroponicDataService,
-              public operationsService: HydroponicOperationsService) {
+  time: NgbTimeStruct = {hour: 0, minute: 0, second: 0};
+  hiddenBtn: string = '';
+  hiddenBtn1?: string = '';
+  hiddenBtn2?: string = '';
+  hiddenBtn3?: string = '';
+  hiddenGeneral?: string = '';
+  buttonUpdateDisabled?: string = 'disabled';
+  isMetadataCollapsed: boolean = true;
+  isSetupValuesCollapsed: boolean = true;
+  isCalibrationCollapsed: boolean = true;
+  isErrorsCollapsed: boolean = true;
+  isDosingCollapsed: boolean = true;
+  isWifiCollapsed: boolean = true;
+  isTimeCollapsed: boolean = true;
+  setupTdsValue: number = 600;
+  setupPhValue: number = 6.2;
+  phRegulationError: number = 0.5;
+  tdsRegulationError: number = 20;
+  phUpDoseMl: number = 2;
+  phDownDoseMl: number = 2;
+  fertilizerDoseMl: number = 2;
+  recheckDosatorsAfterMs: number = 0;
+  wifiSSID: string = '';
+  wifiPASS: string = '';
+  phLowCalibration: number = 4.0;
+  phHighCalibration: number = 6.86;
+  tdsCalibration: number = 1000;
+  hydroponicName: string = 'Назва Гідропоніки';
+  hydroponicDescription: string = 'Змінити опис можна в налаштуваннях';
+  startDate: NgbDateStruct = {year: 2021, month: 10, day: 12};
+  date: NgbDateStruct = {year: 2021, month: 10, day: 12};
+  timeZone: string = '';
+  autotime: boolean = true;
+  enableDosators: boolean = true;
+
+  constructor(private deviceService: DeviceService) {
+    this.labelMap = HYDROPONIC_TOPIC_LABEL_MAP;
   }
 
   ngOnInit(): void {
@@ -35,98 +83,221 @@ export class HydroponicComponent implements OnInit {
     }, 1000);
   }
 
+  clrSubscribers() {
+    this.subscriptionMap.forEach(s => s.unsubscribe());
+  }
+
   private uploadInfoFromServer() {
-    this.settingService.getHydroponicSettings(this.uuid).subscribe(sett => {
-      this.hydroSett = sett;
-      console.log(sett);
-    });
-    this.dataService.getHydroponicData(this.uuid).subscribe(data => {
-      this.hydroData = data;
-    });
-    this.operationsService.getMetadata(this.uuid).subscribe(metadata => {
-      this.metadata = metadata;
-    });
-    this.dataService.getHydroponicDataLimitedList(this.uuid, this.chartPointsNumber).subscribe(data => {
-      console.log(data);
-      this.phOptions = {
-        xAxis: {
-          type: 'category',
-          data: data.map<string>(value => value.receiveTime[6] + ''),
-        },
-        yAxis: {
-          type: 'value',
-        },
-        tooltip: {
-          trigger: 'item',
-          showDelay: 0,
-          transitionDuration: 0.2,
-        },
-        series: [{
-          data: data.map<number>(value => value.phValue <= 0 ? 0 : value.phValue),
-          type: 'line',
-        }]
-      };
-      this.tdsOptions = {
-        xAxis: {
-          type: 'category',
-          data: data.map<string>(value => value.receiveTime[6] + ''),
-        },
-        yAxis: {
-          type: 'value',
-        },
-        tooltip: {
-          trigger: 'item',
-          showDelay: 0,
-          transitionDuration: 0.2,
-        },
-        series: [{
-          data: data.map<number>(value => value.tdsValue),
-          type: 'line',
-        }],
-      };
-      this.tmpOptions = {
-        xAxis: {
-          type: 'category',
-          data: data.map<string>(value => value.receiveTime[6] + ''),
-        },
-        yAxis: {
-          type: 'value',
-        },
-        tooltip: {
-          trigger: 'item',
-          showDelay: 0,
-          transitionDuration: 0.2,
-        },
-        series: [{
-          data: data.map<number>(value => value.temperatureValue),
-          type: 'line',
-        }],
-      };
-    });
-    this.hidden = 'hidden';
+    if (this.isChartOpened) {
+      this.subscriptionMap.set('GetHydroponicLastDataRequest',
+        this.deviceService.getLastDataInDeviceWithUUID(this.metadata.uuid, 1, this.chartPointsNumber)
+          .subscribe(
+            hydroponicData => {
+              this.hydroData = hydroponicData[0];
+              this.phOptions = {
+                xAxis: {
+                  type: 'category',
+                  data: hydroponicData.map<string>(d => d.receiveTime[6] + ''),
+                },
+                yAxis: {
+                  type: 'value',
+                },
+                tooltip: {
+                  trigger: 'item',
+                  showDelay: 0,
+                  transitionDuration: 0.2,
+                },
+                series: [{
+                  data: hydroponicData.map<number>(d => d.phValue <= 0 ? 0 : d.phValue),
+                  type: 'line',
+                }]
+              };
+              this.tdsOptions = {
+                xAxis: {
+                  type: 'category',
+                  data: hydroponicData.map<string>(d => d.receiveTime[6] + ''),
+                },
+                yAxis: {
+                  type: 'value',
+                },
+                tooltip: {
+                  trigger: 'item',
+                  showDelay: 0,
+                  transitionDuration: 0.2,
+                },
+                series: [{
+                  data: hydroponicData.map<number>(d => d.tdsValue <= 0 ? 0 : d.tdsValue),
+                  type: 'line',
+                }],
+              };
+              this.tmpOptions = {
+                xAxis: {
+                  type: 'category',
+                  data: hydroponicData.map<string>(d => d.receiveTime[6] + ''),
+                },
+                yAxis: {
+                  type: 'value',
+                },
+                tooltip: {
+                  trigger: 'item',
+                  showDelay: 0,
+                  transitionDuration: 0.2,
+                },
+                series: [{
+                  data: hydroponicData.map<number>(d => d.temperatureValue <= 0 ? 0 : d.temperatureValue),
+                  type: 'line',
+                }],
+              };
+            }));
+    } else {
+      this.subscriptionMap.set('GetHydroponicLastDataRequest',
+        this.deviceService.getLastDataInDeviceWithUUID(this.metadata.uuid, 1, 1)
+          .subscribe(hydroponicData => this.hydroData = hydroponicData[0]));
+    }
+    this.subscriptionMap.set('GetHydroponicLastSettingsRequest',
+      this.deviceService.getLastSettingsInDeviceWithUUID(this.metadata.uuid, 1, 1)
+        .subscribe(hydroponicSettings => this.hydroSett = hydroponicSettings[0])
+    );
+    this.subscriptionMap.set('GetHydroponicSchedulesRequest',
+      this.deviceService.getSchedulesByKey(this.metadata.uuid, this.metadata.deviceType)
+        .subscribe(schedules => this.scheduleList = schedules)
+    );
+    this.hiddenBtn1 = this.hiddenBtn2 = this.hiddenBtn3 = this.hiddenGeneral = this.hiddenBtn = 'hidden';
+    this.buttonUpdateDisabled = '';
   }
 
   startPhUp() {
-    this.operationsService.controlHydroponicPhUpPump(this.uuid, '1');
+    this.subscriptionMap.set('UpdatePhUp',
+      this.deviceService.updatePhUpPumpStatus(this.metadata.uuid, '1').subscribe(data => console.log(data))
+    );
   }
 
   stopPhUp() {
-    this.operationsService.controlHydroponicPhUpPump(this.uuid, '0');
+    this.subscriptionMap.set('UpdatePhUp',
+      this.deviceService.updatePhUpPumpStatus(this.metadata.uuid, '0').subscribe(data => console.log(data))
+    );
   }
 
   startPhDown() {
-    this.operationsService.controlHydroponicPhDownPump(this.uuid, '1');
+    this.subscriptionMap.set('UpdatePhDown',
+      this.deviceService.updatePhDownPumpStatus(this.metadata.uuid, '1').subscribe(data => console.log(data))
+    );
   }
 
   stopPhDown() {
-    this.operationsService.controlHydroponicPhDownPump(this.uuid, '0');
+    this.subscriptionMap.set('UpdatePhDown',
+      this.deviceService.updatePhDownPumpStatus(this.metadata.uuid, '0').subscribe(data => console.log(data))
+    );
   }
 
-  startFertilizer() {
-    this.operationsService.controlHydroponicTdsPump(this.uuid, '1');
+  startTds() {
+    this.subscriptionMap.set('UpdateTds',
+      this.deviceService.updateTdsPumpStatus(this.metadata.uuid, '1').subscribe(data => console.log(data))
+    );
   }
 
-  stopFertilizer() {
-    this.operationsService.controlHydroponicTdsPump(this.uuid, '0');
+  stopTds() {
+    this.subscriptionMap.set('UpdateTds',
+      this.deviceService.updateTdsPumpStatus(this.metadata.uuid, '0').subscribe(data => console.log(data))
+    );
+  }
+
+  abs(num: number): number {
+    if (num === 0) {
+      return 0;
+    }
+    if (num > 0) {
+      return num;
+    }
+    return num * -1;
+  }
+
+
+  search: OperatorFunction<string, string[]> = (text$: Observable<string>) => text$.pipe(
+    debounceTime(200),
+    distinctUntilChanged(),
+    map(term => term.length < 1 ? [] : Array.from(TIME_ZONE_MAP.keys())
+      .filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+  );
+
+  updateSetupValues() {
+    this.hiddenBtn1 = '';
+    this.buttonUpdateDisabled = 'disabled';
+    this.deviceService.updateSetupTdsValue(this.metadata.uuid, this.setupTdsValue + '').subscribe(d => console.log(d));
+    this.deviceService.updateSetupPhValue(this.metadata.uuid, this.setupPhValue + '').subscribe(d => console.log(d));
+  }
+
+  updateErrorValues() {
+    this.hiddenBtn2 = '';
+    this.buttonUpdateDisabled = 'disabled';
+    this.deviceService.updateRegulatePhError(this.metadata.uuid, this.phRegulationError + '').subscribe(d => console.log(d));
+    this.deviceService.updateRegulateTdsError(this.metadata.uuid, this.tdsRegulationError + '').subscribe(d => console.log(d));
+  }
+
+  updateDosingValues() {
+    this.hiddenBtn3 = '';
+    this.buttonUpdateDisabled = 'disabled';
+    this.deviceService.updatePhUpDose(this.metadata.uuid, this.phUpDoseMl + '').subscribe(d => console.log(d));
+    this.deviceService.updatePhDownDose(this.metadata.uuid, this.phDownDoseMl + '').subscribe(d => console.log(d));
+    this.deviceService.updateFertilizerDose(this.metadata.uuid, this.fertilizerDoseMl + '').subscribe(d => console.log(d));
+    this.deviceService.updateRecheckDispensersAfterTime(this.metadata.uuid, this.recheckDosatorsAfterMs + '')
+      .subscribe(d => console.log(d));
+  }
+
+  updateWifiValues() {
+    this.deviceService.updateWifiSsid(this.metadata.uuid, this.wifiSSID + '').subscribe(d => console.log(d));
+    this.deviceService.updateWifiPassword(this.metadata.uuid, this.wifiPASS + '').subscribe(d => console.log(d));
+  }
+
+  calibratePhLow() {
+    this.deviceService.calibratePhLow(this.metadata.uuid, this.phLowCalibration + '').subscribe(d => console.log(d));
+  }
+
+  calibratePhHigh() {
+    this.deviceService.calibratePhHigh(this.metadata.uuid, this.phHighCalibration + '').subscribe(d => console.log(d));
+  }
+
+  calibratePhClear() {
+    this.deviceService.clrCalibrationPhSensor(this.metadata.uuid).subscribe(d => console.log(d));
+  }
+
+  calibrateTds() {
+    this.deviceService.calibrateTdsSensor(this.metadata.uuid, this.tdsCalibration + '').subscribe(d => console.log(d));
+  }
+
+  calibrateTdsClear() {
+    this.deviceService.clrCalibrationTdsSensor(this.metadata.uuid).subscribe(d => console.log(d));
+  }
+
+  updateMetadata() {
+    this.deviceService.updateMetadata(this.metadata.uuid, this.hydroponicName, this.hydroponicDescription).subscribe(d => console.log(d));
+  }
+
+  updateTime() {
+    const time: HydroponicTimeDto = {
+      microcontrollerTime: [
+        this.date.year,
+        this.date.month,
+        this.date.day,
+        this.time.hour,
+        this.time.minute,
+        this.time.second,
+      ],
+      microcontrollerTimeZone: '',
+      uuid: this.metadata.uuid
+    };
+    this.deviceService.updateTimeManually(time).subscribe(d => console.log(d));
+  }
+
+  changeTimeZone() {
+    this.deviceService.updateZone(this.metadata.uuid, this.timeZone).subscribe(d => console.log(d));
+  }
+
+  changeAutoTime() {
+    this.deviceService.updateAutotime(this.metadata.uuid, (this.autotime ? 0 : 1) + '').subscribe(d => console.log(d));
+  }
+
+  changeEnableDosators() {
+    this.deviceService.updateDispensersEnable(this.metadata.uuid, (this.enableDosators ? 0 : 1) + '').subscribe(d => console.log(d));
   }
 }

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {BACKEND} from '../../../../../backend-urls';
+import {SERVER} from '../../../../../backend-urls';
 
 export interface HydroponicOneData {
   uuid: string;
@@ -23,14 +23,14 @@ export class HydroponicDataService {
 
   getHydroponicData(uuid: string): Observable<HydroponicOneData> {
     return this.httpClient
-      .get<HydroponicOneData>(BACKEND.backendServerUrl + '/hydroponic/data/last',
-        {params: new HttpParams().set('uuid', uuid), headers: BACKEND.HEADERS});
+      .get<HydroponicOneData>(SERVER.backendServerUrl + '/hydroponic/data/last',
+        {params: new HttpParams().set('uuid', uuid), headers: SERVER.HEADERS});
   }
 
   getHydroponicDataLimitedList(uuid: string, limit: number): Observable<HydroponicOneData[]> {
     return this.httpClient
       .get<HydroponicOneData[]>('http://192.168.1.100:5555/hydroponic/data/last/' + limit,
-        {params: new HttpParams().set('uuid', uuid), headers: BACKEND.HEADERS});
+        {params: new HttpParams().set('uuid', uuid), headers: SERVER.HEADERS});
   }
 }
 

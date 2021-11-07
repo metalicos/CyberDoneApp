@@ -1,0 +1,42 @@
+<div class="bg-dark rounded-pill d-none d-md-block text-white">
+  <div class="d-flex justify-content-between align-content-center m-1 p-1">
+    <h6 class="text-left text-warning col-2 my-auto">{{name | uppercase}}</h6>
+    <h6 class="text-left text-warning col-2 my-auto">{{description}}</h6>
+    <h6 class="text-left my-auto col-3">{{getLabelForValue()}}</h6>
+    <h6 class="text-left my-auto col-1">{{value}}</h6>
+    <h6 class="text-center text-warning col-2 my-auto">
+      {{monday ? 'Пн;' : ''}} {{tuesday ? 'Вт;' : ''}} {{wednesday ? 'Ср;' : ''}}
+      {{thursday ? 'Чт;' : ''}} {{friday ? 'Пт;' : ''}} {{saturday ? 'Сб;' : ''}}
+      {{sunday ? 'Нд;' : ''}}
+    </h6>
+    <h6 class="text-center thead-light col-1 my-auto">
+      {{time[0] + ':' + time[1] + ':' + (time[2] == null ? '0' : time[2])}}
+    </h6>
+    <button class="btn btn-sm btn-outline-danger m-auto rounded-circle" (click)="deleteSchedule(id)">
+      <i class="fa fa-close text-white" aria-hidden="true"></i></button>
+  </div>
+</div>
+
+<div class="bg-dark rounded d-block d-md-none text-white p-2 m-1">
+  <div class="d-flex justify-content-between align-content-center">
+    <div>
+      <h6 class="text-left text-warning">{{name | uppercase}}</h6>
+      <h6 class="text-left">{{description}}</h6>
+    </div>
+    <button class="btn btn-sm btn-outline-danger rounded my-auto" (click)="deleteSchedule(id)">
+      <i class="fa fa-remove text-white" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div class="d-flex justify-content-between align-content-center">
+    <h6 class="form-label h6 align-self-center my-auto">{{getLabelForValue()}}</h6>
+    <h6 class="form-label h6 align-self-center my-auto">{{value}}</h6>
+  </div>
+  <div class="d-flex justify-content-between align-content-center">
+    <h6 class="form-label h6 align-self-center my-auto">
+      {{monday ? 'Пн;' : ''}} {{tuesday ? 'Вт;' : ''}} {{wednesday ? 'Ср;' : ''}}
+      {{thursday ? 'Чт;' : ''}} {{friday ? 'Пт;' : ''}} {{saturday ? 'Сб;' : ''}}
+      {{sunday ? 'Нд;' : ''}}
+    </h6>
+    <h6 class="form-label h6 align-self-center my-auto">{{time[0] + ':' + time[1] + ':' + (time[2] == null ? '0' : time[2])}}</h6>
+  </div>
+</div>
