@@ -1,4 +1,5 @@
 import {INavData} from '@coreui/angular';
+import {INavLabel} from '@coreui/angular/lib/sidebar/app-sidebar-nav';
 
 export const navItems: INavData[] = [
   // {
@@ -10,6 +11,7 @@ export const navItems: INavData[] = [
     name: 'Пристрої',
     icon: 'cil-screen-smartphone',
     url: '/devices',
+    class: 'USER,ADMIN,OWNER',
     children: [
       {
         name: 'Мої пристрої',
@@ -22,25 +24,26 @@ export const navItems: INavData[] = [
       },
     ]
   },
-  {
-    name: 'Події',
-    icon: 'cil-av-timer',
-    url: '/actions',
-    children: [
-      {
-        name: 'Регулярні події',
-        url: '/actions/regular',
-      },
-      {
-        name: 'Одноразові події',
-        url: '/actions/one-time',
-      },
-    ]
-  },
+  // {
+  //   name: 'Події',
+  //   icon: 'cil-av-timer',
+  //   url: '/actions',
+  //   children: [
+  //     {
+  //       name: 'Регулярні події',
+  //       url: '/actions/regular',
+  //     },
+  //     {
+  //       name: 'Одноразові події',
+  //       url: '/actions/one-time',
+  //     },
+  //   ]
+  // },
   {
     name: 'Дані',
     url: '/data',
     icon: 'cil-bar-chart',
+    class: 'USER,ADMIN,OWNER',
     children: [
       {
         name: 'У графіках',
@@ -52,30 +55,32 @@ export const navItems: INavData[] = [
       },
     ]
   },
-  {
-    name: 'Шаблони',
-    url: '/templates',
-    icon: 'cil-window-restore',
-    // badge: {
-    //   variant: 'light',
-    //   text: 'Нове'
-    // }
-  },
-  {
-    name: 'Налаштування',
-    url: '/settings',
-    icon: 'cil-settings',
-  },
+  // {
+  //   name: 'Шаблони',
+  //   url: '/templates',
+  //   icon: 'cil-window-restore',
+  //   // badge: {
+  //   //   variant: 'light',
+  //   //   text: 'Нове'
+  //   // }
+  // },
+  // {
+  //   name: 'Налаштування',
+  //   url: '/settings',
+  //   icon: 'cil-settings',
+  // },
 
   // ########################################## ADMINS #####################################################
   {
     title: true,
-    name: 'Адміністрування'
+    name: 'Адміністрування',
+    class: 'ADMIN,OWNER',
   },
   {
     name: 'Користувачі',
     icon: 'cil-group',
     url: '/users',
+    class: 'ADMIN,OWNER',
     children: [
       {
         name: 'Додати користувача',
@@ -95,6 +100,7 @@ export const navItems: INavData[] = [
     name: 'Пристрої',
     icon: 'icon-pencil',
     url: '/devices',
+    class: 'ADMIN,OWNER',
     children: [
       {
         name: 'Створити пристрій',
@@ -106,6 +112,7 @@ export const navItems: INavData[] = [
     name: 'Сповіщення',
     icon: 'icon-pencil',
     url: '/notifications',
+    class: 'ADMIN,OWNER',
     children: [
       {
         name: 'Тарифний план',
@@ -122,9 +129,10 @@ export const navItems: INavData[] = [
     ]
   },
   {
-    name: 'Pages',
+    name: 'Сторінки',
     url: '/pages',
     icon: 'icon-star',
+    class: 'USER,ADMIN,OWNER',
     children: [
       {
         name: 'Увійти',

@@ -9,6 +9,7 @@ import { P500Component } from './views/error/500.component';
 import { LoginComponent } from './views/login/login.component';
 import { RegisterComponent } from './views/register/register.component';
 import {ForgotPasswordComponent} from './views/forgotPassword/forgot-password.component';
+import {LogoutComponent} from './views/logout/logout.component';
 
 export const routes: Routes = [
   {
@@ -38,6 +39,13 @@ export const routes: Routes = [
     }
   },
   {
+    path: 'logout',
+    component: LogoutComponent,
+    data: {
+      title: 'Вихід із облікового запису'
+    }
+  },
+  {
     path: 'register',
     component: RegisterComponent,
     data: {
@@ -59,22 +67,6 @@ export const routes: Routes = [
     },
     children: [
       {
-        path: 'base',
-        loadChildren: () => import('./views/base/base.module').then(m => m.BaseModule)
-      },
-      {
-        path: 'buttons',
-        loadChildren: () => import('./views/buttons/buttons.module').then(m => m.ButtonsModule)
-      },
-      {
-        path: 'charts',
-        loadChildren: () => import('./views/chartjs/chartjs.module').then(m => m.ChartJSModule)
-      },
-      {
-        path: 'dashboard',
-        loadChildren: () => import('./views/dashboard/dashboard.module').then(m => m.DashboardModule)
-      },
-      {
         path: 'icons',
         loadChildren: () => import('./views/icons/icons.module').then(m => m.IconsModule)
       },
@@ -82,10 +74,6 @@ export const routes: Routes = [
       {
         path: 'devices',
         loadChildren: () => import('./views/devices/devices.module').then(m => m.DevicesModule)
-      },
-      {
-        path: 'charts',
-        loadChildren: () => import('./views/chartjs/chartjs.module').then(m => m.ChartJSModule)
       },
     ]
   },

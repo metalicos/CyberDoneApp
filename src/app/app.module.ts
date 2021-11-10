@@ -32,6 +32,7 @@ import {ForgotPasswordComponent} from './views/forgotPassword/forgot-password.co
 import {AlertModule} from 'ngx-bootstrap/alert';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgxEchartsModule} from 'ngx-echarts';
+import {LogoutComponent} from './views/logout/logout.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -71,6 +72,7 @@ const APP_CONTAINERS = [
     P404Component,
     P500Component,
     LoginComponent,
+    LogoutComponent,
     RegisterComponent,
     ForgotPasswordComponent,
   ],
