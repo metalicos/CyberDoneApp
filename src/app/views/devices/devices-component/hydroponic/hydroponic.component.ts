@@ -73,6 +73,7 @@ export class HydroponicComponent implements OnInit, OnDestroy {
   autotime: boolean = true;
   enableDosators: boolean = true;
   uploadInfoTimer: any;
+  currentDate: string;
 
   constructor(private deviceService: DeviceService) {
     this.labelMap = HYDROPONIC_TOPIC_LABEL_MAP;
@@ -104,10 +105,11 @@ export class HydroponicComponent implements OnInit, OnDestroy {
           .subscribe(
             hydroponicData => {
               this.hydroData = hydroponicData[0];
+              this.currentDate = this.hydroData.receiveTime[0] + '.' + this.hydroData.receiveTime[1] + '.' + this.hydroData.receiveTime[2];
               this.phOptions = {
                 xAxis: {
                   type: 'category',
-                  data: hydroponicData.map<string>(d => d.receiveTime[6] + ''),
+                  data: hydroponicData.map<string>(d => d.receiveTime[3] + ':' + d.receiveTime[4] + ':' + d.receiveTime[5]),
                 },
                 yAxis: {
                   type: 'value',
@@ -125,7 +127,7 @@ export class HydroponicComponent implements OnInit, OnDestroy {
               this.tdsOptions = {
                 xAxis: {
                   type: 'category',
-                  data: hydroponicData.map<string>(d => d.receiveTime[6] + ''),
+                  data: hydroponicData.map<string>(d =>  d.receiveTime[3] + ':' + d.receiveTime[4] + ':' + d.receiveTime[5]),
                 },
                 yAxis: {
                   type: 'value',
@@ -143,7 +145,7 @@ export class HydroponicComponent implements OnInit, OnDestroy {
               this.tmpOptions = {
                 xAxis: {
                   type: 'category',
-                  data: hydroponicData.map<string>(d => d.receiveTime[6] + ''),
+                  data: hydroponicData.map<string>(d =>  d.receiveTime[3] + ':' + d.receiveTime[4] + ':' + d.receiveTime[5]),
                 },
                 yAxis: {
                   type: 'value',
@@ -228,7 +230,7 @@ export class HydroponicComponent implements OnInit, OnDestroy {
     distinctUntilChanged(),
     map(term => term.length < 1 ? [] : Array.from(TIME_ZONE_MAP.keys())
       .filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
-  );
+  )
 
   updateSetupValues() {
     this.hiddenBtn1 = '';

@@ -425,8 +425,17 @@ export class DeviceService {
     );
   }
 
+  createMetadata(deviceMetadataDto: DeviceMetadataDto) {
+    return this.http.post(SERVER.backendServerUrl + '/device/metadata', deviceMetadataDto,
+      {
+        headers: SERVER.HEADERS,
+        params: new HttpParams()
+      }
+    );
+  }
+
   updateMetadata(uuid: string, name: string, description: string) {
-    return this.http.post(SERVER.backendServerUrl + '/device/metadata', {},
+    return this.http.patch(SERVER.backendServerUrl + '/device/metadata', {},
       {
         headers: SERVER.HEADERS,
         params: new HttpParams().set('uuid', uuid).set('name', name).set('description', description)

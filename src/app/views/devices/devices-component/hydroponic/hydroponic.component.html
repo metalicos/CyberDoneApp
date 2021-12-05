@@ -41,7 +41,7 @@
           </div>
           <div class="modal-body">
             <input type="number" class="form-control-sm" min="10" max="2000" [(ngModel)]="chartPointsNumber">
-            <p class="h4 card-title my-1 text-center text-dark font-weight-bold">PH в реальному часі</p>
+            <p class="h4 card-title my-1 text-center text-dark font-weight-bold">PH в реальному часі {{currentDate | date}}</p>
             <div echarts [options]="phOptions" class="demo-chart" *ngIf="phOptions"></div>
             <div *ngIf="!phOptions">
               <h3 class="h4 card-title my-1 text-center text-dark font-weight-bold">Запит до сервера, будь ласка,
@@ -67,7 +67,7 @@
           </div>
           <div class="modal-body">
             <input type="number" class="form-control-sm" min="10" max="2000" [(ngModel)]="chartPointsNumber">
-            <p class="h4 card-title my-1 text-center text-dark font-weight-bold">TDS в реальному часі</p>
+            <p class="h4 card-title my-1 text-center text-dark font-weight-bold">TDS в реальному часі {{currentDate | date}}</p>
             <div echarts [options]="tdsOptions" class="demo-chart" *ngIf="tdsOptions"></div>
             <div *ngIf="!tdsOptions">
               <h3 class="h4 card-title my-1 text-center text-dark font-weight-bold">Запит до сервера, будь ласка,
@@ -93,7 +93,7 @@
           </div>
           <div class="modal-body">
             <input type="number" class="form-control-sm" min="10" max="2000" [(ngModel)]="chartPointsNumber">
-            <p class="h4 card-title my-1 text-center text-dark font-weight-bold">Температура води в реальному часі</p>
+            <p class="h4 card-title my-1 text-center text-dark font-weight-bold">Температура води в реальному часі {{currentDate | date}}</p>
             <div echarts [options]="tmpOptions" class="demo-chart" *ngIf="tmpOptions"></div>
             <div *ngIf="!tmpOptions">
               <h3 class="h4 card-title my-1 text-center text-dark font-weight-bold">Запит до сервера, будь ласка,
