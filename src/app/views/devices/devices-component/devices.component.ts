@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {DeviceMetadataDto, DeviceService} from '../../../services/device.service';
 import {AuthStorageService} from '../../../security/auth-storage.service';
@@ -8,7 +8,7 @@ import {AuthStorageService} from '../../../security/auth-storage.service';
   templateUrl: './devices.component.html',
   styleUrls: ['./devices.component.scss']
 })
-export class DevicesComponent implements OnInit {
+export class DevicesComponent implements OnInit, OnDestroy {
 
   sub: Subscription;
   hydroponicMetadataList: DeviceMetadataDto[];
@@ -22,12 +22,18 @@ export class DevicesComponent implements OnInit {
   }
 
   private generateLinkedDevicesList() {
-    this.deviceService.getMetadataListByUser(this.authStorage.getUser().id).subscribe(
-      data => {
-        this.hydroponicMetadataList = data.filter(m => 'HYDROPONIC_V1'.toLowerCase() === m.deviceType.toLowerCase());
-      });
-    setTimeout(() => {
-      this.sub.unsubscribe();
-    }, 2000);
+    const user = this.authStorage.getUser();
+    if (user != null) {
+      this.sub = this.deviceService.getMetadataListByUser(user.id).subscribe(
+        data => {
+          this.hydroponicMetadataList = data.filter(m => 'HYDROPONIC_V1'.toLowerCase() === m.deviceType.toLowerCase());
+        });
+      setTimeout(() => {
+        this.sub.unsubscribe();
+      }, 2000);
+    }
+  }
+
+  ngOnDestroy(): void {
   }
 }

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {EChartsOption} from 'echarts';
 import {Observable, OperatorFunction, Subscription} from 'rxjs';
 import {
@@ -21,7 +21,7 @@ import {TIME_ZONE_MAP} from '../../time-zone-map';
   templateUrl: './hydroponic.component.html',
   styleUrls: ['./hydroponic.component.css']
 })
-export class HydroponicComponent implements OnInit {
+export class HydroponicComponent implements OnInit, OnDestroy {
   subscriptionMap = new Map<string, Subscription>();
   @ViewChild('phGraph') public phGraph: ModalDirective;
   @ViewChild('tdsGraph') public tdsGraph: ModalDirective;
@@ -72,13 +72,23 @@ export class HydroponicComponent implements OnInit {
   timeZone: string = '';
   autotime: boolean = true;
   enableDosators: boolean = true;
+  uploadInfoTimer: any;
 
   constructor(private deviceService: DeviceService) {
     this.labelMap = HYDROPONIC_TOPIC_LABEL_MAP;
   }
 
+  ngOnDestroy(): void {
+    this.subscriptionMap.forEach(sub => {
+      if (sub != null) {
+        sub.unsubscribe();
+      }
+    });
+    clearInterval(this.uploadInfoTimer);
+  }
+
   ngOnInit(): void {
-    setInterval(() => {
+    this.uploadInfoTimer = setInterval(() => {
       this.uploadInfoFromServer();
     }, 1000);
   }
@@ -223,54 +233,71 @@ export class HydroponicComponent implements OnInit {
   updateSetupValues() {
     this.hiddenBtn1 = '';
     this.buttonUpdateDisabled = 'disabled';
-    this.deviceService.updateSetupTdsValue(this.metadata.uuid, this.setupTdsValue + '').subscribe(d => console.log(d));
-    this.deviceService.updateSetupPhValue(this.metadata.uuid, this.setupPhValue + '').subscribe(d => console.log(d));
+    this.subscriptionMap.set('updateSetupTdsValue',
+      this.deviceService.updateSetupTdsValue(this.metadata.uuid, this.setupTdsValue + '').subscribe(d => console.log(d)));
+    this.subscriptionMap.set('updateSetupPhValue',
+      this.deviceService.updateSetupPhValue(this.metadata.uuid, this.setupPhValue + '').subscribe(d => console.log(d)));
   }
 
   updateErrorValues() {
     this.hiddenBtn2 = '';
     this.buttonUpdateDisabled = 'disabled';
-    this.deviceService.updateRegulatePhError(this.metadata.uuid, this.phRegulationError + '').subscribe(d => console.log(d));
-    this.deviceService.updateRegulateTdsError(this.metadata.uuid, this.tdsRegulationError + '').subscribe(d => console.log(d));
+    this.subscriptionMap.set('updateRegulatePhError',
+      this.deviceService.updateRegulatePhError(this.metadata.uuid, this.phRegulationError + '').subscribe(d => console.log(d)));
+    this.subscriptionMap.set('updateRegulateTdsError',
+      this.deviceService.updateRegulateTdsError(this.metadata.uuid, this.tdsRegulationError + '').subscribe(d => console.log(d)));
   }
 
   updateDosingValues() {
     this.hiddenBtn3 = '';
     this.buttonUpdateDisabled = 'disabled';
-    this.deviceService.updatePhUpDose(this.metadata.uuid, this.phUpDoseMl + '').subscribe(d => console.log(d));
-    this.deviceService.updatePhDownDose(this.metadata.uuid, this.phDownDoseMl + '').subscribe(d => console.log(d));
-    this.deviceService.updateFertilizerDose(this.metadata.uuid, this.fertilizerDoseMl + '').subscribe(d => console.log(d));
-    this.deviceService.updateRecheckDispensersAfterTime(this.metadata.uuid, this.recheckDosatorsAfterMs + '')
-      .subscribe(d => console.log(d));
+    this.subscriptionMap.set('updatePhUpDose',
+      this.deviceService.updatePhUpDose(this.metadata.uuid, this.phUpDoseMl + '').subscribe(d => console.log(d)));
+    this.subscriptionMap.set('updatePhDownDose',
+      this.deviceService.updatePhDownDose(this.metadata.uuid, this.phDownDoseMl + '').subscribe(d => console.log(d)));
+    this.subscriptionMap.set('updateFertilizerDose',
+      this.deviceService.updateFertilizerDose(this.metadata.uuid, this.fertilizerDoseMl + '').subscribe(d => console.log(d)));
+    this.subscriptionMap.set('updateRecheckDispensersAfterTime',
+      this.deviceService.updateRecheckDispensersAfterTime(this.metadata.uuid, this.recheckDosatorsAfterMs + '')
+        .subscribe(d => console.log(d)));
   }
 
   updateWifiValues() {
-    this.deviceService.updateWifiSsid(this.metadata.uuid, this.wifiSSID + '').subscribe(d => console.log(d));
-    this.deviceService.updateWifiPassword(this.metadata.uuid, this.wifiPASS + '').subscribe(d => console.log(d));
+    this.subscriptionMap.set('updateWifiSsid',
+      this.deviceService.updateWifiSsid(this.metadata.uuid, this.wifiSSID + '').subscribe(d => console.log(d)));
+    this.subscriptionMap.set('updateWifiPassword',
+      this.deviceService.updateWifiPassword(this.metadata.uuid, this.wifiPASS + '').subscribe(d => console.log(d)));
   }
 
   calibratePhLow() {
-    this.deviceService.calibratePhLow(this.metadata.uuid, this.phLowCalibration + '').subscribe(d => console.log(d));
+    this.subscriptionMap.set('calibratePhLow',
+      this.deviceService.calibratePhLow(this.metadata.uuid, this.phLowCalibration + '').subscribe(d => console.log(d)));
   }
 
   calibratePhHigh() {
-    this.deviceService.calibratePhHigh(this.metadata.uuid, this.phHighCalibration + '').subscribe(d => console.log(d));
+    this.subscriptionMap.set('calibratePhHigh',
+      this.deviceService.calibratePhHigh(this.metadata.uuid, this.phHighCalibration + '').subscribe(d => console.log(d)));
   }
 
   calibratePhClear() {
-    this.deviceService.clrCalibrationPhSensor(this.metadata.uuid).subscribe(d => console.log(d));
+    this.subscriptionMap.set('clrCalibrationPhSensor',
+      this.deviceService.clrCalibrationPhSensor(this.metadata.uuid).subscribe(d => console.log(d)));
   }
 
   calibrateTds() {
-    this.deviceService.calibrateTdsSensor(this.metadata.uuid, this.tdsCalibration + '').subscribe(d => console.log(d));
+    this.subscriptionMap.set('calibrateTdsSensor',
+      this.deviceService.calibrateTdsSensor(this.metadata.uuid, this.tdsCalibration + '').subscribe(d => console.log(d)));
   }
 
   calibrateTdsClear() {
-    this.deviceService.clrCalibrationTdsSensor(this.metadata.uuid).subscribe(d => console.log(d));
+    this.subscriptionMap.set('clrCalibrationTdsSensor',
+      this.deviceService.clrCalibrationTdsSensor(this.metadata.uuid).subscribe(d => console.log(d)));
   }
 
   updateMetadata() {
-    this.deviceService.updateMetadata(this.metadata.uuid, this.hydroponicName, this.hydroponicDescription).subscribe(d => console.log(d));
+    this.subscriptionMap.set('updateMetadata',
+      this.deviceService.updateMetadata(this.metadata.uuid, this.hydroponicName, this.hydroponicDescription)
+        .subscribe(d => console.log(d)));
   }
 
   updateTime() {
@@ -286,18 +313,22 @@ export class HydroponicComponent implements OnInit {
       microcontrollerTimeZone: '',
       uuid: this.metadata.uuid
     };
-    this.deviceService.updateTimeManually(time).subscribe(d => console.log(d));
+    this.subscriptionMap.set('updateTimeManually',
+      this.deviceService.updateTimeManually(time).subscribe(d => console.log(d)));
   }
 
   changeTimeZone() {
-    this.deviceService.updateZone(this.metadata.uuid, this.timeZone).subscribe(d => console.log(d));
+    this.subscriptionMap.set('updateZone',
+      this.deviceService.updateZone(this.metadata.uuid, this.timeZone).subscribe(d => console.log(d)));
   }
 
   changeAutoTime() {
-    this.deviceService.updateAutotime(this.metadata.uuid, (this.autotime ? 0 : 1) + '').subscribe(d => console.log(d));
+    this.subscriptionMap.set('updateAutotime',
+      this.deviceService.updateAutotime(this.metadata.uuid, (this.autotime ? 0 : 1) + '').subscribe(d => console.log(d)));
   }
 
   changeEnableDosators() {
-    this.deviceService.updateDispensersEnable(this.metadata.uuid, (this.enableDosators ? 0 : 1) + '').subscribe(d => console.log(d));
+    this.subscriptionMap.set('updateDispensersEnable',
+      this.deviceService.updateDispensersEnable(this.metadata.uuid, (this.enableDosators ? 0 : 1) + '').subscribe(d => console.log(d)));
   }
 }

@@ -4,7 +4,6 @@ import {Router} from '@angular/router';
 import {EMAIL_PATTERN, NAME_PATTERN, PASSWORD_PATTERN} from '../../validator-utils.service';
 
 @Component({
-  selector: 'app-dashboard',
   templateUrl: 'register.component.html'
 })
 export class RegisterComponent implements OnDestroy {
@@ -34,6 +33,7 @@ export class RegisterComponent implements OnDestroy {
 
   constructor(public authService: AuthService,
               private router: Router) {
+    console.log('REGISTER');
   }
 
   registration() {

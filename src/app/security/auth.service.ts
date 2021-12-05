@@ -58,12 +58,16 @@ export class AuthService {
     return this.http.post<TokenDto>(SERVER.backendServerUrl + '/accounts/auth/login', loginUserDto, {headers: SERVER.HEADERS});
   }
 
+  init() {
+    this.tokenStorage.init();
+  }
+
   registration(registrationUserDto): Observable<AccountDto> {
     return this.http.post<AccountDto>(SERVER.backendServerUrl + '/accounts', registrationUserDto, {headers: SERVER.HEADERS});
   }
 
   isAuthorised(): boolean {
-    return this.tokenStorage.getUser() != null || this.tokenStorage.getUser() !== null;
+    return this.tokenStorage.getUser() != null && this.tokenStorage.getUser() !== null && this.tokenStorage.getUser() !== undefined;
   }
 
   getUserAccount(email: string): Observable<AccountDto> {

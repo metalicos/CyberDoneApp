@@ -47,6 +47,10 @@ export class AddRemoveDevicesComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscriptionMap.forEach(sub => sub.unsubscribe());
+    this.subscriptionMap.forEach(sub => {
+      if (sub != null) {
+        sub.unsubscribe();
+      }
+    });
   }
 }

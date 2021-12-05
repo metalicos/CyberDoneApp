@@ -16,6 +16,10 @@ export class StorageService {
   }
 
   protected get(key: string): any {
-    return JSON.parse(localStorage.getItem(key));
+    const item = localStorage.getItem(key);
+    if (item !== null && item !== undefined) {
+      return JSON.parse(item);
+    }
+    return null;
   }
 }

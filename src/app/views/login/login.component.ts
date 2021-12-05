@@ -5,7 +5,6 @@ import {Router} from '@angular/router';
 import {EMAIL_PATTERN, PASSWORD_PATTERN} from '../../validator-utils.service';
 
 @Component({
-  selector: 'app-dashboard',
   templateUrl: 'login.component.html'
 })
 export class LoginComponent implements OnDestroy {
@@ -25,6 +24,7 @@ export class LoginComponent implements OnDestroy {
   constructor(public authService: AuthService,
               public tokenStorage: AuthStorageService,
               private router: Router) {
+    console.log('LOGIN');
   }
 
   login() {

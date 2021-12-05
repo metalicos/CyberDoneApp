@@ -15,6 +15,11 @@ export class AuthStorageService extends StorageService {
     super.update(USER_KEY, '');
   }
 
+  init(): void {
+    super.update(TOKEN_KEY, '');
+    super.update(USER_KEY, '');
+  }
+
   public saveToken(token: string): string {
     return super.update(TOKEN_KEY, token);
   }

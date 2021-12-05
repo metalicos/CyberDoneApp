@@ -1,6 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
-import {Observable, OperatorFunction} from 'rxjs';
+import {Observable, OperatorFunction, Subscription} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 import {DeviceService, RegularScheduleDto, ValueType} from '../../../../../services/device.service';
 import {HYDROPONIC_LABEL_TOPIC_MAP} from './hydroponic-topic-label-map';
@@ -10,11 +10,13 @@ import {HYDROPONIC_LABEL_TOPIC_MAP} from './hydroponic-topic-label-map';
   selector: 'schedule-setup',
   templateUrl: './schedule-setup.component.html',
 })
-export class ScheduleSetupComponent implements OnInit {
+export class ScheduleSetupComponent implements OnInit, OnDestroy {
 
   @Input() title: string = '';
   @Input() key: string = '';
   @Input() uuid: string = '';
+
+  sub: Subscription;
 
   isCreateNewAutomationCollapsed: boolean = true;
   time: NgbTimeStruct = {hour: 0, minute: 0, second: 0};
@@ -42,6 +44,12 @@ export class ScheduleSetupComponent implements OnInit {
   constructor(private deviceService: DeviceService) {
   }
 
+  ngOnDestroy(): void {
+    if (this.sub != null) {
+      this.sub.unsubscribe();
+    }
+  }
+
   search: OperatorFunction<string, string[]> = (text$: Observable<string>) => text$.pipe(
     debounceTime(200),
     distinctUntilChanged(),
@@ -56,7 +64,7 @@ export class ScheduleSetupComponent implements OnInit {
 
   createSchedule() {
     this.schedule.time = [this.time.hour, this.time.minute, this.time.second];
-    this.deviceService.createSchedule(this.schedule).subscribe(schedule => console.log(schedule));
+    this.sub = this.deviceService.createSchedule(this.schedule).subscribe(schedule => console.log(schedule));
   }
 
   isValueTypeEnabled(): boolean {
