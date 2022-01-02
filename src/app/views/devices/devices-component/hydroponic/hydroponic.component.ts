@@ -21,7 +21,7 @@ import {TIME_ZONE_MAP} from '../../time-zone-map';
   templateUrl: './hydroponic.component.html',
   styleUrls: ['./hydroponic.component.css']
 })
-export class HydroponicComponent implements OnInit, OnDestroy {
+export class HydroponicComponent implements OnDestroy, OnInit {
   subscriptionMap = new Map<string, Subscription>();
   @ViewChild('phGraph') public phGraph: ModalDirective;
   @ViewChild('tdsGraph') public tdsGraph: ModalDirective;
@@ -30,8 +30,40 @@ export class HydroponicComponent implements OnInit, OnDestroy {
   scheduleList: RegularScheduleDto[];
   labelMap: Map<string, string>;
   hidden: string = '';
-  hydroData: HydroponicDataDto;
-  hydroSett: HydroponicSettingsDto;
+  hydroData: HydroponicDataDto = {
+    ecValue: 0,
+    microcontrollerTime: [0, 0, 0, 0, 0],
+    phValue: 0,
+    receiveTime: [0, 0, 0, 0, 0],
+    tdsValue: 0,
+    temperatureValue: 0,
+    uuid: 'uuid'
+  };
+  hydroSett: HydroponicSettingsDto = {
+    autotime: false,
+    deviceEnable: false,
+    dispensersEnable: false,
+    fertilizerDoseMl: 0,
+    isDispenserPhDownOpen: false,
+    isDispenserPhUpOpen: false,
+    isDispenserTdsOpen: false,
+    microcontrollerTime: [0, 0, 0, 0, 0],
+    mlPerMillisecond: 0,
+    phDownDoseMl: 0,
+    phUpDoseMl: 0,
+    recheckDispensersAfterMs: 0,
+    regulateErrorFertilizer: 0,
+    regulateErrorPh: 0,
+    restartCounter: 0,
+    sensorsEnable: false,
+    setupPhValue: 0,
+    setupTdsValue: 0,
+    setupTemperatureValue: 0,
+    timeZone: ' ',
+    uuid: ' ',
+    wifiPASS: ' ',
+    wifiSSID: ' '
+  };
   phOptions: EChartsOption;
   tdsOptions?: EChartsOption;
   tmpOptions?: EChartsOption;
@@ -79,6 +111,12 @@ export class HydroponicComponent implements OnInit, OnDestroy {
     this.labelMap = HYDROPONIC_TOPIC_LABEL_MAP;
   }
 
+  ngOnInit(): void {
+    this.uploadInfoTimer = setInterval(() => {
+      this.uploadInfoFromServer();
+    }, 1000);
+  }
+
   ngOnDestroy(): void {
     this.subscriptionMap.forEach(sub => {
       if (sub != null) {
@@ -88,14 +126,12 @@ export class HydroponicComponent implements OnInit, OnDestroy {
     clearInterval(this.uploadInfoTimer);
   }
 
-  ngOnInit(): void {
-    this.uploadInfoTimer = setInterval(() => {
-      this.uploadInfoFromServer();
-    }, 1000);
-  }
-
   clrSubscribers() {
-    this.subscriptionMap.forEach(s => s.unsubscribe());
+    this.subscriptionMap.forEach(s => {
+      if (s != null) {
+        s.unsubscribe();
+      }
+    });
   }
 
   private uploadInfoFromServer() {
@@ -127,7 +163,7 @@ export class HydroponicComponent implements OnInit, OnDestroy {
               this.tdsOptions = {
                 xAxis: {
                   type: 'category',
-                  data: hydroponicData.map<string>(d =>  d.receiveTime[3] + ':' + d.receiveTime[4] + ':' + d.receiveTime[5]),
+                  data: hydroponicData.map<string>(d => d.receiveTime[3] + ':' + d.receiveTime[4] + ':' + d.receiveTime[5]),
                 },
                 yAxis: {
                   type: 'value',
@@ -145,7 +181,7 @@ export class HydroponicComponent implements OnInit, OnDestroy {
               this.tmpOptions = {
                 xAxis: {
                   type: 'category',
-                  data: hydroponicData.map<string>(d =>  d.receiveTime[3] + ':' + d.receiveTime[4] + ':' + d.receiveTime[5]),
+                  data: hydroponicData.map<string>(d => d.receiveTime[3] + ':' + d.receiveTime[4] + ':' + d.receiveTime[5]),
                 },
                 yAxis: {
                   type: 'value',
@@ -160,20 +196,47 @@ export class HydroponicComponent implements OnInit, OnDestroy {
                   type: 'line',
                 }],
               };
+            },
+            err => {
+              console.log('Data receive error');
+              console.log(JSON.stringify(err));
+              this.subscriptionMap.get('GetHydroponicLastDataRequest').unsubscribe();
             }));
     } else {
       this.subscriptionMap.set('GetHydroponicLastDataRequest',
         this.deviceService.getLastDataInDeviceWithUUID(this.metadata.uuid, 1, 1)
-          .subscribe(hydroponicData => this.hydroData = hydroponicData[0]));
+          .subscribe(
+            hydroponicData => {
+              this.hydroData = hydroponicData[0];
+            },
+            err => {
+              console.log('Data receive error');
+              console.log(JSON.stringify(err));
+              this.subscriptionMap.get('GetHydroponicLastDataRequest').unsubscribe();
+            }));
     }
     this.subscriptionMap.set('GetHydroponicLastSettingsRequest',
       this.deviceService.getLastSettingsInDeviceWithUUID(this.metadata.uuid, 1, 1)
-        .subscribe(hydroponicSettings => this.hydroSett = hydroponicSettings[0])
-    );
+        .subscribe(
+          hydroponicSettings => {
+            this.hydroSett = hydroponicSettings[0];
+          },
+          err => {
+            console.log('Settings receive error');
+            console.log(JSON.stringify(err));
+            this.subscriptionMap.get('GetHydroponicLastSettingsRequest').unsubscribe();
+          }));
     this.subscriptionMap.set('GetHydroponicSchedulesRequest',
       this.deviceService.getSchedulesByKey(this.metadata.uuid, this.metadata.deviceType)
-        .subscribe(schedules => this.scheduleList = schedules)
-    );
+        .subscribe(
+          schedules => {
+            this.scheduleList = schedules;
+          },
+          err => {
+            console.log('Schedules receive error');
+            console.log(JSON.stringify(err));
+            this.subscriptionMap.get('GetHydroponicSchedulesRequest').unsubscribe();
+          }));
     this.hiddenBtn1 = this.hiddenBtn2 = this.hiddenBtn3 = this.hiddenGeneral = this.hiddenBtn = 'hidden';
     this.buttonUpdateDisabled = '';
   }
@@ -230,7 +293,7 @@ export class HydroponicComponent implements OnInit, OnDestroy {
     distinctUntilChanged(),
     map(term => term.length < 1 ? [] : Array.from(TIME_ZONE_MAP.keys())
       .filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
-  )
+  );
 
   updateSetupValues() {
     this.hiddenBtn1 = '';
