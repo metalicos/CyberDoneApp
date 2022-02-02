@@ -6,10 +6,6 @@ pipeline {
   triggers {
     pollSCM('* * * * *')
   }
-  environment {
-    IMAGE = ""
-    VERSION = ""
-  }
   options {
     buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
     skipDefaultCheckout(true)
@@ -20,12 +16,6 @@ pipeline {
     stage('Prepare') {
       steps {
         checkout scm
-        script {
-          IMAGE = readMavenPom().getArtifactId().toLowerCase()
-          VERSION = readMavenPom().getVersion().toLowerCase()
-        }
-        echo IMAGE
-        echo VERSION
       }
     }
     stage('Create Docker Image') {
@@ -43,7 +33,7 @@ pipeline {
             bat "docker stop cyberdone-iot-ui-image"
             bat "docker rm cyberdone-iot-ui-image"
           } catch (Exception e) {
-            echo "None ${IMAGE} running containers found, continue."
+            echo "None running containers found, continue."
           }
           bat "docker run -d -t -i -p 80:80 --name=cyberdone-iot-ui-image"
           echo "=============================== DEPLOY SUCCESSFUL =================================="
