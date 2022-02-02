@@ -22,7 +22,7 @@ pipeline {
       steps {
         echo "========================== STARTING DOCKER IMAGE CREATION =========================="
         bat "npm -v"
-        bat "npm update"
+        bat "npm install -g npm@latest"
         bat "npm -v"
         bat "docker build -t cyberdone-iot-ui-image:latest ."
         echo "======================== DOCKER IMAGE CREATION IS SUCCESSFUL ======================="
