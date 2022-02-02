@@ -6,7 +6,7 @@ export enum DirectionEnum {
 }
 
 export class ServerGlobalConstants {
-  public backendServerUrl: string = 'http://192.168.1.100:9090';
+  public backendServerUrl: string = 'http://cyberdone.store:9090';
   public HEADERS = new HttpHeaders({
     'Content-Type': 'application/json',
   });
