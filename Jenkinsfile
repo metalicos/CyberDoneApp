@@ -21,7 +21,6 @@ pipeline {
     stage('Create Docker Image') {
       steps {
         echo "========================== STARTING DOCKER IMAGE CREATION =========================="
-        bat "npm -v"
         bat "docker build -t cyberdone-iot-ui-image:latest ."
         echo "======================== DOCKER IMAGE CREATION IS SUCCESSFUL ======================="
       }
