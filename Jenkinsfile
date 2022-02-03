@@ -38,12 +38,12 @@ pipeline {
         echo "=============================== STARTING DEPLOY ===================================="
         script {
           try {
-            bat "docker stop cyberdone-iot-ui-image"
-            bat "docker rm cyberdone-iot-ui-image"
+            bat "docker stop cyberdone-iot-ui"
+            bat "docker rm cyberdone-iot-ui"
           } catch (Exception e) {
             echo "None running containers found, continue."
           }
-          bat "docker run --name=iot-ui -d -p 80:80 cyberdone-iot-ui-image"
+          bat "docker run --name=cyberdone-iot-ui -d -p 80:80 cyberdone-iot-ui-image"
           echo "=============================== DEPLOY SUCCESSFUL =================================="
         }
       }
