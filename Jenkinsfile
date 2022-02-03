@@ -25,18 +25,18 @@ pipeline {
           bat "npm install -g npm@8.4.0"
           echo "==== Installed node.js ==="
 
-          bat "npm install -g @angular/cli"
+          bat "npm install -g @angular/cli@11.2.15"
           echo "==== Installed Angular CLI ==="
 
-          try {
-            bat "npm uninstall @angular-devkit/build-angular"
-            echo "==== UnInstalled Angular Devkit build-angular ==="
-          } catch (Exception ex) {
-            echo "==== Angular Devkit build-angular was not installed ==="
-          }
-
-          bat "npm install --save-dev @angular-devkit/build-angular"
-          echo "==== Installed Angular Devkit build-angular ==="
+//           try {
+//             bat "npm uninstall @angular-devkit/build-angular"
+//             echo "==== UnInstalled Angular Devkit build-angular ==="
+//           } catch (Exception ex) {
+//             echo "==== Angular Devkit build-angular was not installed ==="
+//           }
+//
+//           bat "npm install --save-dev @angular-devkit/build-angular"
+//           echo "==== Installed Angular Devkit build-angular ==="
 
           bat "docker build -t cyberdone-iot-ui-image:latest ."
 
