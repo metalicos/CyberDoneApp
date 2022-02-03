@@ -43,7 +43,7 @@ pipeline {
           } catch (Exception e) {
             echo "None running containers found, continue."
           }
-          bat "docker run --name=cyberdone-iot-ui-image -d -p 80:80 cyberdone-iot-ui-image"
+          bat "docker run --name=iot-ui -d -p 80:80 cyberdone-iot-ui-image"
           echo "=============================== DEPLOY SUCCESSFUL =================================="
         }
       }
