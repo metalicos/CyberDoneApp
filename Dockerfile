@@ -4,8 +4,6 @@ WORKDIR /app
 COPY . .
 ENV NODE_OPTIONS=--openssl-legacy-provider
 RUN npm install -g npm@8.4.0
-RUN npm fund
-RUN npm audit fix
 RUN npm install -g @angular/cli
 RUN npm uninstall @angular-devkit/build-angular
 RUN npm install --save-dev @angular-devkit/build-angular
