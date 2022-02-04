@@ -1,7 +1,7 @@
 import {Component, OnDestroy} from '@angular/core';
 import {navItems} from '../../_nav';
 import {AuthStorageService} from '../../security/auth-storage.service';
-import {AuthService} from '../../security/auth.service';
+import {AccountService} from '../../services/account.service';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 
@@ -15,7 +15,7 @@ export class DefaultLayoutComponent implements OnDestroy {
   public navItems;
 
   constructor(public storageService: AuthStorageService,
-              public authService: AuthService,
+              public authService: AccountService,
               public router: Router) {
     if (!this.authService.isAuthorised()) {
       this.authService.init();

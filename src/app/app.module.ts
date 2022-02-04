@@ -26,7 +26,7 @@ import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
 import {TabsModule} from 'ngx-bootstrap/tabs';
 import {ChartsModule} from 'ng2-charts';
 import {authInterceptorProviders} from './security/auth.interceptor';
-import {AuthService} from './security/auth.service';
+import {AccountService} from './services/account.service';
 import {HttpClientModule} from '@angular/common/http';
 import {ForgotPasswordComponent} from './views/forgotPassword/forgot-password.component';
 import {AlertModule} from 'ngx-bootstrap/alert';
@@ -77,7 +77,7 @@ const APP_CONTAINERS = [
     ForgotPasswordComponent,
   ],
   providers: [
-    AuthService,
+    AccountService,
     HttpClientModule,
     authInterceptorProviders,
     {

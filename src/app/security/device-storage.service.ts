@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
-import {AccountDto, LoginUserDto} from './auth.service';
+import {AccountDto} from '../services/account.service';
 import {StorageService} from './storage.service';
 
 const DEVICE_UUID = 'UUID';
 const DEVICE_ID = 'ID';
 const USER_KEY = 'AUTH-USER';
+const TOKEN_KEY = 'TOKEN';
 
 @Injectable({
   providedIn: 'root'

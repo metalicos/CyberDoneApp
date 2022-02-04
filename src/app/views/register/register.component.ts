@@ -1,5 +1,5 @@
 import {Component, OnDestroy} from '@angular/core';
-import {AuthService, RegistrationUserDto} from '../../security/auth.service';
+import {AccountService, RegistrationUserDto} from '../../services/account.service';
 import {Router} from '@angular/router';
 import {EMAIL_PATTERN, NAME_PATTERN, PASSWORD_PATTERN} from '../../validator-utils.service';
 
@@ -31,7 +31,7 @@ export class RegisterComponent implements OnDestroy {
   validationLastName: string = '';
   validationPatronymic: string = '';
 
-  constructor(public authService: AuthService,
+  constructor(public accountService: AccountService,
               private router: Router) {
     console.log('REGISTER');
   }
@@ -40,7 +40,7 @@ export class RegisterComponent implements OnDestroy {
     if (this.registrationDto.firstName.match(NAME_PATTERN) && this.registrationDto.lastName.match(NAME_PATTERN) &&
       this.registrationDto.patronymic.match(NAME_PATTERN) && this.registrationDto.password.match(PASSWORD_PATTERN)) {
 
-      this.registrationAction = this.authService.registration(this.registrationDto).subscribe(data => {
+      this.registrationAction = this.accountService.registration(this.registrationDto).subscribe(data => {
           this.router.navigate(['/login']);
           console.log(data);
         }, err => {

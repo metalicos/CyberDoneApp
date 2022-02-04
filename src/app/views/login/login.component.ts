@@ -1,5 +1,5 @@
 import {Component, OnDestroy} from '@angular/core';
-import {AuthService, LoginUserDto} from '../../security/auth.service';
+import {AccountService, LoginUserDto} from '../../services/account.service';
 import {AuthStorageService} from '../../security/auth-storage.service';
 import {Router} from '@angular/router';
 import {EMAIL_PATTERN, PASSWORD_PATTERN} from '../../validator-utils.service';
@@ -21,7 +21,7 @@ export class LoginComponent implements OnDestroy {
   errorAlert: any;
   dismissible = true;
 
-  constructor(public authService: AuthService,
+  constructor(public authService: AccountService,
               public tokenStorage: AuthStorageService,
               private router: Router) {
     console.log('LOGIN');

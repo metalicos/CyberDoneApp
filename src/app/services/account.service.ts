@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {SERVER} from '../backend-urls';
-import {AuthStorageService} from './auth-storage.service';
+import {AuthStorageService} from '../security/auth-storage.service';
 
 export interface Role {
   role: string;
@@ -11,6 +11,12 @@ export interface Role {
 export interface LoginUserDto {
   username: string;
   password: string;
+}
+
+export interface ChangePasswordDto {
+  username: string;
+  newPassword: string;
+  checkNewPassword: string;
 }
 
 export interface RegistrationUserDto {
@@ -49,13 +55,13 @@ export interface TokenDto {
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AccountService {
 
   constructor(public http: HttpClient, private tokenStorage: AuthStorageService) {
   }
 
   login(loginUserDto: LoginUserDto): Observable<TokenDto> {
-    return this.http.post<TokenDto>(SERVER.backendServerUrl + '/accounts/auth/login', loginUserDto, {headers: SERVER.HEADERS});
+    return this.http.post<TokenDto>(SERVER.backendServerUrl + '/accounts/authentication/login', loginUserDto, {headers: SERVER.HEADERS});
   }
 
   init() {
@@ -63,7 +69,7 @@ export class AuthService {
   }
 
   registration(registrationUserDto): Observable<AccountDto> {
-    return this.http.post<AccountDto>(SERVER.backendServerUrl + '/accounts', registrationUserDto, {headers: SERVER.HEADERS});
+    return this.http.post<AccountDto>(SERVER.backendServerUrl + '/accounts/registration', registrationUserDto, {headers: SERVER.HEADERS});
   }
 
   isAuthorised(): boolean {
@@ -71,10 +77,14 @@ export class AuthService {
   }
 
   getUserAccount(email: string): Observable<AccountDto> {
-    return this.http.get<AccountDto>(SERVER.backendServerUrl + '/accounts',
-      {
-        headers: SERVER.HEADERS,
-        params: new HttpParams().set('username', email)
-      });
+    return this.http.get<AccountDto>(SERVER.backendServerUrl + '/accounts/' + email, {headers: SERVER.HEADERS});
+  }
+
+  changeForgotAccountPassword(changePassDto: ChangePasswordDto): Observable<string> {
+    return this.http.put<string>(
+      SERVER.backendServerUrl + '/accounts/change/password',
+      changePassDto,
+      {headers: SERVER.HEADERS}
+    );
   }
 }
