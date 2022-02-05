@@ -1,69 +1,51 @@
 import {Component, OnDestroy} from '@angular/core';
-import {AccountService, LoginUserDto} from '../../services/account.service';
+import {AccountService} from '../../services/account.service';
 import {AuthStorageService} from '../../security/auth-storage.service';
 import {Router} from '@angular/router';
-import {EMAIL_PATTERN, PASSWORD_PATTERN} from '../../services/validator-utils.service';
+import {PASSWORD_PATTERN} from '../../services/validator-utils.service';
+import {FormBuilder, Validators} from '@angular/forms';
+import {ErrorHandlerService} from '../../services/error-handle.service';
 
 @Component({
   templateUrl: 'login.component.html'
 })
 export class LoginComponent implements OnDestroy {
-
-  private loginTokenSubscription: any = null;
-  private userAccountSubscription: any = null;
-  loginUserDto: LoginUserDto = {
-    username: '',
-    password: '',
-  };
-  emailValidation: string = '';
-  passwordValidation: string = '';
+  loginTokenSubscription: any = null;
+  userAccountSubscription: any = null;
   errorAlert: any;
-  dismissible = true;
+  logForm = this.fb.group({
+    username: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.pattern(PASSWORD_PATTERN), Validators.minLength(8)]]
+  });
 
-  constructor(public authService: AccountService,
-              public tokenStorage: AuthStorageService,
-              private router: Router) {
+  constructor(private fb: FormBuilder, private errorHandler: ErrorHandlerService, public authService: AccountService,
+              public tokenStorage: AuthStorageService, private router: Router) {
+  }
+
+  get username() {
+    return this.logForm.get('username');
+  }
+
+  get password() {
+    return this.logForm.get('password');
   }
 
   login() {
-    if (this.loginUserDto.username.match(EMAIL_PATTERN) && this.loginUserDto.password.match(PASSWORD_PATTERN)) {
-      this.loginTokenSubscription = this.authService.login(this.loginUserDto).subscribe(data => {
-          console.log(JSON.stringify(data));
-          this.tokenStorage.saveToken(data.authToken);
-          this.userAccountSubscription = this.authService.getUserAccount(this.loginUserDto.username).subscribe(user => {
-              JSON.stringify(this.tokenStorage.saveUser(user));
-              if (this.authService.isAuthorised()) {
-                this.router.navigate(['/']);
-              }
-            }, err => {
-              console.log('Load User Error: user might not found or sth went wrong.' + JSON.stringify(err));
-              this.errorAlert = {
-                type: 'danger',
-                msg: `Помилка входу: E-mail або пароль введені неправильно`
-              };
+    this.loginTokenSubscription = this.authService.login(this.logForm.value).subscribe(data => {
+        this.tokenStorage.saveToken(data.authToken);
+        this.userAccountSubscription = this.authService.getUserAccount(this.logForm.get('username').value).subscribe(user => {
+            this.tokenStorage.saveUser(user);
+            if (this.authService.isAuthorised()) {
+              this.router.navigate(['/']);
             }
-          );
-        }, err => {
-          console.log('Authorization Error: problems with receiving JWT token...' + JSON.stringify(err));
-          this.errorAlert = {
-            type: 'danger',
-            msg: `Помилка входу: E-mail або пароль введені неправильно`
-          };
-        }
-      );
-    } else {
-      if (this.loginUserDto.username.match(EMAIL_PATTERN)) {
-        this.emailValidation = 'is-valid';
-      } else {
-        this.emailValidation = 'is-invalid';
+          }, err => {
+            this.errorAlert = {type: 'danger', msg: this.errorHandler.handleError(err.status, err.error)};
+          }
+        );
+      }, err => {
+        this.errorAlert = {type: 'danger', msg: this.errorHandler.handleError(err.status, err.error)};
       }
-
-      if (this.loginUserDto.password.match(PASSWORD_PATTERN)) {
-        this.passwordValidation = 'is-valid';
-      } else {
-        this.passwordValidation = 'is-invalid';
-      }
-    }
+    );
   }
 
   ngOnDestroy(): void {

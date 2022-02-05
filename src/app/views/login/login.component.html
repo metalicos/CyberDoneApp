@@ -6,51 +6,61 @@
           <div class="card-group">
             <div class="card p-4">
               <div class="card-body">
-                <h1 class="text-capitalize text-center">CyberDone</h1>
-                <div class="input-group mb-1">
-                  <img class="mx-auto" src="./assets/favicon.ico" alt="CyberDoneLogo"/>
-                </div>
-                <h3 class="text-center text-dark">Вхід в обліковий запис</h3>
-
-                <alert [type]="errorAlert.type" [dismissible]="dismissible" *ngIf="errorAlert">{{errorAlert.msg}}</alert>
-
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="icon-user"></i></span>
+                <form [formGroup]="logForm">
+                  <h1 class="text-capitalize text-center">CyberDone</h1>
+                  <div class="input-group mb-1">
+                    <img class="mx-auto" src="./assets/favicon.ico" alt="CyberDoneLogo"/>
                   </div>
-                  <input id="email" type="email" class="form-control {{emailValidation}}"
-                         [(ngModel)]="loginUserDto.username"
-                         placeholder="E-mail" required>
-                </div>
+                  <h3 class="text-center text-dark">Вхід в обліковий запис</h3>
 
-                <div class="input-group mb-4">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="icon-lock"></i></span>
-                  </div>
-                  <input id="password" type="password" class="form-control {{passwordValidation}}"
-                         [(ngModel)]="loginUserDto.password"
-                         placeholder="Пароль" required>
-                </div>
+                  <alert [type]="errorAlert.type" [dismissible]="true" *ngIf="errorAlert">{{errorAlert.msg}}</alert>
 
-                <div class="row mb-2">
-                  <div class="col-12">
-                    <button type="button" class="btn btn-dark btn-block px-4" (click)="login()">Увійти
-                    </button>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="icon-user"></i></span>
+                    </div>
+                    <input formControlName="username"
+                           [class.is-invalid]="username.invalid && username.touched"
+                           id="email" type="email" class="form-control"
+                           placeholder="E-mail" required>
+                    <div class="invalid-feedback text-right" *ngIf="username.errors">
+                      Неправильно введена електронна пошта
+                    </div>
                   </div>
-                </div>
+                  <div class="input-group mb-4">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="icon-lock"></i></span>
+                    </div>
+                    <input formControlName="password"
+                           [class.is-invalid]="password.invalid && password.touched"
+                           id="password" type="password" class="form-control"
+                           placeholder="Пароль" required>
+                    <div class="invalid-feedback text-right" *ngIf="password.errors">
+                      Неправильно введений пароль
+                    </div>
+                  </div>
+                  <div class="row mb-2">
+                    <div class="col-12">
+                      <button
+                        [disabled]="(username.invalid && username.touched) || (password.invalid && password.touched)"
+                        type="button" class="btn btn-dark btn-block px-4" (click)="login()">Увійти
+                      </button>
+                    </div>
+                  </div>
 
-                <div class="row">
-                  <div class="col-6 text-left">
-                    <button type="button" class="btn btn-link text-dark px-0" [routerLink]="['/change-password']">Забули
-                      пароль?
-                    </button>
+                  <div class="row">
+                    <div class="col-6 text-left">
+                      <button type="button" class="btn btn-link text-dark px-0" [routerLink]="['/change-password']">
+                        Забули пароль?
+                      </button>
+                    </div>
+                    <div class="col-6 text-right">
+                      <button type="button" class="btn btn-link text-dark px-0" [routerLink]="['/register']">
+                        Зареєструватися
+                      </button>
+                    </div>
                   </div>
-                  <div class="col-6 text-right">
-                    <button type="button" class="btn btn-link text-dark px-0"
-                            [routerLink]="['/register']">Зареєструватися
-                    </button>
-                  </div>
-                </div>
+                </form>
               </div>
             </div>
           </div>

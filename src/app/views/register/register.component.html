@@ -12,19 +12,19 @@
                 </div>
                 <h3 class="text-center text-dark">Реєстрація</h3>
 
-                <alert [type]="errorAlert.type" [dismissible]="dismissible" *ngIf="errorAlert">{{errorAlert.msg}}</alert>
+                <alert [type]="errorAlert.type" [dismissible]="true" *ngIf="errorAlert">{{errorAlert.msg}}</alert>
 
                 <div class="input-group mb-3">
                   <div class="input-group-prepend">
                     <span class="input-group-text"><i class="icon-user"></i></span>
                   </div>
                   <input formControlName="lastName"
-                         [class.is-invalid]="regForm.get('lastName').invalid && regForm.get('lastName').touched"
+                         [class.is-invalid]="lastName.invalid && lastName.touched"
                          id="lastName" type="text" class="form-control" placeholder="Прізвище" required>
-                  <div class="invalid-feedback text-right" *ngIf="regForm.get('lastName').errors?.pattern">
+                  <div class="invalid-feedback text-right" *ngIf="lastName.errors?.pattern">
                     Прізвище не відповідає правилу заповнення та введено не правильно.
                   </div>
-                  <div class="invalid-feedback text-right" *ngIf="regForm.get('lastName').errors?.required">
+                  <div class="invalid-feedback text-right" *ngIf="lastName.errors?.required">
                     Це поле є обов'язковим для введення.
                   </div>
                 </div>
@@ -34,13 +34,13 @@
                     <span class="input-group-text"><i class="icon-user"></i></span>
                   </div>
                   <input formControlName="firstName"
-                         [class.is-invalid]="regForm.get('firstName').invalid && regForm.get('firstName').touched"
+                         [class.is-invalid]="firstName.invalid && firstName.touched"
                          id="firstName" type="text" class="form-control"
                          placeholder="Ім'я" required>
-                  <div class="invalid-feedback text-right" *ngIf="regForm.get('firstName').errors?.pattern">
+                  <div class="invalid-feedback text-right" *ngIf="firstName.errors?.pattern">
                     Ім'я не відповідає правилу заповнення та введено не правильно.
                   </div>
-                  <div class="invalid-feedback text-right" *ngIf="regForm.get('firstName').errors?.required">
+                  <div class="invalid-feedback text-right" *ngIf="firstName.errors?.required">
                     Це поле є обов'язковим для введення.
                   </div>
                 </div>
@@ -50,13 +50,13 @@
                     <span class="input-group-text"><i class="icon-user"></i></span>
                   </div>
                   <input formControlName="patronymic"
-                         [class.is-invalid]="regForm.get('patronymic').invalid && regForm.get('patronymic').touched"
+                         [class.is-invalid]="patronymic.invalid && patronymic.touched"
                          id="patronymic" class="form-control"
                          placeholder="По батькові" required>
-                  <div class="invalid-feedback text-right" *ngIf="regForm.get('patronymic').errors?.pattern">
+                  <div class="invalid-feedback text-right" *ngIf="patronymic.errors?.pattern">
                     По батькові не відповідає правилу заповнення та введено не правильно.
                   </div>
-                  <div class="invalid-feedback text-right" *ngIf="regForm.get('patronymic').errors?.required">
+                  <div class="invalid-feedback text-right" *ngIf="patronymic.errors?.required">
                     Це поле є обов'язковим для введення.
                   </div>
                 </div>
@@ -66,13 +66,13 @@
                     <span class="input-group-text">@</span>
                   </div>
                   <input formControlName="username"
-                         [class.is-invalid]="regForm.get('username').invalid && regForm.get('username').touched"
+                         [class.is-invalid]="username.invalid && username.touched"
                          id="email" type="text" class="form-control"
                          placeholder="E-mail" required>
-                  <div class="invalid-feedback text-right" *ngIf="regForm.get('username').errors?.email">
+                  <div class="invalid-feedback text-right" *ngIf="username.errors?.email">
                     Введена пошта є неправильного форматую
                   </div>
-                  <div class="invalid-feedback text-right" *ngIf="regForm.get('username').errors?.required">
+                  <div class="invalid-feedback text-right" *ngIf="username.errors?.required">
                     Це поле є обов'язковим для введення.
                   </div>
                 </div>
@@ -82,17 +82,17 @@
                     <span class="input-group-text"><i class="icon-lock"></i></span>
                   </div>
                   <input formControlName="password"
-                         [class.is-invalid]="regForm.get('password').invalid && regForm.get('password').touched"
+                         [class.is-invalid]="password.invalid && password.touched"
                          id="password" type="password" class="form-control"
                          placeholder="Пароль" required>
-                  <div class="invalid-feedback text-right" *ngIf="regForm.get('password').errors?.pattern">
+                  <div class="invalid-feedback text-right" *ngIf="password.errors?.pattern">
                     Пароль повинен містити щонайменше 1 літеру нижнього та 1 літеру верхнього регістру. Дозволені літери
                     англійського алфавіту.
                   </div>
-                  <div class="invalid-feedback text-right" *ngIf="regForm.get('password').errors?.minlength">
+                  <div class="invalid-feedback text-right" *ngIf="password.errors?.minlength">
                     Пароль повинен містити щонайменше 8 символів
                   </div>
-                  <div class="invalid-feedback text-right" *ngIf="regForm.get('password').errors?.required">
+                  <div class="invalid-feedback text-right" *ngIf="password.errors?.required">
                     Це поле є обов'язковим для введення.
                   </div>
                 </div>
@@ -102,22 +102,26 @@
                     <span class="input-group-text"><i class="icon-lock"></i></span>
                   </div>
                   <input formControlName="passwordCheck"
-                         [class.is-invalid]="regForm.get('passwordCheck').invalid && regForm.get('passwordCheck').touched"
+                         [class.is-invalid]="passwordCheck.invalid && passwordCheck.touched"
                          id="password-check" type="password" class="form-control"
                          placeholder="Повторіть пароль" required>
-                  <div class="invalid-feedback text-right" *ngIf="regForm.get('passwordCheck').errors?.pattern">
+                  <div class="invalid-feedback text-right" *ngIf="passwordCheck.errors?.pattern">
                     Пароль повинен містити щонайменше 1 літеру нижнього та 1 літеру верхнього регістру. Дозволені літери
                     англійського алфавіту.
                   </div>
-                  <div class="invalid-feedback text-right" *ngIf="regForm.get('passwordCheck').errors?.minlength">
+                  <div class="invalid-feedback text-right" *ngIf="passwordCheck.errors?.minlength">
                     Пароль повинен містити щонайменше 8 символів
                   </div>
-                  <div class="invalid-feedback text-right" *ngIf="regForm.get('passwordCheck').errors?.required">
+                  <div class="invalid-feedback text-right" *ngIf="passwordCheck.errors?.required">
                     Це поле є обов'язковим для введення.
                   </div>
                 </div>
 
-                <button type="button" class="btn btn-block btn-dark mb-2" (click)="completeRegistration()">
+                <button [disabled]="(firstName.touched && firstName.invalid) ||
+                      (lastName.touched && lastName.invalid) || (patronymic.touched && patronymic.invalid) ||
+                      (username.touched && username.invalid) || (password.touched && password.invalid) ||
+                      (passwordCheck.touched && passwordCheck.invalid)"
+                        type="button" class="btn btn-block btn-dark mb-2" (click)="completeRegistration()">
                   Створити обліковий запис
                 </button>
 

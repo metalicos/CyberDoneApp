@@ -12,6 +12,30 @@ export class RegisterComponent implements OnDestroy {
   registrationAction: any;
   errorAlert: any;
 
+  get firstName() {
+    return this.regForm.get('firstName');
+  }
+
+  get lastName() {
+    return this.regForm.get('lastName');
+  }
+
+  get patronymic() {
+    return this.regForm.get('patronymic');
+  }
+
+  get password() {
+    return this.regForm.get('password');
+  }
+
+  get username() {
+    return this.regForm.get('username');
+  }
+
+  get passwordCheck() {
+    return this.regForm.get('passwordCheck');
+  }
+
   constructor(private fb: FormBuilder, public accountService: AccountService,
               private router: Router, private errorHandler: ErrorHandlerService) {
   }
