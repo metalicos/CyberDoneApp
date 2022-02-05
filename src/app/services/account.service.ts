@@ -22,6 +22,7 @@ export interface ChangePasswordDto {
 export interface RegistrationUserDto {
   username: string;
   password: string;
+  passwordCheck: string;
   firstName: string;
   lastName: string;
   patronymic: string;

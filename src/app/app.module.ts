@@ -1,5 +1,4 @@
 import {NgModule} from '@angular/core';
-import {FormsModule} from '@angular/forms';
 
 import {HashLocationStrategy, LocationStrategy} from '@angular/common';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -33,6 +32,7 @@ import {AlertModule} from 'ngx-bootstrap/alert';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgxEchartsModule} from 'ngx-echarts';
 import {LogoutComponent} from './views/logout/logout.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -44,8 +44,6 @@ const APP_CONTAINERS = [
 
 @NgModule({
   imports: [
-    FormsModule,
-    FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
     AppRoutingModule,
@@ -65,6 +63,8 @@ const APP_CONTAINERS = [
     }),
     AlertModule,
     NgbModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   declarations: [
     AppComponent,

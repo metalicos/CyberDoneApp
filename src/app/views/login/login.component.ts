@@ -2,7 +2,7 @@ import {Component, OnDestroy} from '@angular/core';
 import {AccountService, LoginUserDto} from '../../services/account.service';
 import {AuthStorageService} from '../../security/auth-storage.service';
 import {Router} from '@angular/router';
-import {EMAIL_PATTERN, PASSWORD_PATTERN} from '../../validator-utils.service';
+import {EMAIL_PATTERN, PASSWORD_PATTERN} from '../../services/validator-utils.service';
 
 @Component({
   templateUrl: 'login.component.html'
@@ -11,7 +11,6 @@ export class LoginComponent implements OnDestroy {
 
   private loginTokenSubscription: any = null;
   private userAccountSubscription: any = null;
-  private formChecker: any = null;
   loginUserDto: LoginUserDto = {
     username: '',
     password: '',
@@ -24,12 +23,12 @@ export class LoginComponent implements OnDestroy {
   constructor(public authService: AccountService,
               public tokenStorage: AuthStorageService,
               private router: Router) {
-    console.log('LOGIN');
   }
 
   login() {
     if (this.loginUserDto.username.match(EMAIL_PATTERN) && this.loginUserDto.password.match(PASSWORD_PATTERN)) {
       this.loginTokenSubscription = this.authService.login(this.loginUserDto).subscribe(data => {
+          console.log(JSON.stringify(data));
           this.tokenStorage.saveToken(data.authToken);
           this.userAccountSubscription = this.authService.getUserAccount(this.loginUserDto.username).subscribe(user => {
               JSON.stringify(this.tokenStorage.saveUser(user));

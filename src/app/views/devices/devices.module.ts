@@ -14,7 +14,6 @@ import {
   NgbTypeaheadModule
 } from '@ng-bootstrap/ng-bootstrap';
 import {NgxEchartsModule} from 'ngx-echarts';
-import {FormsModule} from '@angular/forms';
 import {RemoveItemComponent} from './add-remove-devices-component/remove-item/remove-item.component';
 import {ModalModule} from 'ngx-bootstrap/modal';
 import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
@@ -28,7 +27,6 @@ import {ScheduleSetupComponent} from './devices-component/hydroponic/schedule/sc
     DevicesRoutingModule,
     NgbCollapseModule,
     NgxEchartsModule,
-    FormsModule,
     NgbButtonsModule,
     NgbTimepickerModule,
     NgbDropdownModule,

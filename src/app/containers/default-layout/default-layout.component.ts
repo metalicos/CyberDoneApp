@@ -22,7 +22,6 @@ export class DefaultLayoutComponent implements OnDestroy {
     }
     const user = this.storageService.getUser();
     this.subscription = authService.getUserAccount(user.username).subscribe(data => {
-        console.log(data);
         let rolesStr = '';
         user.roles.forEach(r => rolesStr += r.role.toLowerCase());
         this.navItems = navItems.filter(nav => {

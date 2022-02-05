@@ -6,11 +6,11 @@ import {AuthStorageService} from './auth-storage.service';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor(private token: AuthStorageService) {
+  constructor(private storageService: AuthStorageService) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    const authToken: string = this.token.getToken();
+    const authToken: string = this.storageService.getToken();
     req = req.clone({
       url: req.url,
       setHeaders: {

@@ -5,85 +5,135 @@
         <div class="col-md-6 mx-auto">
           <div class="card mx-4">
             <div class="card-body p-4">
-              <h1 class="text-capitalize text-center">CyberDone</h1>
-              <div class="input-group mb-1">
-                <img class="mx-auto" src="./assets/favicon.ico" alt="CyberDoneLogo"/>
-              </div>
-              <h3 class="text-center text-dark">Реєстрація</h3>
-
-              <alert [type]="errorAlert.type" [dismissible]="dismissible" *ngIf="errorAlert">{{errorAlert.msg}}</alert>
-
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text"><i class="icon-user"></i></span>
+              <form [formGroup]="regForm">
+                <h1 class="text-capitalize text-center">CyberDone</h1>
+                <div class="input-group mb-1">
+                  <img class="mx-auto" src="./assets/favicon.ico" alt="CyberDoneLogo"/>
                 </div>
-                <input id="lastName" type="text" class="form-control {{validationLastName}}"
-                       [(ngModel)]="registrationDto.lastName"
-                       placeholder="Прізвище" required>
-              </div>
+                <h3 class="text-center text-dark">Реєстрація</h3>
 
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text"><i class="icon-user"></i></span>
+                <alert [type]="errorAlert.type" [dismissible]="dismissible" *ngIf="errorAlert">{{errorAlert.msg}}</alert>
+
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="icon-user"></i></span>
+                  </div>
+                  <input formControlName="lastName"
+                         [class.is-invalid]="regForm.get('lastName').invalid && regForm.get('lastName').touched"
+                         id="lastName" type="text" class="form-control" placeholder="Прізвище" required>
+                  <div class="invalid-feedback text-right" *ngIf="regForm.get('lastName').errors?.pattern">
+                    Прізвище не відповідає правилу заповнення та введено не правильно.
+                  </div>
+                  <div class="invalid-feedback text-right" *ngIf="regForm.get('lastName').errors?.required">
+                    Це поле є обов'язковим для введення.
+                  </div>
                 </div>
-                <input id="firstName" type="text" class="form-control {{validationFirstName}}"
-                       [(ngModel)]="registrationDto.firstName"
-                       placeholder="Ім'я" required>
-              </div>
 
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text"><i class="icon-user"></i></span>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="icon-user"></i></span>
+                  </div>
+                  <input formControlName="firstName"
+                         [class.is-invalid]="regForm.get('firstName').invalid && regForm.get('firstName').touched"
+                         id="firstName" type="text" class="form-control"
+                         placeholder="Ім'я" required>
+                  <div class="invalid-feedback text-right" *ngIf="regForm.get('firstName').errors?.pattern">
+                    Ім'я не відповідає правилу заповнення та введено не правильно.
+                  </div>
+                  <div class="invalid-feedback text-right" *ngIf="regForm.get('firstName').errors?.required">
+                    Це поле є обов'язковим для введення.
+                  </div>
                 </div>
-                <input id="patronymic" class="form-control {{validationPatronymic}}"
-                       [(ngModel)]="registrationDto.patronymic"
-                       placeholder="По батькові" required>
-              </div>
 
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">@</span>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="icon-user"></i></span>
+                  </div>
+                  <input formControlName="patronymic"
+                         [class.is-invalid]="regForm.get('patronymic').invalid && regForm.get('patronymic').touched"
+                         id="patronymic" class="form-control"
+                         placeholder="По батькові" required>
+                  <div class="invalid-feedback text-right" *ngIf="regForm.get('patronymic').errors?.pattern">
+                    По батькові не відповідає правилу заповнення та введено не правильно.
+                  </div>
+                  <div class="invalid-feedback text-right" *ngIf="regForm.get('patronymic').errors?.required">
+                    Це поле є обов'язковим для введення.
+                  </div>
                 </div>
-                <input id="email" type="text" class="form-control {{validationUsername}}"
-                       [(ngModel)]="registrationDto.username"
-                       placeholder="E-mail" required>
-              </div>
 
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text"><i class="icon-lock"></i></span>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">@</span>
+                  </div>
+                  <input formControlName="username"
+                         [class.is-invalid]="regForm.get('username').invalid && regForm.get('username').touched"
+                         id="email" type="text" class="form-control"
+                         placeholder="E-mail" required>
+                  <div class="invalid-feedback text-right" *ngIf="regForm.get('username').errors?.email">
+                    Введена пошта є неправильного форматую
+                  </div>
+                  <div class="invalid-feedback text-right" *ngIf="regForm.get('username').errors?.required">
+                    Це поле є обов'язковим для введення.
+                  </div>
                 </div>
-                <input id="password" type="password" class="form-control {{validationPassword}}"
-                       [(ngModel)]="registrationDto.password"
-                       placeholder="Пароль" required>
-              </div>
 
-              <div class="input-group mb-4">
-                <div class="input-group-prepend">
-                  <span class="input-group-text"><i class="icon-lock"></i></span>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="icon-lock"></i></span>
+                  </div>
+                  <input formControlName="password"
+                         [class.is-invalid]="regForm.get('password').invalid && regForm.get('password').touched"
+                         id="password" type="password" class="form-control"
+                         placeholder="Пароль" required>
+                  <div class="invalid-feedback text-right" *ngIf="regForm.get('password').errors?.pattern">
+                    Пароль повинен містити щонайменше 1 літеру нижнього та 1 літеру верхнього регістру. Дозволені літери
+                    англійського алфавіту.
+                  </div>
+                  <div class="invalid-feedback text-right" *ngIf="regForm.get('password').errors?.minlength">
+                    Пароль повинен містити щонайменше 8 символів
+                  </div>
+                  <div class="invalid-feedback text-right" *ngIf="regForm.get('password').errors?.required">
+                    Це поле є обов'язковим для введення.
+                  </div>
                 </div>
-                <input id="password-check" type="password" class="form-control {{validationPasswordCheck}}"
-                       [(ngModel)]="passwordCheck"
-                       placeholder="Повторіть пароль" required>
-              </div>
 
-              <button type="button" class="btn btn-block btn-dark mb-2" (click)="registration()">Створити обліковий
-                запис
-              </button>
-
-              <div class="row">
-                <div class="col-6 text-left">
-                  <button type="button" class="btn btn-link text-dark px-0" [routerLink]="['/login']">У мене вже є
-                    обліковий запис...
-                  </button>
+                <div class="input-group mb-4">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="icon-lock"></i></span>
+                  </div>
+                  <input formControlName="passwordCheck"
+                         [class.is-invalid]="regForm.get('passwordCheck').invalid && regForm.get('passwordCheck').touched"
+                         id="password-check" type="password" class="form-control"
+                         placeholder="Повторіть пароль" required>
+                  <div class="invalid-feedback text-right" *ngIf="regForm.get('passwordCheck').errors?.pattern">
+                    Пароль повинен містити щонайменше 1 літеру нижнього та 1 літеру верхнього регістру. Дозволені літери
+                    англійського алфавіту.
+                  </div>
+                  <div class="invalid-feedback text-right" *ngIf="regForm.get('passwordCheck').errors?.minlength">
+                    Пароль повинен містити щонайменше 8 символів
+                  </div>
+                  <div class="invalid-feedback text-right" *ngIf="regForm.get('passwordCheck').errors?.required">
+                    Це поле є обов'язковим для введення.
+                  </div>
                 </div>
-                <div class="col-6 text-right">
-                  <button type="button" class="btn btn-link text-dark px-0"
-                          [routerLink]="['/change-password']">Забули пароль?
-                  </button>
-                </div>
-              </div>
 
+                <button type="button" class="btn btn-block btn-dark mb-2" (click)="completeRegistration()">
+                  Створити обліковий запис
+                </button>
+
+                <div class="row">
+                  <div class="col-6 text-left">
+                    <button type="button" class="btn btn-link text-dark px-0" [routerLink]="['/login']">У мене вже є
+                      обліковий запис...
+                    </button>
+                  </div>
+                  <div class="col-6 text-right">
+                    <button type="button" class="btn btn-link text-dark px-0"
+                            [routerLink]="['/change-password']">Забули пароль?
+                    </button>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>
