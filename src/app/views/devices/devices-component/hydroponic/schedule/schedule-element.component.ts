@@ -1,6 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {DeviceService, ValueType} from '../../../../../services/device.service';
 import {Subscription} from 'rxjs';
+import {DeviceScheduleService, ValueType} from '../../../../../services/device-schedule.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -32,7 +32,8 @@ export class ScheduleElementComponent implements OnInit, OnDestroy {
   sub: Subscription;
 
 
-  constructor(private deviceService: DeviceService) {
+  constructor(private deviceSchedule: DeviceScheduleService,
+  ) {
   }
 
   ngOnInit(): void {
@@ -64,7 +65,7 @@ export class ScheduleElementComponent implements OnInit, OnDestroy {
   }
 
   deleteSchedule(id: number) {
-    this.sub = this.deviceService.deleteScheduleById(id).subscribe(data => console.log(data));
+    this.sub = this.deviceSchedule.deleteScheduleById(id).subscribe(data => console.log(data));
   }
 
   ngOnDestroy(): void {

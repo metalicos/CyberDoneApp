@@ -5,8 +5,7 @@ import {
   DeviceService,
   HydroponicDataDto,
   HydroponicSettingsDto,
-  HydroponicTimeDto,
-  RegularScheduleDto
+  HydroponicTimeDto
 } from '../../../../services/device.service';
 import {ModalDirective} from 'ngx-bootstrap/modal';
 import {HYDROPONIC_TOPIC_LABEL_MAP} from './schedule/hydroponic-topic-label-map';
@@ -14,6 +13,7 @@ import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 import {TIME_ZONE_MAP} from '../../time-zone-map';
 import {DeviceMetadataDto, DeviceMetadataService} from '../../../../services/device-metadata.service';
+import {DeviceScheduleService, RegularScheduleDto} from '../../../../services/device-schedule.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -108,6 +108,7 @@ export class HydroponicComponent implements OnDestroy, OnInit {
   currentDate: string;
 
   constructor(private deviceService: DeviceService,
+              private deviceSchedule: DeviceScheduleService,
               private deviceMeta: DeviceMetadataService) {
     this.labelMap = HYDROPONIC_TOPIC_LABEL_MAP;
   }
@@ -228,7 +229,7 @@ export class HydroponicComponent implements OnDestroy, OnInit {
             this.subscriptionMap.get('GetHydroponicLastSettingsRequest').unsubscribe();
           }));
     this.subscriptionMap.set('GetHydroponicSchedulesRequest',
-      this.deviceService.getSchedulesByKey(this.metadata.uuid, this.metadata.deviceType)
+      this.deviceSchedule.getSchedulesByKey(this.metadata.uuid, this.metadata.deviceType)
         .subscribe(
           schedules => {
             this.scheduleList = schedules;

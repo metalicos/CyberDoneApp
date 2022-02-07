@@ -1,5 +1,4 @@
-import {ValueType} from '../../../../../services/device.service';
-
+import {ValueType} from '../../../../../services/device-schedule.service';
 
 export let HYDROPONIC_TOPIC_LABEL_MAP: Map<string, string> = new Map<string, string>([
   ['phUpPump', 'Керувати насосом PH UP'],

@@ -2,8 +2,8 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
 import {Observable, OperatorFunction, Subscription} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
-import {DeviceService, RegularScheduleDto, ValueType} from '../../../../../services/device.service';
 import {HYDROPONIC_LABEL_TOPIC_MAP} from './hydroponic-topic-label-map';
+import {DeviceScheduleService, RegularScheduleDto, ValueType} from '../../../../../services/device-schedule.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -41,7 +41,7 @@ export class ScheduleSetupComponent implements OnInit, OnDestroy {
 
   automation: string = '';
 
-  constructor(private deviceService: DeviceService) {
+  constructor(private deviceSchedule: DeviceScheduleService) {
   }
 
   ngOnDestroy(): void {
@@ -64,7 +64,7 @@ export class ScheduleSetupComponent implements OnInit, OnDestroy {
 
   createSchedule() {
     this.schedule.time = [this.time.hour, this.time.minute, this.time.second];
-    this.sub = this.deviceService.createSchedule(this.schedule).subscribe(schedule => console.log(schedule));
+    this.sub = this.deviceSchedule.createSchedule(this.schedule).subscribe(schedule => console.log(schedule));
   }
 
   isValueTypeEnabled(): boolean {
