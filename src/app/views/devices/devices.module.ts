@@ -19,6 +19,8 @@ import {ModalModule} from 'ngx-bootstrap/modal';
 import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
 import {ScheduleElementComponent} from './devices-component/hydroponic/schedule/schedule-element.component';
 import {ScheduleSetupComponent} from './devices-component/hydroponic/schedule/schedule-setup.component';
+import {ReactiveFormsModule} from '@angular/forms';
+import {AlertModule} from 'ngx-bootstrap/alert';
 
 
 @NgModule({
@@ -35,6 +37,8 @@ import {ScheduleSetupComponent} from './devices-component/hydroponic/schedule/sc
     NgbDatepickerModule,
     ModalModule.forRoot(),
     BsDropdownModule.forRoot(),
+    ReactiveFormsModule,
+    AlertModule,
   ],
   declarations: [
     DevicesComponent,

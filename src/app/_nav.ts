@@ -1,5 +1,4 @@
 import {INavData} from '@coreui/angular';
-import {INavLabel} from '@coreui/angular/lib/sidebar/app-sidebar-nav';
 
 export const navItems: INavData[] = [
   // {

@@ -1,7 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AuthStorageService} from '../../../security/auth-storage.service';
-import {DeviceMetadataDto, DeviceService} from '../../../services/device.service';
 import {Subscription} from 'rxjs';
+import {FormBuilder, Validators} from '@angular/forms';
+import {UUID_PATTERN} from '../../../services/validator-utils.service';
+import {ErrorHandlerService} from '../../../services/error-handle.service';
+import {DeviceMetadataDto, DeviceMetadataService} from '../../../services/device-metadata.service';
 
 @Component({
   selector: 'app-add-remove-devices-component',
@@ -10,39 +13,64 @@ import {Subscription} from 'rxjs';
 })
 export class AddRemoveDevicesComponent implements OnInit, OnDestroy {
   subscriptionMap = new Map<string, Subscription>();
-  uuid: string = '';
   metadataList: DeviceMetadataDto[] = [];
+  errorAlert: any;
+  addForm: any;
 
-  constructor(private authStorage: AuthStorageService,
-              private deviceService: DeviceService) {
+  constructor(private fb: FormBuilder, private errorHandler: ErrorHandlerService,
+              private authStorage: AuthStorageService, private deviceMeta: DeviceMetadataService) {
+  }
+
+  get uuid() {
+    return this.addForm.get('uuid');
   }
 
   ngOnInit(): void {
     this.generateLinkedDevicesList();
+    this.addForm = this.fb.group({
+      uuid: ['', [Validators.required, Validators.pattern(UUID_PATTERN)]],
+    });
   }
 
   linkDeviceToUser() {
     this.subscriptionMap.set('LinkDeviceRequest',
-      this.deviceService.linkDevice(this.uuid, this.authStorage.getUser().id)
-        .subscribe(
-          data => this.generateLinkedDevicesList(),
-          err => this.generateLinkedDevicesList())
+      this.deviceMeta.linkDevice(this.addForm.value.uuid, this.authStorage.getUser().id).subscribe(
+        data => this.generateLinkedDevicesList(),
+        err => {
+          if (err.error.detail === undefined) {
+            this.generateLinkedDevicesList();
+            return;
+          }
+          this.errorAlert = this.errorHandler.handleError(err.status, err.error);
+          this.generateLinkedDevicesList();
+        })
     );
   }
 
   unlinkDevice(uuid: string) {
     this.subscriptionMap.set('UnlinkDeviceRequest',
-      this.deviceService.unlinkDevice(uuid)
-        .subscribe(
-          data => this.generateLinkedDevicesList(),
-          err => this.generateLinkedDevicesList())
+      this.deviceMeta.unlinkDevice(uuid).subscribe(
+        data => this.generateLinkedDevicesList(),
+        err => {
+          if (err.error.detail === undefined) {
+            this.generateLinkedDevicesList();
+            return;
+          }
+          this.errorAlert = this.errorHandler.handleError(err.status, err.error);
+          this.generateLinkedDevicesList();
+        })
     );
   }
 
   private generateLinkedDevicesList() {
     this.subscriptionMap.set('GetLinkedDevicesRequest',
-      this.deviceService.getMetadataListByUser(this.authStorage.getUser().id)
-        .subscribe(data => this.metadataList = data)
+      this.deviceMeta.getMetadataListByUser(this.authStorage.getUser().id).subscribe(
+        data => this.metadataList = data,
+        err => {
+          console.log(err);
+          this.errorAlert = this.errorHandler.handleError(err.status, err.error);
+          this.generateLinkedDevicesList();
+        })
     );
   }
 

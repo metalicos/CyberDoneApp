@@ -1196,4 +1196,4 @@ export let TIME_ZONE_MAP = new Map<string, string>([
   ['Africa/Monrovia', '(UTC+00:00)'],
 
   ['Etc/UTC', '(UTC+00:00)']
-])
+]);

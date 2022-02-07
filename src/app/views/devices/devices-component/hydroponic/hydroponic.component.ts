@@ -2,7 +2,6 @@ import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {EChartsOption} from 'echarts';
 import {Observable, OperatorFunction, Subscription} from 'rxjs';
 import {
-  DeviceMetadataDto,
   DeviceService,
   HydroponicDataDto,
   HydroponicSettingsDto,
@@ -14,6 +13,7 @@ import {HYDROPONIC_TOPIC_LABEL_MAP} from './schedule/hydroponic-topic-label-map'
 import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 import {TIME_ZONE_MAP} from '../../time-zone-map';
+import {DeviceMetadataDto, DeviceMetadataService} from '../../../../services/device-metadata.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -107,7 +107,8 @@ export class HydroponicComponent implements OnDestroy, OnInit {
   uploadInfoTimer: any;
   currentDate: string;
 
-  constructor(private deviceService: DeviceService) {
+  constructor(private deviceService: DeviceService,
+              private deviceMeta: DeviceMetadataService) {
     this.labelMap = HYDROPONIC_TOPIC_LABEL_MAP;
   }
 
@@ -361,7 +362,7 @@ export class HydroponicComponent implements OnDestroy, OnInit {
 
   updateMetadata() {
     this.subscriptionMap.set('updateMetadata',
-      this.deviceService.updateMetadata(this.metadata.uuid, this.hydroponicName, this.hydroponicDescription)
+      this.deviceMeta.updateMetadata(this.metadata.uuid, this.hydroponicName, this.hydroponicDescription)
         .subscribe(d => console.log(d)));
   }
 

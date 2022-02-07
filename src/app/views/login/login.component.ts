@@ -32,6 +32,7 @@ export class LoginComponent implements OnDestroy {
 
   login() {
     this.loginTokenSubscription = this.authService.login(this.logForm.value).subscribe(data => {
+        console.log(data);
         this.tokenStorage.saveToken(data.authToken);
         this.userAccountSubscription = this.authService.getUserAccount(this.logForm.get('username').value).subscribe(user => {
             this.tokenStorage.saveUser(user);
@@ -39,11 +40,11 @@ export class LoginComponent implements OnDestroy {
               this.router.navigate(['/']);
             }
           }, err => {
-            this.errorAlert = {type: 'danger', msg: this.errorHandler.handleError(err.status, err.error)};
+            this.errorAlert = this.errorHandler.handleError(err.status, err.error);
           }
         );
       }, err => {
-        this.errorAlert = {type: 'danger', msg: this.errorHandler.handleError(err.status, err.error)};
+        this.errorAlert = this.errorHandler.handleError(err.status, err.error);
       }
     );
   }

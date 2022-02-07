@@ -2,17 +2,30 @@
 <div class="card-group">
   <div class="card">
     <div class="card-block bg-dark p-1">
-      <div class="input-group">
-        <h6 class="form-text text-center text-white w-100">Введіть UUID пристрою</h6>
-      </div>
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Приклад: d70f8752-2d0d-41ca-a707-eca2f5a27ab7"
-               [(ngModel)]="uuid">
-      </div>
-      <div class="input-group-btn">
-        <button class="btn btn-warning w-100 my-1" (click)="linkDeviceToUser()">Додати пристрій<i
-          class="fa fa-plus text-white ml-2"></i></button>
-      </div>
+      <form [formGroup]="addForm">
+
+        <alert [type]="errorAlert.type" *ngIf="errorAlert">{{errorAlert.msg}}</alert>
+
+        <div class="input-group">
+          <h6 class="form-text text-center text-white w-100">Введіть UUID пристрою</h6>
+        </div>
+        <div class="input-group">
+          <input formControlName="uuid"
+                 [class.is-invalid]="uuid.invalid && uuid.touched"
+                 type="text" class="form-control" placeholder="Приклад: d70f8752-2d0d-41ca-a707-eca2f5a27ab7">
+          <div class="invalid-feedback text-right" *ngIf="uuid.errors?.pattern">
+            Ви допустили помилку при введенні унікального ідентифікатору пристрою - UUID.
+          </div>
+          <div class="invalid-feedback text-right" *ngIf="uuid.errors?.required">
+            Це поле є обов'язковим для введення.
+          </div>
+        </div>
+        <div class="input-group-btn">
+          <button [disabled]="(uuid.touched && uuid.invalid)"
+                  class="btn btn-warning w-100 my-1" (click)="linkDeviceToUser()">Додати пристрій
+            <i class="fa fa-plus text-white ml-2"></i></button>
+        </div>
+      </form>
     </div>
     <div class="card-block bg-white" *ngFor="let meta of metadataList">
       <div class="bg-dark m-1 rounded d-none d-md-block text-white">

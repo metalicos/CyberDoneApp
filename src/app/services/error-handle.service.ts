@@ -16,18 +16,20 @@ export class ErrorHandlerService {
     let errorMsg = '';
     console.log(JSON.stringify(err));
     if (errCode === 400) {
-      errorMsg = 'Запит надісланий на сервер не валідний. 400 : ' + err.error + ' : ' + err.title;
+      errorMsg = 'Запит надісланий на сервер не валідний. 400 : ' + err.error + ' : ' + err.title + ' : ' + err.detail;
     } else if (errCode === 401) {
-      errorMsg = 'Помилка авторизації. 401 : ' + err.error + ' : ' + err.title;
+      errorMsg = 'Помилка авторизації. 401 : ' + err.error + ' : ' + err.title + ' : ' + err.detail;
     } else if (errCode === 403) {
-      errorMsg = 'Відмовлено у доступі 403 : ' + err.error + ' : ' + err.title;
+      errorMsg = 'Відмовлено у доступі 403 : ' + err.error + ' : ' + err.title + ' : ' + err.detail;
     } else if (errCode === 404) {
-      errorMsg = 'Ресурс не знайдено. 404 : ' + err.error + ' : ' + err.title;
+      errorMsg = 'Ресурс не знайдено. 404 : ' + err.error + ' : ' + err.title + ' : ' + err.detail;
+    } else if (errCode === 405) {
+      errorMsg = 'Метод . 405 : ' + err.error + ' : ' + err.title + ' : ' + err.detail;
     } else if (errCode === 409) {
-      errorMsg = 'Конфлікт із існуючим ресурсом. 409 : ' + err.error + ' : ' + err.title;
+      errorMsg = 'Конфлікт із існуючим ресурсом. 409 : ' + err.error + ' : ' + err.title + ' : ' + err.detail;
     } else if (errCode === 500) {
-      errorMsg = 'Вибачте за тимчасові незручності, у нас серверні неполадки. 500 : ' + err.error + ' : ' + err.title;
+      errorMsg = 'Вибачте за тимчасові незручності, у нас серверні неполадки. 500 : ' + err.error + ' : ' + err.title + ' : ' + err.detail;
     }
-    return errorMsg;
+    return {type: 'danger', msg: errorMsg};
   }
 }

@@ -9,7 +9,7 @@ import {ErrorHandlerService} from '../../services/error-handle.service';
   templateUrl: 'register.component.html'
 })
 export class RegisterComponent implements OnDestroy {
-  registrationAction: any;
+  registrationSub: any;
   errorAlert: any;
 
   get firstName() {
@@ -36,8 +36,8 @@ export class RegisterComponent implements OnDestroy {
     return this.regForm.get('passwordCheck');
   }
 
-  constructor(private fb: FormBuilder, public accountService: AccountService,
-              private router: Router, private errorHandler: ErrorHandlerService) {
+  constructor(public fb: FormBuilder, public errorHandler: ErrorHandlerService,
+              public accountService: AccountService, public router: Router) {
   }
 
   regForm = this.fb.group({
@@ -50,17 +50,17 @@ export class RegisterComponent implements OnDestroy {
   });
 
   completeRegistration() {
-    this.registrationAction = this.accountService.registration(this.regForm.value).subscribe(data => {
+    this.registrationSub = this.accountService.registration(this.regForm.value).subscribe(data => {
         this.router.navigate(['/login']);
       }, err => {
-        this.errorAlert = {type: 'danger', msg: this.errorHandler.handleError(err.status, err.error)};
+        this.errorAlert = this.errorHandler.handleError(err.status, err.error);
       }
     );
   }
 
   ngOnDestroy() {
-    if (this.registrationAction != null) {
-      this.registrationAction.unsubscribe();
+    if (this.registrationSub != null) {
+      this.registrationSub.unsubscribe();
     }
   }
 }

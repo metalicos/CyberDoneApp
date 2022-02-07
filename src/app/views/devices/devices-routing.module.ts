@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 import {AddRemoveDevicesComponent} from './add-remove-devices-component/add-remove-devices.component';
 import {DevicesComponent} from './devices-component/devices.component';
 
@@ -37,4 +37,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class DevicesRoutingModule {}
+export class DevicesRoutingModule {
+}

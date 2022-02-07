@@ -1,7 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {DeviceMetadataDto, DeviceService} from '../../../services/device.service';
+import {DeviceService} from '../../../services/device.service';
 import {AuthStorageService} from '../../../security/auth-storage.service';
+import {DeviceMetadataDto, DeviceMetadataService} from '../../../services/device-metadata.service';
 
 @Component({
   selector: 'app-devices-component',
@@ -9,13 +10,13 @@ import {AuthStorageService} from '../../../security/auth-storage.service';
   styleUrls: ['./devices.component.scss']
 })
 export class DevicesComponent implements OnInit, OnDestroy {
-
   sub: Subscription;
   hydroponicMetadataList: DeviceMetadataDto[];
   uuidMap: Map<string, string> = new Map<string, string>();
 
   constructor(private authStorage: AuthStorageService,
-              private deviceService: DeviceService) {
+              private deviceService: DeviceService,
+              private deviceMeta: DeviceMetadataService) {
   }
 
   ngOnInit(): void {
@@ -25,7 +26,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
   private generateLinkedDevicesList() {
     const user = this.authStorage.getUser();
     if (user != null) {
-      this.sub = this.deviceService.getMetadataListByUser(user.id).subscribe(
+      this.sub = this.deviceMeta.getMetadataListByUser(user.id).subscribe(
         data => {
           this.hydroponicMetadataList =
             data

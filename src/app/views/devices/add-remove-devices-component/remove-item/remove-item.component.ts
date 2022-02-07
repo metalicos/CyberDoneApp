@@ -1,6 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {DeviceService} from '../../../../services/device.service';
 import {Subscription} from 'rxjs';
+import {DeviceMetadataService} from '../../../../services/device-metadata.service';
 
 @Component({
   selector: 'app-removable-item',
@@ -15,7 +15,7 @@ export class RemoveItemComponent implements OnInit, OnDestroy {
   @Input() value: string = '';
   @Input() extraInfo: string = '';
 
-  constructor(private deviceService: DeviceService) {
+  constructor(private deviceMeta: DeviceMetadataService) {
   }
 
   ngOnInit(): void {
@@ -23,7 +23,7 @@ export class RemoveItemComponent implements OnInit, OnDestroy {
 
   unlinkDevice(uuid: string) {
     this.subscriptionMap.set('UnlinkDeviceRequest',
-      this.deviceService.unlinkDevice(uuid).subscribe(data => {
+      this.deviceMeta.unlinkDevice(uuid).subscribe(data => {
         return data;
       })
     );

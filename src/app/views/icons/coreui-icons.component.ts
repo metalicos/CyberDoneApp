@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Platform } from '@angular/cdk/platform';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {Platform} from '@angular/cdk/platform';
 
-import { IconSetService } from '@coreui/icons-angular';
+import {IconSetService} from '@coreui/icons-angular';
 
 @Component({
   templateUrl: 'coreui-icons.component.html',
@@ -16,7 +16,8 @@ export class CoreUIIconsComponent implements OnInit {
     public platform: Platform,
     private route: ActivatedRoute,
     public iconSet: IconSetService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     const path = this.route.routeConfig.path;

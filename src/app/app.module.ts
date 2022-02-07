@@ -3,7 +3,7 @@ import {NgModule} from '@angular/core';
 import {HashLocationStrategy, LocationStrategy} from '@angular/common';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-import {PerfectScrollbarConfigInterface, PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
+import {PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
 
 import {IconModule, IconSetModule, IconSetService} from '@coreui/icons-angular';
 import {AppComponent} from './app.component';
@@ -34,10 +34,6 @@ import {NgxEchartsModule} from 'ngx-echarts';
 import {LogoutComponent} from './views/logout/logout.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
-const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-  suppressScrollX: true
-};
-
 const APP_CONTAINERS = [
   DefaultLayoutComponent
 ];
@@ -64,7 +60,7 @@ const APP_CONTAINERS = [
     AlertModule,
     NgbModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   declarations: [
     AppComponent,
