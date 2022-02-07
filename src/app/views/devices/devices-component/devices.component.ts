@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {DeviceService} from '../../../services/device.service';
 import {AuthStorageService} from '../../../security/auth-storage.service';
 import {DeviceMetadataDto, DeviceMetadataService} from '../../../services/device-metadata.service';
+import {HydroponicDataService} from '../../../services/hydroponic-data.service';
 
 @Component({
   selector: 'app-devices-component',
@@ -15,7 +15,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
   uuidMap: Map<string, string> = new Map<string, string>();
 
   constructor(private authStorage: AuthStorageService,
-              private deviceService: DeviceService,
+              private hydroData: HydroponicDataService,
               private deviceMeta: DeviceMetadataService) {
   }
 
@@ -31,7 +31,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
           this.hydroponicMetadataList = data
             .filter(m => 'HYDROPONIC_V1'.toLowerCase() === m.deviceType.toLowerCase())
             .filter(m => {
-              this.deviceService.getLastDataInDeviceWithUUID(m.uuid, 1, 1).subscribe(
+              this.hydroData.getLastDataInDeviceWithUUID(m.uuid, 1, 1).subscribe(
                 set => {
                   if (set.length === 1) {
                     this.uuidMap.set(set[0].uuid, set[0].uuid);

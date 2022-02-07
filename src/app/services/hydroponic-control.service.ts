@@ -2,59 +2,6 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {SERVER} from '../backend-urls';
 
-export interface HydroponicCalibrationDataDto {
-  tdsCalibrationCoefficientValue: number;
-  tdsOversampling: number;
-  phCalibrationValuePoint: number;
-  phCalibrationEtalonValue1: number;
-  phCalibrationEtalonValue2: number;
-  phCalibrationAdcValue1: number;
-  phCalibrationAdcValue2: number;
-  phCalibrationSlope: number;
-  phCalibrationValueOffset: number;
-  phOversampling: number;
-  id: number;
-  uuid: string;
-  receiveTime: number[];
-  microcontrollerTime: number[];
-}
-
-export interface HydroponicDataDto {
-  uuid: string;
-  phValue: number;
-  temperatureValue: number;
-  ecValue: number;
-  tdsValue: number;
-  receiveTime: number[];
-  microcontrollerTime: number[];
-}
-
-export interface HydroponicSettingsDto {
-  uuid: string;
-  mlPerMillisecond: number;
-  regulateErrorPh: number;
-  regulateErrorFertilizer: number;
-  phUpDoseMl: number;
-  phDownDoseMl: number;
-  fertilizerDoseMl: number;
-  recheckDispensersAfterMs: number;
-  setupPhValue: number;
-  setupTdsValue: number;
-  setupTemperatureValue: number;
-  deviceEnable: boolean;
-  dispensersEnable: boolean;
-  sensorsEnable: boolean;
-  restartCounter: number;
-  wifiSSID: string;
-  wifiPASS: string;
-  isDispenserPhUpOpen: boolean;
-  isDispenserPhDownOpen: boolean;
-  isDispenserTdsOpen: boolean;
-  autotime: boolean;
-  timeZone: string;
-  microcontrollerTime: number[];
-}
-
 export interface HydroponicTimeDto {
   microcontrollerTime: number[];
   microcontrollerTimeZone: string;
@@ -64,54 +11,9 @@ export interface HydroponicTimeDto {
 @Injectable({
   providedIn: 'root'
 })
-export class DeviceService {
+export class HydroponicControlService {
 
   constructor(private http: HttpClient) {
-  }
-
-  getLastCalibrationDataInDeviceWithUUID(uuid: string, page: number, limit: number) {
-    return this.http.get<HydroponicCalibrationDataDto[]>(SERVER.backendServerUrl + '/hydroponic/calibration-data/last',
-      {
-        headers: SERVER.HEADERS,
-        params: new HttpParams().set('uuid', uuid).set('page', String(page)).set('limit', String(limit))
-      }
-    );
-  }
-
-  deleteCalibrationDataInDeviceWithId(id: number) {
-    return this.http.delete(SERVER.backendServerUrl + '/hydroponic/calibration-data',
-      {
-        headers: SERVER.HEADERS,
-        params: new HttpParams().set('id', String(id))
-      }
-    );
-  }
-
-  getLastDataInDeviceWithUUID(uuid: string, page: number, limit: number) {
-    return this.http.get<HydroponicDataDto[]>(SERVER.backendServerUrl + '/hydroponic/data/last',
-      {
-        headers: SERVER.HEADERS,
-        params: new HttpParams().set('uuid', uuid).set('page', String(page)).set('limit', String(limit))
-      }
-    );
-  }
-
-  deleteAllDataInDeviceWithUUID(id: number) {
-    return this.http.delete(SERVER.backendServerUrl + '/hydroponic/data',
-      {
-        headers: SERVER.HEADERS,
-        params: new HttpParams().set('id', String(id))
-      }
-    );
-  }
-
-  getLastSettingsInDeviceWithUUID(uuid: string, page: number, limit: number) {
-    return this.http.get<HydroponicSettingsDto[]>(SERVER.backendServerUrl + '/hydroponic/settings/last',
-      {
-        headers: SERVER.HEADERS,
-        params: new HttpParams().set('uuid', uuid).set('page', String(page)).set('limit', String(limit))
-      }
-    );
   }
 
   updateTimeManually(dto: HydroponicTimeDto) {

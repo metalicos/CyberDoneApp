@@ -1,12 +1,7 @@
 import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {EChartsOption} from 'echarts';
 import {Observable, OperatorFunction, Subscription} from 'rxjs';
-import {
-  DeviceService,
-  HydroponicDataDto,
-  HydroponicSettingsDto,
-  HydroponicTimeDto
-} from '../../../../services/device.service';
+import {HydroponicControlService, HydroponicTimeDto} from '../../../../services/hydroponic-control.service';
 import {ModalDirective} from 'ngx-bootstrap/modal';
 import {HYDROPONIC_TOPIC_LABEL_MAP} from './schedule/hydroponic-topic-label-map';
 import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
@@ -14,6 +9,8 @@ import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 import {TIME_ZONE_MAP} from '../../time-zone-map';
 import {DeviceMetadataDto, DeviceMetadataService} from '../../../../services/device-metadata.service';
 import {DeviceScheduleService, RegularScheduleDto} from '../../../../services/device-schedule.service';
+import {HydroponicDataDto, HydroponicDataService} from '../../../../services/hydroponic-data.service';
+import {HydroponicSettingsDto, HydroponicSettingsService} from '../../../../services/hydroponic-settings.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -107,9 +104,11 @@ export class HydroponicComponent implements OnDestroy, OnInit {
   uploadInfoTimer: any;
   currentDate: string;
 
-  constructor(private deviceService: DeviceService,
+  constructor(private deviceService: HydroponicControlService,
               private deviceSchedule: DeviceScheduleService,
-              private deviceMeta: DeviceMetadataService) {
+              private deviceMetadataService: DeviceMetadataService,
+              private hydroDataService: HydroponicDataService,
+              private hydroSettService: HydroponicSettingsService) {
     this.labelMap = HYDROPONIC_TOPIC_LABEL_MAP;
   }
 
@@ -139,7 +138,7 @@ export class HydroponicComponent implements OnDestroy, OnInit {
   private uploadInfoFromServer() {
     if (this.isChartOpened) {
       this.subscriptionMap.set('GetHydroponicLastDataRequest',
-        this.deviceService.getLastDataInDeviceWithUUID(this.metadata.uuid, 1, this.chartPointsNumber)
+        this.hydroDataService.getLastDataInDeviceWithUUID(this.metadata.uuid, 1, this.chartPointsNumber)
           .subscribe(
             hydroponicData => {
               this.hydroData = hydroponicData[0];
@@ -206,7 +205,7 @@ export class HydroponicComponent implements OnDestroy, OnInit {
             }));
     } else {
       this.subscriptionMap.set('GetHydroponicLastDataRequest',
-        this.deviceService.getLastDataInDeviceWithUUID(this.metadata.uuid, 1, 1)
+        this.hydroDataService.getLastDataInDeviceWithUUID(this.metadata.uuid, 1, 1)
           .subscribe(
             hydroponicData => {
               this.hydroData = hydroponicData[0];
@@ -218,7 +217,7 @@ export class HydroponicComponent implements OnDestroy, OnInit {
             }));
     }
     this.subscriptionMap.set('GetHydroponicLastSettingsRequest',
-      this.deviceService.getLastSettingsInDeviceWithUUID(this.metadata.uuid, 1, 1)
+      this.hydroSettService.getLastSettingsInDeviceWithUUID(this.metadata.uuid, 1, 1)
         .subscribe(
           hydroponicSettings => {
             this.hydroSett = hydroponicSettings[0];
@@ -295,7 +294,7 @@ export class HydroponicComponent implements OnDestroy, OnInit {
     distinctUntilChanged(),
     map(term => term.length < 1 ? [] : Array.from(TIME_ZONE_MAP.keys())
       .filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
-  );
+  )
 
   updateSetupValues() {
     this.hiddenBtn1 = '';
@@ -363,7 +362,7 @@ export class HydroponicComponent implements OnDestroy, OnInit {
 
   updateMetadata() {
     this.subscriptionMap.set('updateMetadata',
-      this.deviceMeta.updateMetadata(this.metadata.uuid, this.hydroponicName, this.hydroponicDescription)
+      this.deviceMetadataService.updateMetadata(this.metadata.uuid, this.hydroponicName, this.hydroponicDescription)
         .subscribe(d => console.log(d)));
   }
 
