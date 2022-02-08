@@ -33,22 +33,6 @@ export const navItems: INavData[] = [
   //     },
   //   ]
   // },
-  {
-    name: 'Real-Time',
-    url: '/charts',
-    icon: 'cil-bar-chart',
-    class: 'USER,ADMIN,OWNER',
-    children: [
-      {
-        name: 'У графіках',
-        url: '/charts/linear',
-      },
-      {
-        name: 'У таблицях',
-        url: '/charts/table',
-      },
-    ]
-  },
   // {
   //   name: 'Шаблони',
   //   url: '/templates',
