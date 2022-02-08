@@ -1,5 +1,6 @@
 <div *ngIf="phOptions">
   <p class="h4 card-title my-1 text-center text-dark font-weight-bold">PH в реальному часі {{currentDate | date}}</p>
+  <p class="h4 card-title my-1 text-center text-dark font-weight-bold">{{lastPh + ' ph'}}</p>
 </div>
 <div *ngIf="phOptions" class="bg-light pb-4 rounded">
   <div echarts [options]="phOptions" class="demo-chart"></div>
@@ -11,6 +12,7 @@
 
 <div *ngIf="tdsOptions">
   <p class="h4 card-title my-1 text-center text-dark font-weight-bold">TDS в реальному часі {{currentDate | date}}</p>
+  <p class="h4 card-title my-1 text-center text-dark font-weight-bold">{{lastTds + ' ppm'}}</p>
 </div>
 <div *ngIf="tdsOptions" class="bg-light pb-4 rounded">
   <div echarts [options]="tdsOptions" class="demo-chart"></div>

@@ -50,11 +50,15 @@ export class LinearChartComponent implements OnInit, OnDestroy {
           if (this.type === 'temp') {
             this.lastTmp = data[this.chartPointsNumber - 1].temperatureValue;
             const dataSeries = data.map<number>(d => d.temperatureValue <= 0 ? 0 : d.temperatureValue);
+            console.log(dataSeries);
             const timeSeries = data.map<string>(d => d.microcontrollerTime[3] + ':' + d.microcontrollerTime[4] + ':' + d.microcontrollerTime[5]);
+            console.log(timeSeries);
             this.tmpOptions = this.setupOptions(dataSeries, timeSeries);
+            console.log(this.tmpOptions);
           }
         },
-        err => console.log('Data receive error   ' + JSON.stringify(err)));
+        err => console.log('Data receive error   ' + JSON.stringify(err))
+      );
     }, 1000);
   }
 
@@ -77,7 +81,7 @@ export class LinearChartComponent implements OnInit, OnDestroy {
       tooltip: {
         trigger: 'item',
         showDelay: 0,
-        transitionDuration: 0.2,
+        transitionDuration: 0.1,
       },
       series: [{
         data: dataSeries,
