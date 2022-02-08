@@ -26,6 +26,8 @@ export interface HydroponicSettingsDto {
   autotime: boolean;
   timeZone: string;
   microcontrollerTime: number[];
+  createdTimestamp: number[];
+  updatedTimestamp: number[];
 }
 
 @Injectable({

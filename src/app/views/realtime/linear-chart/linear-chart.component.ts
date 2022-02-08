@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {HydroponicSettingsService} from '../../../services/hydroponic-settings.service';
-import {HydroponicDataDto, HydroponicDataService} from '../../../services/hydroponic-data.service';
+import {HydroponicDataService} from '../../../services/hydroponic-data.service';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {EChartsOption} from 'echarts';
@@ -15,35 +15,46 @@ export class LinearChartComponent implements OnInit, OnDestroy {
   type: string;
   hydroponicDataSub: Subscription;
   phOptions: EChartsOption;
+  lastPh: number;
   tdsOptions?: EChartsOption;
+  lastTds: number;
   tmpOptions?: EChartsOption;
+  lastTmp: number;
   currentDate: string;
   chartPointsNumber: number = 30;
   updateInfoTimer: any;
 
-  constructor(private route: ActivatedRoute,
-              private hydroponicSettingsService: HydroponicSettingsService,
+  constructor(private route: ActivatedRoute, private hydroSettService: HydroponicSettingsService,
               private hydroDataService: HydroponicDataService) {
-  }
-
-  ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
+    this.route.params.subscribe(params => {
       this.uuid = params['uuid'];
       this.type = params['type'];
     });
+  }
+
+  ngOnInit(): void {
     this.updateInfoTimer = setInterval(() => {
-      this.hydroponicDataSub = this.hydroDataService.getLastDataInDeviceWithUUID(this.uuid, 0, this.chartPointsNumber)
-        .subscribe(data => {
-            console.log(data);
-            this.currentDate = data[0].microcontrollerTime[0] + '.' + data[0].microcontrollerTime[1] + '.' + data[0].microcontrollerTime[2];
-            this.phOptions = this.setupOptions(data, 'ph');
-            this.tdsOptions = this.setupOptions(data, 'tds');
-            this.tmpOptions = this.setupOptions(data, 'temp');
-          },
-          err => {
-            console.log('Data receive error');
-            console.log(JSON.stringify(err));
-          });
+      this.hydroponicDataSub = this.hydroDataService.getLastDataInDeviceWithUUID(this.uuid, 0, this.chartPointsNumber).subscribe(
+        data => {
+          this.currentDate = data[0].microcontrollerTime[0] + '.' + data[0].microcontrollerTime[1] + '.' + data[0].microcontrollerTime[2];
+          if (this.type === 'ph') {
+            const dataSeries = data.map<number>(d => d.phValue <= 0 ? 0 : d.phValue);
+            const timeSeries = data.map<string>(d => d.microcontrollerTime[3] + ':' + d.microcontrollerTime[4] + ':' + d.microcontrollerTime[5]);
+            this.phOptions = this.setupOptions(dataSeries, timeSeries);
+          }
+          if (this.type === 'tds') {
+            const dataSeries = data.map<number>(d => d.tdsValue <= 0 ? 0 : d.tdsValue);
+            const timeSeries = data.map<string>(d => d.microcontrollerTime[3] + ':' + d.microcontrollerTime[4] + ':' + d.microcontrollerTime[5]);
+            this.tdsOptions = this.setupOptions(dataSeries, timeSeries);
+          }
+          if (this.type === 'temp') {
+            this.lastTmp = data[this.chartPointsNumber - 1].temperatureValue;
+            const dataSeries = data.map<number>(d => d.temperatureValue <= 0 ? 0 : d.temperatureValue);
+            const timeSeries = data.map<string>(d => d.microcontrollerTime[3] + ':' + d.microcontrollerTime[4] + ':' + d.microcontrollerTime[5]);
+            this.tmpOptions = this.setupOptions(dataSeries, timeSeries);
+          }
+        },
+        err => console.log('Data receive error   ' + JSON.stringify(err)));
     }, 1000);
   }
 
@@ -54,15 +65,11 @@ export class LinearChartComponent implements OnInit, OnDestroy {
     clearInterval(this.updateInfoTimer);
   }
 
-  setupOptions(hydroponicData: HydroponicDataDto[], value: string): EChartsOption {
-    let dataSeries = (value === 'ph') ? hydroponicData.map<number>(d => d.phValue <= 0 ? 0 : d.phValue) : [];
-    dataSeries = (value === 'tds') ? hydroponicData.map<number>(d => d.tdsValue <= 0 ? 0 : d.tdsValue) : dataSeries;
-    dataSeries = (value === 'temp') ? hydroponicData.map<number>(d => d.temperatureValue <= 0 ? 0 : d.temperatureValue) : dataSeries;
-    console.log(dataSeries);
+  setupOptions(dataSeries: any, timeSeries: any): EChartsOption {
     return {
       xAxis: {
         type: 'category',
-        data: hydroponicData.map<string>(d => d.microcontrollerTime[3] + ':' + d.microcontrollerTime[4] + ':' + d.microcontrollerTime[5]),
+        data: timeSeries,
       },
       yAxis: {
         type: 'value',

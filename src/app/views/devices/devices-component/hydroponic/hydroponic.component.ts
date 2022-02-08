@@ -28,10 +28,10 @@ export class HydroponicComponent implements OnDestroy, OnInit {
   labelMap: Map<string, string>;
   hidden: string = '';
   hydroData: HydroponicDataDto = {
-    ecValue: 0,
     microcontrollerTime: [0, 0, 0, 0, 0],
+    createdTimestamp: [0, 0, 0, 0, 0],
+    updatedTimestamp: [0, 0, 0, 0, 0],
     phValue: 0,
-    receiveTime: [0, 0, 0, 0, 0],
     tdsValue: 0,
     temperatureValue: 0,
     uuid: 'uuid'
@@ -45,6 +45,8 @@ export class HydroponicComponent implements OnDestroy, OnInit {
     isDispenserPhUpOpen: false,
     isDispenserTdsOpen: false,
     microcontrollerTime: [0, 0, 0, 0, 0],
+    createdTimestamp: [0, 0, 0, 0, 0],
+    updatedTimestamp: [0, 0, 0, 0, 0],
     mlPerMillisecond: 0,
     phDownDoseMl: 0,
     phUpDoseMl: 0,
@@ -56,10 +58,10 @@ export class HydroponicComponent implements OnDestroy, OnInit {
     setupPhValue: 0,
     setupTdsValue: 0,
     setupTemperatureValue: 0,
-    timeZone: ' ',
-    uuid: ' ',
-    wifiPASS: ' ',
-    wifiSSID: ' '
+    timeZone: '',
+    uuid: '',
+    wifiPASS: '',
+    wifiSSID: ''
   };
   phOptions: EChartsOption;
   tdsOptions?: EChartsOption;
@@ -143,7 +145,7 @@ export class HydroponicComponent implements OnDestroy, OnInit {
             hydroponicData => {
               this.hydroData = hydroponicData[0];
               console.log(this.hydroData);
-              this.currentDate = this.hydroData.receiveTime[0] + '.' + this.hydroData.receiveTime[1] + '.' + this.hydroData.receiveTime[2];
+              this.currentDate = this.hydroData.createdTimestamp[0] + '.' + this.hydroData.createdTimestamp[1] + '.' + this.hydroData.createdTimestamp[2];
               this.phOptions = this.setupOptions(hydroponicData, 'ph');
               this.tdsOptions = this.setupOptions(hydroponicData, 'tds');
               this.tmpOptions = this.setupOptions(hydroponicData, 'temp');

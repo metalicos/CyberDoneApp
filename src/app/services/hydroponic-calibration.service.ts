@@ -3,6 +3,8 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {SERVER} from '../backend-urls';
 
 export interface HydroponicCalibrationDataDto {
+  id: number;
+  uuid: string;
   tdsCalibrationCoefficientValue: number;
   tdsOversampling: number;
   phCalibrationValuePoint: number;
@@ -13,10 +15,9 @@ export interface HydroponicCalibrationDataDto {
   phCalibrationSlope: number;
   phCalibrationValueOffset: number;
   phOversampling: number;
-  id: number;
-  uuid: string;
-  receiveTime: number[];
   microcontrollerTime: number[];
+  createdTimestamp: number[];
+  updatedTimestamp: number[];
 }
 
 @Injectable({
