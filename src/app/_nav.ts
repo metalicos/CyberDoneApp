@@ -1,11 +1,6 @@
 import {INavData} from '@coreui/angular';
 
 export const navItems: INavData[] = [
-  // {
-  //   name: 'Інфо-панель',
-  //   url: '/dashboard',
-  //   icon: 'cil-home',
-  // },
   {
     name: 'Пристрої',
     icon: 'cil-screen-smartphone',
@@ -39,18 +34,18 @@ export const navItems: INavData[] = [
   //   ]
   // },
   {
-    name: 'Дані',
-    url: '/data',
+    name: 'Real-Time',
+    url: '/charts',
     icon: 'cil-bar-chart',
     class: 'USER,ADMIN,OWNER',
     children: [
       {
         name: 'У графіках',
-        url: '/data/graphs',
+        url: '/charts/linear',
       },
       {
         name: 'У таблицях',
-        url: '/data/tables',
+        url: '/charts/table',
       },
     ]
   },

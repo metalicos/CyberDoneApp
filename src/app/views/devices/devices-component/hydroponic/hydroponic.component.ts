@@ -101,7 +101,7 @@ export class HydroponicComponent implements OnDestroy, OnInit {
   timeZone: string = '';
   autotime: boolean = true;
   enableDosators: boolean = true;
-  uploadInfoTimer: any;
+  updateInfoTimer: any;
   currentDate: string;
 
   constructor(private deviceService: HydroponicControlService,
@@ -113,90 +113,40 @@ export class HydroponicComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.uploadInfoTimer = setInterval(() => {
-      this.uploadInfoFromServer();
+    this.updateInfoTimer = setInterval(() => {
+      this.updateInfoFromServer();
     }, 1000);
   }
 
   ngOnDestroy(): void {
     this.subscriptionMap.forEach(sub => {
-      if (sub != null) {
+      if (sub !== null) {
         sub.unsubscribe();
       }
     });
-    clearInterval(this.uploadInfoTimer);
+    clearInterval(this.updateInfoTimer);
   }
 
   clrSubscribers() {
     this.subscriptionMap.forEach(s => {
-      if (s != null) {
+      if (s !== null) {
         s.unsubscribe();
       }
     });
   }
 
-  private uploadInfoFromServer() {
+  private updateInfoFromServer() {
     if (this.isChartOpened) {
       this.subscriptionMap.set('GetHydroponicLastDataRequest',
         this.hydroDataService.getLastDataInDeviceWithUUID(this.metadata.uuid, 1, this.chartPointsNumber)
           .subscribe(
             hydroponicData => {
               this.hydroData = hydroponicData[0];
+              console.log(this.hydroData);
               this.currentDate = this.hydroData.receiveTime[0] + '.' + this.hydroData.receiveTime[1] + '.' + this.hydroData.receiveTime[2];
-              this.phOptions = {
-                xAxis: {
-                  type: 'category',
-                  data: hydroponicData.map<string>(d => d.receiveTime[3] + ':' + d.receiveTime[4] + ':' + d.receiveTime[5]),
-                },
-                yAxis: {
-                  type: 'value',
-                },
-                tooltip: {
-                  trigger: 'item',
-                  showDelay: 0,
-                  transitionDuration: 0.2,
-                },
-                series: [{
-                  data: hydroponicData.map<number>(d => d.phValue <= 0 ? 0 : d.phValue),
-                  type: 'line',
-                }]
-              };
-              this.tdsOptions = {
-                xAxis: {
-                  type: 'category',
-                  data: hydroponicData.map<string>(d => d.receiveTime[3] + ':' + d.receiveTime[4] + ':' + d.receiveTime[5]),
-                },
-                yAxis: {
-                  type: 'value',
-                },
-                tooltip: {
-                  trigger: 'item',
-                  showDelay: 0,
-                  transitionDuration: 0.2,
-                },
-                series: [{
-                  data: hydroponicData.map<number>(d => d.tdsValue <= 0 ? 0 : d.tdsValue),
-                  type: 'line',
-                }],
-              };
-              this.tmpOptions = {
-                xAxis: {
-                  type: 'category',
-                  data: hydroponicData.map<string>(d => d.receiveTime[3] + ':' + d.receiveTime[4] + ':' + d.receiveTime[5]),
-                },
-                yAxis: {
-                  type: 'value',
-                },
-                tooltip: {
-                  trigger: 'item',
-                  showDelay: 0,
-                  transitionDuration: 0.2,
-                },
-                series: [{
-                  data: hydroponicData.map<number>(d => d.temperatureValue <= 0 ? 0 : d.temperatureValue),
-                  type: 'line',
-                }],
-              };
+              this.phOptions = this.setupOptions(hydroponicData, 'ph');
+              this.tdsOptions = this.setupOptions(hydroponicData, 'tds');
+              this.tmpOptions = this.setupOptions(hydroponicData, 'temp');
             },
             err => {
               console.log('Data receive error');
@@ -205,7 +155,7 @@ export class HydroponicComponent implements OnDestroy, OnInit {
             }));
     } else {
       this.subscriptionMap.set('GetHydroponicLastDataRequest',
-        this.hydroDataService.getLastDataInDeviceWithUUID(this.metadata.uuid, 1, 1)
+        this.hydroDataService.getLastDataInDeviceWithUUID(this.metadata.uuid, 0, 1)
           .subscribe(
             hydroponicData => {
               this.hydroData = hydroponicData[0];
@@ -217,7 +167,7 @@ export class HydroponicComponent implements OnDestroy, OnInit {
             }));
     }
     this.subscriptionMap.set('GetHydroponicLastSettingsRequest',
-      this.hydroSettService.getLastSettingsInDeviceWithUUID(this.metadata.uuid, 1, 1)
+      this.hydroSettService.getLastSettingsInDeviceWithUUID(this.metadata.uuid, 0, 1)
         .subscribe(
           hydroponicSettings => {
             this.hydroSett = hydroponicSettings[0];
@@ -294,7 +244,7 @@ export class HydroponicComponent implements OnDestroy, OnInit {
     distinctUntilChanged(),
     map(term => term.length < 1 ? [] : Array.from(TIME_ZONE_MAP.keys())
       .filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
-  )
+  );
 
   updateSetupValues() {
     this.hiddenBtn1 = '';
@@ -396,5 +346,30 @@ export class HydroponicComponent implements OnDestroy, OnInit {
   changeEnableDosators() {
     this.subscriptionMap.set('updateDispensersEnable',
       this.deviceService.updateDispensersEnable(this.metadata.uuid, (this.enableDosators ? 0 : 1) + '').subscribe(d => console.log(d)));
+  }
+
+  setupOptions(hydroponicData: HydroponicDataDto[], value: string): EChartsOption {
+    let dataSeries = (value === 'ph') ? hydroponicData.map<number>(d => d.phValue <= 0 ? 0 : d.phValue) : [];
+    dataSeries = (value === 'tds') ? hydroponicData.map<number>(d => d.tdsValue <= 0 ? 0 : d.tdsValue) : dataSeries;
+    dataSeries = (value === 'temp') ? hydroponicData.map<number>(d => d.temperatureValue <= 0 ? 0 : d.temperatureValue) : dataSeries;
+    console.log(dataSeries);
+    return {
+      xAxis: {
+        type: 'category',
+        data: hydroponicData.map<string>(d => d.microcontrollerTime[3] + ':' + d.microcontrollerTime[4] + ':' + d.microcontrollerTime[5]),
+      },
+      yAxis: {
+        type: 'value',
+      },
+      tooltip: {
+        trigger: 'item',
+        showDelay: 0,
+        transitionDuration: 0.2,
+      },
+      series: [{
+        data: dataSeries,
+        type: 'line',
+      }]
+    };
   }
 }

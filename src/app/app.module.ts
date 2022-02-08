@@ -33,6 +33,8 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgxEchartsModule} from 'ngx-echarts';
 import {LogoutComponent} from './views/logout/logout.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {LinearChartComponent} from './views/realtime/linear-chart/linear-chart.component';
+import {TableComponent} from './views/realtime/table/table.component';
 
 const APP_CONTAINERS = [
   DefaultLayoutComponent

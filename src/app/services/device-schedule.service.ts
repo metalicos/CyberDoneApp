@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {SERVER} from '../backend-urls';
+import {Observable} from 'rxjs';
 
 export interface RegularScheduleDto {
   id: number;
@@ -44,7 +45,7 @@ export class DeviceScheduleService {
   constructor(private http: HttpClient) {
   }
 
-  getSchedulesByKey(uuid: string, key: string) {
+  getSchedulesByKey(uuid: string, key: string): Observable<RegularScheduleDto[]> {
     return this.http.get<RegularScheduleDto[]>(SERVER.backendServerUrl + '/device/regular/schedules',
       {
         headers: SERVER.HEADERS,
@@ -53,7 +54,7 @@ export class DeviceScheduleService {
     );
   }
 
-  createSchedule(schedule: RegularScheduleDto) {
+  createSchedule(schedule: RegularScheduleDto): Observable<RegularScheduleDto> {
     return this.http.post<RegularScheduleDto>(SERVER.backendServerUrl + '/device/regular/schedules', schedule,
       {
         headers: SERVER.HEADERS,
@@ -70,10 +71,9 @@ export class DeviceScheduleService {
   }
 
   deleteScheduleById(id: number) {
-    return this.http.delete(SERVER.backendServerUrl + '/device/regular/schedules',
+    return this.http.delete(SERVER.backendServerUrl + '/device/regular/schedules/' + id,
       {
-        headers: SERVER.HEADERS,
-        params: new HttpParams().set('id', String(id))
+        headers: SERVER.HEADERS
       }
     );
   }

@@ -75,6 +75,11 @@ export const routes: Routes = [
         path: 'devices',
         loadChildren: () => import('./views/devices/devices.module').then(m => m.DevicesModule)
       },
+
+      {
+        path: 'charts/devices/:uuid/values/:type',
+        loadChildren: () => import('./views/realtime/realtime.module').then(m => m.RealtimeModule)
+      },
     ]
   },
   {path: '**', component: P404Component}

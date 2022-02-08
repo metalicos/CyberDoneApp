@@ -10,7 +10,8 @@ import {HydroponicDataService} from '../../../services/hydroponic-data.service';
   styleUrls: ['./devices.component.scss']
 })
 export class DevicesComponent implements OnInit, OnDestroy {
-  sub: Subscription;
+  deviceMetadataSub: Subscription;
+  hydroDataSub: Subscription;
   hydroponicMetadataList: DeviceMetadataDto[];
   uuidMap: Map<string, string> = new Map<string, string>();
 
@@ -26,12 +27,11 @@ export class DevicesComponent implements OnInit, OnDestroy {
   private generateLinkedDevicesList() {
     const user = this.authStorage.getUser();
     if (user != null) {
-      this.sub = this.deviceMeta.getMetadataListByUser(user.id).subscribe(
+      this.deviceMetadataSub = this.deviceMeta.getMetadataListByUser(user.id).subscribe(
         data => {
-          this.hydroponicMetadataList = data
-            .filter(m => 'HYDROPONIC_V1'.toLowerCase() === m.deviceType.toLowerCase())
+          this.hydroponicMetadataList = data.filter(m => 'HYDROPONIC_V1'.toLowerCase() === m.deviceType.toLowerCase())
             .filter(m => {
-              this.hydroData.getLastDataInDeviceWithUUID(m.uuid, 1, 1).subscribe(
+              this.hydroDataSub = this.hydroData.getLastDataInDeviceWithUUID(m.uuid, 1, 1).subscribe(
                 set => {
                   if (set.length === 1) {
                     this.uuidMap.set(set[0].uuid, set[0].uuid);
@@ -40,18 +40,23 @@ export class DevicesComponent implements OnInit, OnDestroy {
                 });
               return true;
             });
-          setTimeout(() => {
-            this.hydroponicMetadataList = this.hydroponicMetadataList
-              .filter(m => m.uuid === this.uuidMap.get(m.uuid));
-          }, 2000);
-        });
+          setTimeout(() => this.hydroponicMetadataList = this.hydroponicMetadataList
+            .filter(m => m.uuid === this.uuidMap.get(m.uuid)), 2000);
+          console.log(this.hydroponicMetadataList);
+        }
+      );
     }
   }
 
 
   ngOnDestroy(): void {
     setTimeout(() => {
-      this.sub.unsubscribe();
+      if (this.notNull(this.deviceMetadataSub)) {
+        this.deviceMetadataSub.unsubscribe();
+      }
+      if (this.notNull(this.hydroDataSub)) {
+        this.deviceMetadataSub.unsubscribe();
+      }
     }, 2000);
   }
 

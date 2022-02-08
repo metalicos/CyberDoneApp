@@ -1,556 +1,31 @@
 <div>
   <div class="bg-dark rounded card">
     <div class="d-flex justify-content-between m-0">
-      <div class="d-block text-left col-10">
+      <div class="d-block text-left col-11">
         <p class="h4 card-title my-1 mb-2 text-white font-weight-bold">Hydroponic</p>
         <p class="h6 text-white my-2 font-weight-bold">{{metadata.name == null ? '' : metadata.name + '.'}}
           {{metadata.description == null ? '' : metadata.description}}</p>
       </div>
-      <div class="m-auto d-flex justify-content-end col-2 btn-group p-0">
-        <div class="btn-group" dropdown *ngIf="hydroData && hydroSett">
-          <button dropdownToggle type="button" class="btn btn-sm text-white">
-            <i class="fa fa-2x fa-line-chart"></i>
+
+      <div ngbDropdown class="m-auto btn-group dropleft p-0">
+        <a class="btn btn-sm text-white" id="actionSet" [class.dropdown-toggle]="false" ngbDropdownToggle><i
+          class="fa fa-2x fa-ellipsis-v"></i></a>
+        <div ngbDropdownMenu aria-labelledby="actionSet">
+          <button ngbDropdownItem [routerLink]="'/charts/devices/'+metadata.uuid+'/values/ph'">
+            <i class="fa fa-2x fa-line-chart mr-3"></i> PH Realtime
           </button>
-          <ul *dropdownMenu class="dropdown-menu" role="menu">
-            <li role="menuitem"><a class="dropdown-item nav-link" (click)="phGraph.show(); isChartOpened=true">Графік
-              Ph</a></li>
-            <li role="menuitem"><a class="dropdown-item nav-link" (click)="tdsGraph.show(); isChartOpened=true">Графік
-              Tds</a></li>
-            <li role="menuitem"><a class="dropdown-item nav-link" (click)="tempGraph.show(); isChartOpened=true">Графік
-              температури</a></li>
-          </ul>
-        </div>
-        <a class="btn btn-sm text-white" (click)="scheduling.show()" *ngIf="hydroData && hydroSett">
-          <i class="fa fa-2x fa-clock-o"></i>
-        </a>
-        <a class="btn btn-sm text-white" (click)="settings.show()" *ngIf="hydroData && hydroSett">
-          <i class="fa fa-2x fa-cog"></i>
-        </a>
-      </div>
-    </div>
-    <div bsModal #phGraph="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title text-dark">Графік PH у реальному часі</h4>
-            <button type="button" class="close" (click)="phGraph.hide(); clrSubscribers(); isChartOpened=false"
-                    aria-label="Закрити">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <input type="number" class="form-control-sm" min="10" max="2000" [(ngModel)]="chartPointsNumber">
-            <p class="h4 card-title my-1 text-center text-dark font-weight-bold">PH в реальному
-              часі {{currentDate | date}}</p>
-            <div echarts [options]="phOptions" class="demo-chart" *ngIf="phOptions"></div>
-            <div *ngIf="!phOptions">
-              <h3 class="h4 card-title my-1 text-center text-dark font-weight-bold">Запит до сервера, будь ласка,
-                зачекайте...</h3>
-              <div class="spinner-grow" role="status">
-                <span class="sr-only"></span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div bsModal #tdsGraph="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title text-dark">Графік TDS у реальному часі</h4>
-            <button type="button" class="close" (click)="tdsGraph.hide(); clrSubscribers(); isChartOpened=false"
-                    aria-label="Закрити">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <input type="number" class="form-control-sm" min="10" max="2000" [(ngModel)]="chartPointsNumber">
-            <p class="h4 card-title my-1 text-center text-dark font-weight-bold">TDS в реальному
-              часі {{currentDate | date}}</p>
-            <div echarts [options]="tdsOptions" class="demo-chart" *ngIf="tdsOptions"></div>
-            <div *ngIf="!tdsOptions">
-              <h3 class="h4 card-title my-1 text-center text-dark font-weight-bold">Запит до сервера, будь ласка,
-                зачекайте...</h3>
-              <div class="spinner-grow" role="status">
-                <span class="sr-only"></span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div bsModal #tempGraph="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">Графік температури у реальному часі</h4>
-            <button type="button" class="close" (click)="tempGraph.hide(); clrSubscribers(); isChartOpened=false"
-                    aria-label="Закрити">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <input type="number" class="form-control-sm" min="10" max="2000" [(ngModel)]="chartPointsNumber">
-            <p class="h4 card-title my-1 text-center text-dark font-weight-bold">Температура води в реальному
-              часі {{currentDate | date}}</p>
-            <div echarts [options]="tmpOptions" class="demo-chart" *ngIf="tmpOptions"></div>
-            <div *ngIf="!tmpOptions">
-              <h3 class="h4 card-title my-1 text-center text-dark font-weight-bold">Запит до сервера, будь ласка,
-                зачекайте...</h3>
-              <div class="spinner-grow" role="status">
-                <span class="sr-only"></span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div bsModal #scheduling="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title text-dark">Менеджер регулярних подій</h4>
-            <button type="button" class="close" (click)="scheduling.hide(); clrSubscribers();" aria-label="Закрити">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <schedule-setup [title]="'Створити регулярну подію'" [uuid]="metadata.uuid"
-                            [key]="metadata.deviceType"></schedule-setup>
-
-            <div *ngIf="scheduleList">
-              <schedule-element *ngFor="let schedule of scheduleList" [id]="schedule.id" [uuid]="schedule.uuid"
-                                [name]="schedule.name"
-                                [description]="schedule.description" [key]="schedule.key" [topic]="schedule.topic"
-                                [monday]="schedule.monday" [tuesday]="schedule.tuesday" [wednesday]="schedule.wednesday"
-                                [thursday]="schedule.thursday" [friday]="schedule.friday" [saturday]="schedule.saturday"
-                                [sunday]="schedule.sunday" [time]="schedule.time" [value]="schedule.value"
-                                [valueType]="schedule.valueType" [topicLabels]="labelMap">
-              </schedule-element>
-            </div>
-
-            <div *ngIf="!scheduleList">
-              <h3 class="h4 card-title my-1 text-center text-dark font-weight-bold">Запит до сервера, будь ласка,
-                зачекайте...</h3>
-              <div class="spinner-grow" role="status">
-                <span class="sr-only"></span>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-    <div bsModal #settings="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title text-dark">Налаштування гідропоніки</h4>
-            <button type="button" class="close" (click)="settings.hide(); clrSubscribers();" aria-label="Закрити">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="container-fluid to-back card bg-dark">
-              <div class="spinner-grow align-self-center text-white" role="status" [hidden]="hiddenGeneral">
-                <span class="sr-only"></span>
-              </div>
-              <div class="table-responsive my-2">
-                <div *ngIf="settings">
-                  <table class="table table-dark table-striped table-hover">
-                    <thead>
-                    <tr>
-                      <th colspan="3">
-                        <button type="button" class="btn btn-outline-warning w-100"
-                                (click)="MetadataCollapsed.toggle();"
-                                [attr.aria-expanded]="!isMetadataCollapsed"
-                                aria-controls="isPhGraphCollapsed">
-                          Налаштування назви та опису пристрою <i class="fa fa-arrow-down"></i>
-                        </button>
-                      </th>
-                    </tr>
-                    <tr #MetadataCollapsed="ngbCollapse" [(ngbCollapse)]="isMetadataCollapsed">
-                      <th class="my-auto" scope="col">{{'Назва' | uppercase}}</th>
-                      <th scope="col">{{'Нове значення' | uppercase}}</th>
-                      <th scope="col">{{'Поточне значення' | uppercase}}</th>
-                    </tr>
-                    </thead>
-                    <tbody #MetadataCollapsed="ngbCollapse" [(ngbCollapse)]="isMetadataCollapsed">
-                    <tr>
-                      <th scope="row">Назва пристрою</th>
-                      <td><input class="form-control my-1 col-12 col-md-6" type="text" [(ngModel)]='hydroponicName'>
-                      </td>
-                      <td class="font-weight-bold h6"><span *ngIf="metadata">{{metadata.name}}</span></td>
-                    </tr>
-                    <tr *ngIf="metadata">
-                      <th scope="row">Опис пристрою</th>
-                      <td><input class="form-control my-1 col-12 col-md-6" type="text"
-                                 [(ngModel)]='hydroponicDescription'></td>
-                      <td class="font-weight-bold h6"><span *ngIf="metadata">{{metadata.description}}</span></td>
-                    </tr>
-                    <tr>
-                      <th scope="row" colspan="3">
-                        <button class="form-control btn btn-outline-light text-uppercase" type="submit"
-                                (click)="updateMetadata()"
-                                [disabled]="buttonUpdateDisabled">Оновити налаштування
-                          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
-                                [hidden]="hiddenBtn"></span>
-                        </button>
-                      </th>
-                    </tr>
-                    </tbody>
-                    <thead>
-                    <tr>
-                      <th colspan="3">
-                        <button type="button" class="btn btn-outline-warning w-100"
-                                (click)="SetupValuesCollapsed.toggle();"
-                                [attr.aria-expanded]="!isSetupValuesCollapsed"
-                                aria-controls="isPhGraphCollapsed">
-                          Налаштування підтримуваних значень <i class="fa fa-arrow-down"></i>
-                        </button>
-                      </th>
-                    </tr>
-                    <tr #SetupValuesCollapsed="ngbCollapse" [(ngbCollapse)]="isSetupValuesCollapsed">
-                      <th class="my-auto" scope="col">{{'Назва' | uppercase}}</th>
-                      <th scope="col">{{'Нове значення' | uppercase}}</th>
-                      <th scope="col">{{'Поточне значення' | uppercase}}</th>
-                    </tr>
-                    </thead>
-                    <tbody #SetupValuesCollapsed="ngbCollapse" [(ngbCollapse)]="isSetupValuesCollapsed">
-                    <tr>
-                      <th scope="row">Підтримуване значення pH</th>
-                      <td><input class="form-control my-1 col-12 col-md-6" type="number" name="setupPhValue"
-                                 step="0.1" min="0.5" max="10" [(ngModel)]='setupPhValue'></td>
-                      <td class="font-weight-bold h6">{{hydroSett.setupPhValue}} pH</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Підтримуване значення TDS</th>
-                      <td><input class="form-control my-1 col-12 col-md-6" type="number" name="setupTdsValue"
-                                 min="100" max="1800" [(ngModel)]='setupTdsValue'></td>
-                      <td class="font-weight-bold h6">{{hydroSett.setupTdsValue}} tds</td>
-                    </tr>
-                    <tr>
-                      <th scope="row" colspan="3">
-                        <button class="form-control btn btn-outline-light text-uppercase" type="submit"
-                                (click)="updateSetupValues()"
-                                [disabled]="buttonUpdateDisabled">Оновити налаштування
-                          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
-                                [hidden]="hiddenBtn1"></span>
-                        </button>
-                      </th>
-                    </tr>
-                    </tbody>
-                    <thead>
-                    <tr>
-                      <th colspan="3">
-                        <button type="button" class="btn btn-outline-warning w-100"
-                                (click)="CalibrationCollapsed.toggle();"
-                                [attr.aria-expanded]="!isCalibrationCollapsed"
-                                aria-controls="isPhGraphCollapsed">
-                          Калібрування сенсорів <i class="fa fa-arrow-down"></i>
-                        </button>
-                      </th>
-                    </tr>
-                    <tr #CalibrationCollapsed="ngbCollapse" [(ngbCollapse)]="isCalibrationCollapsed">
-                      <th class="my-auto" scope="col">{{'Назва' | uppercase}}</th>
-                      <th scope="col">{{'Нове значення' | uppercase}}</th>
-                      <th scope="col">{{'Поточне значення' | uppercase}}</th>
-                    </tr>
-                    </thead>
-                    <tbody #CalibrationCollapsed="ngbCollapse" [(ngbCollapse)]="isCalibrationCollapsed">
-                    <tr>
-                      <th scope="row"></th>
-                      <td class="input-group my-1 col-12 col-md-6"></td>
-                      <td class="font-weight-bold h6"
-                          *ngIf="hydroData">{{hydroData.temperatureValue <= 0 ? 0 : hydroData.temperatureValue}} °C
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Калібрувати pH (pH Low)</th>
-                      <td class="input-group my-1 col-12 col-md-6">
-                        <input class="form-control" type="number" step="0.1" min="0.5" max="10"
-                               [(ngModel)]='phLowCalibration' aria-describedby="calPh">
-                        <div class="input-group-append" id="calPh">
-                          <button class="btn btn-success" type="button" (click)="calibratePhLow()">Калібрувати
-                          </button>
-                          <button class="btn btn-outline-danger" type="button" (click)="calibratePhClear()">Скинути
-                          </button>
-                        </div>
-                      </td>
-                      <td class="font-weight-bold h6"
-                          *ngIf="hydroData">{{hydroData.phValue <= 0 ? 0 : hydroData.phValue}} pH
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Калібрувати pH (pH High)</th>
-                      <td class="input-group my-1 col-12 col-md-6">
-                        <input class="form-control" type="number" step="0.1" min="0.5" max="10"
-                               [(ngModel)]='phHighCalibration' aria-describedby="calPh2">
-                        <div class="input-group-append" id="calPh2">
-                          <button class="btn btn-success" type="button" (click)="calibratePhHigh()">Калібрувати
-                          </button>
-                          <button class="btn btn-outline-danger" type="button" (click)="calibratePhClear()">Скинути
-                          </button>
-                        </div>
-                      </td>
-                      <td class="font-weight-bold h6"
-                          *ngIf="hydroData">{{hydroData.phValue <= 0 ? 0 : hydroData.phValue}} pH
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Калібрувати TDS</th>
-                      <td class="input-group my-1 col-12 col-md-6">
-                        <input class="form-control" type="number" step="0.1" min="0.5" max="10"
-                               [(ngModel)]='tdsCalibration' aria-describedby="calTds">
-                        <div class="input-group-append" id="calTds">
-                          <button class="btn btn-success" type="button" (click)="calibrateTds()">Калібрувати</button>
-                          <button class="btn btn-outline-danger" type="button" (click)="calibrateTdsClear()">Скинути
-                          </button>
-                        </div>
-                      </td>
-                      <td class="font-weight-bold h6"
-                          *ngIf="hydroData">{{hydroData.tdsValue <= 0 ? 0 : hydroData.tdsValue}} tds
-                      </td>
-                    </tr>
-                    </tbody>
-                    <thead>
-                    <tr>
-                      <th colspan="3">
-                        <button type="button" class="btn btn-outline-warning w-100"
-                                (click)="ErrorsCollapsed.toggle();"
-                                [attr.aria-expanded]="!isErrorsCollapsed"
-                                aria-controls="isPhGraphCollapsed">
-                          Налаштування похибки дозувань <i class="fa fa-arrow-down"></i>
-                        </button>
-                      </th>
-                    </tr>
-                    <tr #ErrorsCollapsed="ngbCollapse" [(ngbCollapse)]="isErrorsCollapsed">
-                      <th class="my-auto" scope="col">{{'Назва' | uppercase}}</th>
-                      <th scope="col">{{'Нове значення' | uppercase}}</th>
-                      <th scope="col">{{'Поточне значення' | uppercase}}</th>
-                    </tr>
-                    </thead>
-                    <tbody #ErrorsCollapsed="ngbCollapse" [(ngbCollapse)]="isErrorsCollapsed">
-                    <tr>
-                      <th scope="row">Похибка регулювання pH</th>
-                      <td><input class="form-control my-1 col-12 col-md-6" type="number" name="phRegulationError"
-                                 min="100" max="1800" [(ngModel)]='phRegulationError'></td>
-                      <td class="font-weight-bold h6">{{hydroSett.regulateErrorPh}} ph</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Похибка регулювання TDS</th>
-                      <td><input class="form-control my-1 col-12 col-md-6" type="number" name="setupTdsValue"
-                                 min="100" max="1800" [(ngModel)]='tdsRegulationError'></td>
-                      <td class="font-weight-bold h6">{{hydroSett.regulateErrorFertilizer}} ppm</td>
-                    </tr>
-                    <tr>
-                      <th scope="row" colspan="3">
-                        <button class="form-control btn btn-outline-light text-uppercase" type="submit"
-                                (click)="updateErrorValues()"
-                                [disabled]="buttonUpdateDisabled">Оновити налаштування
-                          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
-                                [hidden]="hiddenBtn2"></span>
-                        </button>
-                      </th>
-                    </tr>
-                    </tbody>
-                    <thead>
-                    <tr>
-                      <th colspan="3">
-                        <button type="button" class="btn btn-outline-warning w-100"
-                                (click)="DosingCollapsed.toggle();"
-                                [attr.aria-expanded]="!isDosingCollapsed"
-                                aria-controls="isPhGraphCollapsed">
-                          Налаштування дозування насососів <i class="fa fa-arrow-down"></i>
-                        </button>
-                      </th>
-                    </tr>
-                    <tr #DosingCollapsed="ngbCollapse" [(ngbCollapse)]="isDosingCollapsed">
-                      <th class="my-auto" scope="col">{{'Назва' | uppercase}}</th>
-                      <th scope="col">{{'Нове значення' | uppercase}}</th>
-                      <th scope="col">{{'Поточне значення' | uppercase}}</th>
-                    </tr>
-                    </thead>
-                    <tbody #DosingCollapsed="ngbCollapse" [(ngbCollapse)]="isDosingCollapsed">
-                    <tr>
-                      <th scope="row">Дозволити авто дозування</th>
-                      <td class="input-group my-1 col-12 col-md-6">
-                        <div class="btn-group btn-group-toggle my-1 w-100 text-center">
-                          <label class="btn btn-{{enableDosators?'success':'danger'}} my-auto" ngbButtonLabel
-                                 placement="top"
-                                 ngbTooltip="{{enableDosators?'Дозволено':'Заборонено'}}">
-                            <input type="checkbox" ngbButton [(ngModel)]="enableDosators"
-                                   (click)="changeEnableDosators()">{{enableDosators ? 'Дозволити' : 'Заборонити'}}
-                          </label>
-                        </div>
-                      </td>
-                      <td class="font-weight-bold h6"
-                          *ngIf="hydroData">{{hydroSett.dispensersEnable ? 'Дозволено' : 'Заборонено'}}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Доза регулювання pH Up в мл</th>
-                      <td><input class="form-control my-1 col-12 col-md-6" type="number" name="phUpDoseMl" min="0.1"
-                                 step="0.01"
-                                 [(ngModel)]='phUpDoseMl'></td>
-                      <td class="font-weight-bold h6">{{hydroSett.phUpDoseMl}} мл</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Доза регулювання pH Down в мл</th>
-                      <td><input class="form-control my-1 col-12 col-md-6" type="number" name="phDownDoseMl" min="0.1"
-                                 step="0.01"
-                                 [(ngModel)]='phDownDoseMl'></td>
-                      <td class="font-weight-bold h6">{{hydroSett.phDownDoseMl}} мл</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Доза регулювання TDS в мл</th>
-                      <td><input class="form-control my-1 col-12 col-md-6" type="number" name="fertilizerDoseMl"
-                                 min="0.1" step="0.01"
-                                 [(ngModel)]='fertilizerDoseMl'></td>
-                      <td class="font-weight-bold h6">{{hydroSett.fertilizerDoseMl}} мл</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Повторне регулювання значення після мс</th>
-                      <td><input class="form-control my-1 col-12 col-md-6" type="number" name="recheckDosatorsAfterMs"
-                                 min="10" max="100000000"
-                                 [(ngModel)]='recheckDosatorsAfterMs'></td>
-                      <td class="font-weight-bold h6">{{hydroSett.recheckDispensersAfterMs}} мс</td>
-                    </tr>
-                    <tr>
-                      <th scope="row" colspan="3">
-                        <button class="form-control btn btn-outline-light text-uppercase" type="submit"
-                                (click)="updateDosingValues()"
-                                [disabled]="buttonUpdateDisabled">Оновити налаштування
-                          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
-                                [hidden]="hiddenBtn3"></span>
-                        </button>
-                      </th>
-                    </tr>
-                    </tbody>
-                    <thead>
-                    <tr>
-                      <th colspan="3">
-                        <button type="button" class="btn btn-outline-warning w-100" (click)="TimeCollapsed.toggle();"
-                                [attr.aria-expanded]="!isTimeCollapsed"
-                                aria-controls="isPhGraphCollapsed">
-                          Налаштування дати та часу <i class="fa fa-arrow-down"></i>
-                        </button>
-                      </th>
-                    </tr>
-                    <tr #TimeCollapsed="ngbCollapse" [(ngbCollapse)]="isTimeCollapsed">
-                      <th class="my-auto" scope="col">{{'Назва' | uppercase}}</th>
-                      <th scope="col">{{'Нове значення' | uppercase}}</th>
-                      <th scope="col">{{'Поточне значення' | uppercase}}</th>
-                    </tr>
-                    </thead>
-                    <tbody #TimeCollapsed="ngbCollapse" [(ngbCollapse)]="isTimeCollapsed">
-                    <tr>
-                      <th scope="row">Автосинхронізація часу із сервером</th>
-                      <td class="input-group my-1 col-12 col-md-6">
-                        <div class="btn-group btn-group-toggle my-1">
-                          <label class="btn btn-{{autotime?'success':'danger'}} my-auto" ngbButtonLabel
-                                 placement="top"
-                                 ngbTooltip="{{autotime?'Авто-оновлення ввімкнено':'Авто-оновлення вимкнено'}}">
-                            <input type="checkbox" ngbButton [(ngModel)]="autotime"
-                                   (click)="changeAutoTime()">{{autotime ? 'Автосинхронізацію ввімкнено' : 'Автосинхронізацію вимкнено'}}
-                          </label>
-                        </div>
-                      </td>
-                      <td class="font-weight-bold h6"
-                          *ngIf="hydroSett">{{hydroSett.autotime ? 'Увімкнена' : 'Вимкнена'}}</td>
-                    </tr>
-
-                    <tr>
-                      <th scope="row">Мануальний час</th>
-                      <td class="d-flex my-1 col-12 col-md-6">
-                        <ngb-datepicker [(ngModel)]="date" [startDate]="startDate" class="bg-light"></ngb-datepicker>
-                        <div class="d-block mx-2 my-3 align-content-between justify-content-center">
-                          <ngb-timepicker [(ngModel)]="time" [seconds]="true" [spinners]="true"
-                                          class="m-auto"></ngb-timepicker>
-                          <h4 class="text-center my-3">{{date.year + '.' + date.month + '.' + date.day + ' ' +
-                          time.hour + ':' + time.minute + ':' + time.second}}</h4>
-                          <button class="btn btn-success my-3 w-100" type="button" (click)="updateTime()">Оновити
-                            час
-                          </button>
-                        </div>
-                      </td>
-                      <td class="font-weight-bold h6">{{
-                        hydroSett.microcontrollerTime[0] + '.' + hydroSett.microcontrollerTime[1] + '.' + hydroSett.microcontrollerTime[2] + ' ' +
-                        hydroSett.microcontrollerTime[3] + ':' + hydroSett.microcontrollerTime[4] + ':' +
-                        (hydroSett.microcontrollerTime[5] == null ? '0' : hydroSett.microcontrollerTime[5])}}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Зміна часового поясу</th>
-                      <td class="input-group my-1 col-12 col-md-6">
-                        <input id="typeahead-basic" type="text" class="form-control" style="width: 390px"
-                               [(ngModel)]="timeZone"
-                               [ngbTypeahead]="search" placeholder="{{hydroSett.timeZone}}"/>
-                        <button class="btn btn-success w-100" type="button" (click)="changeTimeZone()">Змінити часовий
-                          пояс
-                        </button>
-                      </td>
-                      <td class="font-weight-bold h6">{{hydroSett.timeZone}}</td>
-                    </tr>
-                    </tbody>
-                    <thead>
-                    <tr>
-                      <th colspan="3">
-                        <button type="button" class="btn btn-outline-warning w-100" (click)="WifiCollapsed.toggle();"
-                                [attr.aria-expanded]="!isWifiCollapsed"
-                                aria-controls="isPhGraphCollapsed">
-                          Налаштування точки доступу <i class="fa fa-arrow-down"></i>
-                        </button>
-                      </th>
-                    </tr>
-                    <tr #WifiCollapsed="ngbCollapse" [(ngbCollapse)]="isWifiCollapsed">
-                      <th class="my-auto" scope="col">{{'Назва' | uppercase}}</th>
-                      <th scope="col">{{'Нове значення' | uppercase}}</th>
-                      <th scope="col">{{'Поточне значення' | uppercase}}</th>
-                    </tr>
-                    </thead>
-                    <tbody #WifiCollapsed="ngbCollapse" [(ngbCollapse)]="isWifiCollapsed">
-                    <tr>
-                      <th scope="row">Змінити точку доступу</th>
-                      <td><input class="form-control my-1 col-12 col-md-6" type="text" [(ngModel)]='wifiSSID'
-                                 placeholder="{{hydroSett.wifiSSID}}"></td>
-                      <td class="font-weight-bold h6">{{hydroSett.wifiSSID}}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Змінити пароль точки доступу</th>
-                      <td><input class="form-control my-1 col-12 col-md-6" type="text" [(ngModel)]='wifiPASS'
-                                 placeholder="{{hydroSett.wifiPASS}}"></td>
-                      <td class="font-weight-bold h6">{{hydroSett.wifiPASS}}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row" colspan="3">
-                        <button class="form-control btn btn-outline-light text-uppercase" type="submit"
-                                (click)="updateWifiValues()"
-                                [disabled]="buttonUpdateDisabled">Оновити налаштування
-                          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
-                                [hidden]="hiddenBtn3"></span>
-                        </button>
-                      </th>
-                    </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-            </div>
-            <div *ngIf="!scheduleList">
-              <h3 class="h4 card-title my-1 text-center text-dark font-weight-bold">Запит до сервера, будь ласка,
-                зачекайте...</h3>
-              <div class="spinner-grow" role="status">
-                <span class="sr-only"></span>
-              </div>
-            </div>
-
-          </div>
+          <button ngbDropdownItem [routerLink]="'/charts/devices/'+metadata.uuid+'/values/tds'">
+            <i class="fa fa-2x fa-line-chart mr-3"></i> TDS Realtime
+          </button>
+          <button ngbDropdownItem [routerLink]="'/charts/devices/'+metadata.uuid+'/values/temperature'">
+            <i class="fa fa-2x fa-line-chart mr-3"></i> Temperature Realtime
+          </button>
+          <button ngbDropdownItem [routerLink]="'/data/devices/'+metadata.uuid">
+            <i class="fa fa-2x fa-database mr-3"></i> Дані
+          </button>
+          <button ngbDropdownItem [routerLink]="'/settings/devices/'+metadata.uuid">
+            <i class="fa fa-2x fa-cog mr-3"></i> Налаштування
+          </button>
         </div>
       </div>
     </div>
@@ -584,7 +59,7 @@
         </td>
         <td *ngIf="hydroSett"
             class="text-{{abs(hydroData.phValue - hydroSett.setupPhValue)<=hydroSett.regulateErrorPh?'dark':'danger'}}">
-          {{hydroData.phValue > 0 && hydroData.phValue <= 12 ? hydroData.phValue + ' pH' : 'NONE'}}</td>
+          {{hydroData.phValue > 0 && hydroData.phValue <= 12 ? hydroData.phValue + ' pH' : 'Off'}}</td>
         <td *ngIf="!hydroSett">
           <div class="spinner-grow" role="status">
             <span class="sr-only"></span>
@@ -604,7 +79,27 @@
 
         <td *ngIf="hydroSett"
             class="text-{{abs(hydroData.tdsValue - hydroSett.setupTdsValue)<=hydroSett.regulateErrorFertilizer?'dark':'danger'}}">
-          {{hydroData.tdsValue >= 0 && hydroData.tdsValue <= 9999 ? hydroData.tdsValue + ' ppm' : 'NONE'}}
+          {{hydroData.tdsValue > 0 && hydroData.tdsValue <= 9999 ? hydroData.tdsValue + ' ppm' : 'Off'}}
+        </td>
+        <td *ngIf="!hydroSett">
+          <div class="spinner-grow" role="status">
+            <span class="sr-only"></span>
+          </div>
+        </td>
+      </tr>
+      <tr class="font-weight-bold">
+        <td>TEMP</td>
+        <td
+          *ngIf="hydroSett"> -
+        </td>
+        <td *ngIf="!hydroSett">
+          <div class="spinner-grow" role="status">
+            <span class="sr-only"></span>
+          </div>
+        </td>
+
+        <td *ngIf="hydroSett" class="text-dark">
+          {{hydroData.temperatureValue > 0 && hydroData.temperatureValue <= 60 ? hydroData.temperatureValue + ' °C' : 'Off'}}
         </td>
         <td *ngIf="!hydroSett">
           <div class="spinner-grow" role="status">
