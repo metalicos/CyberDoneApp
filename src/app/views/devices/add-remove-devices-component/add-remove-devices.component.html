@@ -40,7 +40,7 @@
           <h6 class="text-center thead-light col-1 my-auto">
             {{''}}
           </h6>
-          <button class="btn btn-sm btn-outline-danger m-auto rounded" (click)="unlinkDevice(meta.uuid)">
+          <button class="btn btn-sm btn-outline-danger m-auto rounded" (click)="phGraph.show()">
             <i class="fa fa-close text-white" aria-hidden="true"></i></button>
         </div>
       </div>
@@ -51,7 +51,7 @@
             <h6 class="text-left text-warning">{{meta.name}}</h6>
             <h6 class="text-left">{{meta.description}}</h6>
           </div>
-          <button class="btn btn-sm btn-outline-danger rounded my-auto" (click)="unlinkDevice(meta.uuid)">
+          <button class="btn btn-sm btn-outline-danger rounded my-auto" (click)="phGraph.show()">
             <i class="fa fa-remove text-white" aria-hidden="true"></i>
           </button>
         </div>
@@ -66,6 +66,28 @@
           <h6 class="form-label h6 align-self-center my-auto">{{''}}</h6>
         </div>
       </div>
+
+      <div bsModal #phGraph="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+           aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title text-dark">Ви впевнені, що хочете видалити пристрій з вашого акаунту?</h4>
+              <button type="button" class="close" (click)="phGraph.hide();"
+                      aria-label="Закрити">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body btn-group">
+              <button class="btn btn-sm btn-primary form-control" (click)="phGraph.hide()">Скасувати</button>
+              <button class="btn btn-sm btn-danger form-control" (click)="unlinkDevice(meta.uuid)">Видалити</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
+
+
