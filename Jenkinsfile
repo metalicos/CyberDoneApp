@@ -25,7 +25,7 @@ pipeline {
           bat "npm install -g npm@8.4.0"
           echo "==== Installed node.js ==="
 
-          bat "npm install -g @angular/cli@11.2.4"
+          bat "npm install -g @angular/cli@12.0.0"
           echo "==== Installed Angular CLI ==="
 
           bat "docker build -t cyberdone-iot-ui-image:latest ."
