@@ -22,10 +22,10 @@ pipeline {
       steps {
         script {
           echo "========================== STARTING DOCKER IMAGE CREATION =========================="
-          bat "npm install -g npm@8.4.0"
+          bat "npm install -g npm@latest"
           echo "==== Installed node.js ==="
 
-          bat "npm install -g @angular/cli@12.0.0"
+          bat "npm install -g @angular/cli@latest"
           echo "==== Installed Angular CLI ==="
 
           bat "docker build -t cyberdone-iot-ui-image:latest ."
