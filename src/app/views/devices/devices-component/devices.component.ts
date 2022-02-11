@@ -3,6 +3,7 @@ import {Subscription} from 'rxjs';
 import {AuthStorageService} from '../../../security/auth-storage.service';
 import {DeviceMetadataDto, DeviceMetadataService} from '../../../services/device-metadata.service';
 import {HydroponicDataService} from '../../../services/hydroponic-data.service';
+import {ErrorHandlerService} from '../../../services/error-handle.service';
 
 @Component({
   selector: 'app-devices-component',
@@ -17,7 +18,8 @@ export class DevicesComponent implements OnInit, OnDestroy {
 
   constructor(private authStorage: AuthStorageService,
               private hydroData: HydroponicDataService,
-              private deviceMeta: DeviceMetadataService) {
+              private deviceMeta: DeviceMetadataService,
+              private errorHandler: ErrorHandlerService) {
   }
 
   ngOnInit(): void {
@@ -37,13 +39,15 @@ export class DevicesComponent implements OnInit, OnDestroy {
                     this.uuidMap.set(set[0].uuid, set[0].uuid);
                     console.log(this.uuidMap);
                   }
-                });
+                },
+                err => this.errorHandler.handleError(err.status, err.error)
+              );
               return true;
             });
           setTimeout(() => this.hydroponicMetadataList = this.hydroponicMetadataList
             .filter(m => m.uuid === this.uuidMap.get(m.uuid)), 2000);
-          console.log(this.hydroponicMetadataList);
-        }
+        },
+        err => this.errorHandler.handleError(err.status, err.error)
       );
     }
   }

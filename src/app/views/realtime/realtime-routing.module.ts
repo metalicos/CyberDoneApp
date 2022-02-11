@@ -16,10 +16,10 @@ const routes: Routes = [
         redirectTo: 'linear'
       },
       {
-        path: 'linear',
+        path: 'charts/linear/hydroponics/:uuid/values/:type',
         component: LinearChartComponent,
         data: {
-          title: 'Лінійний графік'
+          title: 'Лінійний графік значень гідропоніки у реальному часі'
         }
       },
       {

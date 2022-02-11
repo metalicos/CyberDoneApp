@@ -1,0 +1,360 @@
+<div *ngIf="!currentSettings">
+  <h3 class="h4 card-title my-1 text-center text-dark font-weight-bold">Запит до сервера, будь ласка,
+    зачекайте...</h3>
+  <div class="spinner-grow" role="status">
+    <span class="sr-only"></span>
+  </div>
+</div>
+<form [formGroup]="hydroSettForm" class="card col-12 col-md-4" *ngIf="currentSettings">
+  <h4 class="text-center my-2">Налаштування гідропоніки</h4>
+
+  <div class="card-body mb-1">
+    <div class="input-group">
+      <h6 class="col-10 form-text bg-dark py-2 my-0">Швидкість прокачування рідини (мл/мс)</h6>
+      <button class="btn btn-light rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Редагувати"
+              (click)="(mlPerMillisecond.disabled = !mlPerMillisecond.disabled); editMode = !mlPerMillisecond.disabled">
+        <i class="fa fa-edit"></i>
+      </button>
+      <input #mlPerMillisecond type="number" formControlName="mlPerMillisecond"
+             class="form-control rounded-0 border-dark col-10"
+             value="{{ifBadSetValue(currentSettings.mlPerMillisecond, 0.4)}}"
+             disabled="true">
+      <button class="btn btn-success rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Оновити налаштування на пристрої"
+              (click)="changeMlPerMillisecond()"
+              [class.border-dark]="!mlPerMillisecond.disabled"
+              [disabled]="mlPerMillisecond.disabled">
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body mb-1">
+    <div class="input-group">
+      <h6 class="col-10 form-text bg-dark py-2 my-0">Похибка PH регулювання (pH)</h6>
+      <button class="btn btn-light rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Редагувати"
+              (click)="(regulateErrorPh.disabled = !regulateErrorPh.disabled); editMode = !regulateErrorPh.disabled">
+        <i class="fa fa-edit"></i>
+      </button>
+      <input #regulateErrorPh type="number" formControlName="regulateErrorPh"
+             class="form-control rounded-0 border-dark col-10"
+             value="{{ifBadSetValue(currentSettings.regulateErrorPh, 0.4)}}"
+             disabled="true">
+      <button class="btn btn-success rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Оновити налаштування на пристрої"
+              (click)="changeRegulateErrorPh()"
+              [class.border-dark]="!regulateErrorPh.disabled"
+              [disabled]="regulateErrorPh.disabled">
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body mb-1">
+    <div class="input-group">
+      <h6 class="col-10 form-text bg-dark py-2 my-0">Похибка TDS регулювання (ppm)</h6>
+      <button class="btn btn-light rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Редагувати"
+              (click)="(regulateErrorFertilizer.disabled = !regulateErrorFertilizer.disabled); editMode = !regulateErrorFertilizer.disabled">
+        <i class="fa fa-edit"></i>
+      </button>
+      <input #regulateErrorFertilizer type="number" formControlName="regulateErrorFertilizer"
+             class="form-control rounded-0 border-dark col-10"
+             value="{{ifBadSetValue(currentSettings.regulateErrorFertilizer, 50)}}"
+             disabled="true">
+      <button class="btn btn-success rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Оновити налаштування на пристрої"
+              (click)="changeRegulateErrorFertilizer()"
+              [class.border-dark]="!regulateErrorFertilizer.disabled"
+              [disabled]="regulateErrorFertilizer.disabled">
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body mb-1">
+    <div class="input-group">
+      <h6 class="col-10 form-text bg-dark py-2 my-0">Дозування однієї порції регулятора кислотності PH UP (мл)</h6>
+      <button class="btn btn-light rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Редагувати"
+              (click)="(phUpDoseMl.disabled = !phUpDoseMl.disabled); editMode = !phUpDoseMl.disabled">
+        <i class="fa fa-edit"></i>
+      </button>
+      <input #phUpDoseMl type="number" formControlName="phUpDoseMl"
+             class="form-control rounded-0 border-dark col-10"
+             value="{{ifBadSetValue(currentSettings.phUpDoseMl, 50)}}"
+             disabled="true">
+      <button class="btn btn-success rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Оновити налаштування на пристрої"
+              (click)="changePhUpDoseMl()"
+              [class.border-dark]="!phUpDoseMl.disabled"
+              [disabled]="phUpDoseMl.disabled">
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body mb-1">
+    <div class="input-group">
+      <h6 class="col-10 form-text bg-dark py-2 my-0">Дозування однієї порції регулятора кислотності PH DOWN (мл)</h6>
+      <button class="btn btn-light rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Редагувати"
+              (click)="(phDownDoseMl.disabled = !phDownDoseMl.disabled); editMode = !phDownDoseMl.disabled">
+        <i class="fa fa-edit"></i>
+      </button>
+      <input #phDownDoseMl type="number" formControlName="phDownDoseMl"
+             class="form-control rounded-0 border-dark col-10"
+             value="{{ifBadSetValue(currentSettings.phDownDoseMl, 50)}}"
+             disabled="true">
+      <button class="btn btn-success rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Оновити налаштування на пристрої"
+              (click)="changePhDownDoseMl()"
+              [class.border-dark]="!phDownDoseMl.disabled"
+              [disabled]="phDownDoseMl.disabled">
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body mb-1">
+    <div class="input-group">
+      <h6 class="col-10 form-text bg-dark py-2 my-0">Дозування однієї порції добрива TDS (мл)</h6>
+      <button class="btn btn-light rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Редагувати"
+              (click)="(fertilizerDoseMl.disabled = !fertilizerDoseMl.disabled); editMode = !fertilizerDoseMl.disabled">
+        <i class="fa fa-edit"></i>
+      </button>
+      <input #fertilizerDoseMl type="number" formControlName="fertilizerDoseMl"
+             class="form-control rounded-0 border-dark col-10"
+             value="{{ifBadSetValue(currentSettings.fertilizerDoseMl, 50)}}"
+             disabled="true">
+      <button class="btn btn-success rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Оновити налаштування на пристрої"
+              (click)="changeFertilizerDoseMl()"
+              [class.border-dark]="!fertilizerDoseMl.disabled"
+              [disabled]="fertilizerDoseMl.disabled">
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body mb-1">
+    <div class="input-group">
+      <h6 class="col-10 form-text bg-dark py-2 my-0">Перевірка регуляторів на правильність дозування кожних (мс)</h6>
+      <button class="btn btn-light rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Редагувати"
+              (click)="(recheckDispensersAfterMs.disabled = !recheckDispensersAfterMs.disabled); editMode = !recheckDispensersAfterMs.disabled">
+        <i class="fa fa-edit"></i>
+      </button>
+      <input #recheckDispensersAfterMs type="number" formControlName="recheckDispensersAfterMs"
+             class="form-control rounded-0 border-dark col-10"
+             value="{{ifBadSetValue(currentSettings.recheckDispensersAfterMs, 50)}}"
+             disabled="true">
+      <button class="btn btn-success rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Оновити налаштування на пристрої"
+              (click)="changeRecheckDispensersAfterMs()"
+              [class.border-dark]="!recheckDispensersAfterMs.disabled"
+              [disabled]="recheckDispensersAfterMs.disabled">
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body mb-1">
+    <div class="input-group">
+      <h6 class="col-10 form-text bg-dark py-2 my-0">Встановити підтримуване значення PH (pH)</h6>
+      <button class="btn btn-light rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Редагувати"
+              (click)="(setupPhValue.disabled = !setupPhValue.disabled); editMode = !setupPhValue.disabled">
+        <i class="fa fa-edit"></i>
+      </button>
+      <input #setupPhValue type="number" formControlName="setupPhValue"
+             class="form-control rounded-0 border-dark col-10"
+             value="{{ifBadSetValue(currentSettings.setupPhValue, 50)}}"
+             disabled="true">
+      <button class="btn btn-success rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Оновити налаштування на пристрої"
+              (click)="changeSetupPhValue()"
+              [class.border-dark]="!setupPhValue.disabled"
+              [disabled]="setupPhValue.disabled">
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body mb-1">
+    <div class="input-group">
+      <h6 class="col-10 form-text bg-dark py-2 my-0">Встановити підтримуване значення TDS (ppm)</h6>
+      <button class="btn btn-light rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Редагувати"
+              (click)="(setupTdsValue.disabled = !setupTdsValue.disabled); editMode = !setupTdsValue.disabled">
+        <i class="fa fa-edit"></i>
+      </button>
+      <input #setupTdsValue type="number" formControlName="setupTdsValue"
+             class="form-control rounded-0 border-dark col-10"
+             value="{{ifBadSetValue(currentSettings.setupTdsValue, 50)}}"
+             disabled="true">
+      <button class="btn btn-success rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Оновити налаштування на пристрої"
+              (click)="changeSetupTdsValue()"
+              [class.border-dark]="!setupTdsValue.disabled"
+              [disabled]="setupTdsValue.disabled">
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </div>
+<!--  <div class="card-body mb-1">
+    <div class="input-group">
+      <h6 class="col-10 form-text bg-dark py-2 my-0">Встановити підтримуване значення PH (pH)</h6>
+      <button class="btn btn-light rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Редагувати"
+              (click)="(setupTemperatureValue.disabled = !setupTemperatureValue.disabled); editMode = !setupTemperatureValue.disabled">
+        <i class="fa fa-edit"></i>
+      </button>
+      <input #setupTemperatureValue type="number" formControlName="setupTemperatureValue"
+             class="form-control rounded-0 border-dark col-10"
+             value="{{ifBadSetValue(currentSettings.setupTemperatureValue, 50)}}"
+             disabled="true">
+      <button class="btn btn-success rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Оновити налаштування на пристрої"
+              (click)="changeSetupTemperatureValue()"
+              [class.border-dark]="!setupTemperatureValue.disabled"
+              [disabled]="setupTemperatureValue.disabled">
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+ </div>-->
+  <div class="card-body mb-1">
+    <div class="input-group">
+      <h6 class="col-10 form-text bg-dark py-2 my-0">Пристрій дозволено</h6>
+      <button class="btn btn-light rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Редагувати"
+              (click)="(deviceEnable.disabled = !deviceEnable.disabled); editMode = !deviceEnable.disabled">
+        <i class="fa fa-edit"></i>
+      </button>
+      <input #deviceEnable type="checkbox" formControlName="deviceEnable"
+             class="form-control form-check rounded-0 border-dark col-10"
+             checked="{{ifBadSetValue(currentSettings.deviceEnable, false)}}"
+             value="{{ifBadSetValue(currentSettings.deviceEnable, false)}}"
+             disabled="true">
+      <button class="btn btn-success rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Оновити налаштування на пристрої"
+              (click)="changeDeviceEnable()"
+              [class.border-dark]="!deviceEnable.disabled"
+              [disabled]="deviceEnable.disabled">
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body mb-1">
+    <div class="input-group">
+      <h6 class="col-10 form-text bg-dark py-2 my-0">Регулювання дозволено</h6>
+      <button class="btn btn-light rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Редагувати"
+              (click)="(dispensersEnable.disabled = !dispensersEnable.disabled); editMode = !dispensersEnable.disabled">
+        <i class="fa fa-edit"></i>
+      </button>
+      <input #dispensersEnable type="checkbox" formControlName="dispensersEnable"
+             class="form-control form-check rounded-0 border-dark col-10"
+             checked="{{ifBadSetValue(currentSettings.dispensersEnable, false)}}"
+             value="{{ifBadSetValue(currentSettings.dispensersEnable, false)}}"
+             disabled="true">
+      <button class="btn btn-success rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Оновити налаштування на пристрої"
+              (click)="changeDispensersEnable()"
+              [class.border-dark]="!dispensersEnable.disabled"
+              [disabled]="dispensersEnable.disabled">
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body mb-1">
+    <div class="input-group">
+      <h6 class="col-10 form-text bg-dark py-2 my-0">Сенсори дозволено</h6>
+      <button class="btn btn-light rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Редагувати"
+              (click)="(sensorsEnable.disabled = !sensorsEnable.disabled); editMode = !sensorsEnable.disabled">
+        <i class="fa fa-edit"></i>
+      </button>
+      <input #sensorsEnable type="checkbox" formControlName="sensorsEnable"
+             class="form-control form-check rounded-0 border-dark col-10"
+             checked="{{ifBadSetValue(currentSettings.sensorsEnable, false)}}"
+             value="{{ifBadSetValue(currentSettings.sensorsEnable, false)}}"
+             disabled="true">
+      <button class="btn btn-success rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Оновити налаштування на пристрої"
+              (click)="changeSensorsEnable()"
+              [class.border-dark]="!sensorsEnable.disabled"
+              [disabled]="sensorsEnable.disabled">
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="card-body mb-1">
+    <div class="input-group">
+      <h6 class="col-10 form-text bg-dark py-2 my-0">Лічильник перевантажень контролера</h6>
+      <button class="btn btn-light rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Редагувати"
+              (click)="(restartCounter.disabled = !restartCounter.disabled); editMode = !restartCounter.disabled">
+        <i class="fa fa-edit"></i>
+      </button>
+      <input #restartCounter type="number" formControlName="restartCounter"
+             class="form-control rounded-0 border-dark col-10"
+             value="{{ifBadSetValue(currentSettings.restartCounter, 0)}}"
+             disabled="true">
+      <button class="btn btn-success rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Оновити налаштування на пристрої"
+              (click)="changeRestartCounter()"
+              [class.border-dark]="!restartCounter.disabled"
+              [disabled]="restartCounter.disabled">
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body mb-1">
+    <div class="input-group">
+      <h6 class="col-10 form-text bg-dark py-2 my-0">Назва точки доступу</h6>
+      <button class="btn btn-light rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Редагувати"
+              (click)="(wifiSSID.disabled = !wifiSSID.disabled); editMode = !wifiSSID.disabled">
+        <i class="fa fa-edit"></i>
+      </button>
+      <input #wifiSSID type="text" formControlName="wifiSSID"
+             class="form-control rounded-0 border-dark col-10"
+             value="{{ifBadSetValue(currentSettings.wifiSSID, 'ssid')}}"
+             disabled="true">
+      <button class="btn btn-success rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Оновити налаштування на пристрої"
+              (click)="changeWifiSSID()"
+              [class.border-dark]="!wifiSSID.disabled"
+              [disabled]="wifiSSID.disabled">
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body mb-1">
+    <div class="input-group">
+      <h6 class="col-10 form-text bg-dark py-2 my-0">Пароль до точки доступу</h6>
+      <button class="btn btn-light rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Редагувати"
+              (click)="(wifiPASS.disabled = !wifiPASS.disabled); editMode = !wifiPASS.disabled">
+        <i class="fa fa-edit"></i>
+      </button>
+      <input #wifiPASS type="text" formControlName="wifiPASS"
+             class="form-control rounded-0 border-dark col-10"
+             value="{{ifBadSetValue(currentSettings.wifiPASS, 'xxxxxxx')}}"
+             disabled="true">
+      <button class="btn btn-success rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Оновити налаштування на пристрої"
+              (click)="changeWifiPASS()"
+              [class.border-dark]="!wifiPASS.disabled"
+              [disabled]="wifiPASS.disabled">
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body mb-1">
+    <div class="input-group">
+      <h6 class="col-10 form-text bg-dark py-2 my-0">Часова зона пристрою</h6>
+      <button class="btn btn-light rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Редагувати"
+              (click)="(timeZone.disabled = !timeZone.disabled); editMode = !timeZone.disabled">
+        <i class="fa fa-edit"></i>
+      </button>
+      <input #timeZone type="text" formControlName="timeZone"
+             class="form-control rounded-0 border-dark col-10"
+             value="{{ifBadSetValue(currentSettings.timeZone, '+3:00')}}"
+             disabled="true">
+      <button class="btn btn-success rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Оновити налаштування на пристрої"
+              (click)="changeTimeZone()"
+              [class.border-dark]="!timeZone.disabled"
+              [disabled]="timeZone.disabled">
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="card-body mb-1">
+    <div class="input-group">
+      <h6 class="col-10 form-text bg-dark py-2 my-0">Дозволено автоматичне онолвення часу згідно встановленої часової зони</h6>
+      <button class="btn btn-light rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Редагувати"
+              (click)="(autotime.disabled = !autotime.disabled); editMode = !autotime.disabled">
+        <i class="fa fa-edit"></i>
+      </button>
+      <input #autotime type="checkbox" formControlName="autotime"
+             class="form-control form-check rounded-0 border-dark col-10"
+             checked="{{ifBadSetValue(currentSettings.autotime, false)}}"
+             value="{{ifBadSetValue(currentSettings.autotime, false)}}"
+             disabled="true">
+      <button class="btn btn-success rounded-0 border-dark shadow-none col-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Оновити налаштування на пристрої"
+              (click)="changeAutotime()"
+              [class.border-dark]="!autotime.disabled"
+              [disabled]="autotime.disabled">
+        <i class="fa fa-refresh"></i>
+      </button>
+    </div>
+  </div>
+</form>
+

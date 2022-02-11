@@ -29,7 +29,7 @@ export class HydroponicDataService {
 
   getHydroponicDataLimitedList(uuid: string, limit: number): Observable<HydroponicOneData[]> {
     return this.httpClient
-      .get<HydroponicOneData[]>('http://192.168.1.100:5555/hydroponic/data/last/' + limit,
+      .get<HydroponicOneData[]>(SERVER.backendServerUrl + '/hydroponic/data/last/' + limit,
         {params: new HttpParams().set('uuid', uuid), headers: SERVER.HEADERS});
   }
 }

@@ -70,15 +70,17 @@ export const routes: Routes = [
         path: 'icons',
         loadChildren: () => import('./views/icons/icons.module').then(m => m.IconsModule)
       },
-
       {
         path: 'devices',
         loadChildren: () => import('./views/devices/devices.module').then(m => m.DevicesModule)
       },
-
       {
-        path: 'charts/devices/:uuid/values/:type',
+        path: 'realtime',
         loadChildren: () => import('./views/realtime/realtime.module').then(m => m.RealtimeModule)
+      },
+      {
+        path: 'settings',
+        loadChildren: () => import('./views/settings/settings.module').then(m => m.SettingsModule)
       },
     ]
   },

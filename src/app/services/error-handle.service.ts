@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {Router} from '@angular/router';
 
 export class ErrorDto {
   timestamp: string;
@@ -12,13 +13,16 @@ export class ErrorDto {
 })
 export class ErrorHandlerService {
 
+  constructor(private router: Router) {
+  }
+
   public handleError(errCode: number, err: ErrorDto) {
     let errorMsg = '';
     console.log(JSON.stringify(err));
     if (errCode === 400) {
       errorMsg = 'Запит надісланий на сервер не валідний. 400 : ' + err.error + ' : ' + err.title + ' : ' + err.detail;
     } else if (errCode === 401) {
-      errorMsg = 'Помилка авторизації. 401 : ' + err.error + ' : ' + err.title + ' : ' + err.detail;
+      this.router.navigate(['/login']);
     } else if (errCode === 403) {
       errorMsg = 'Відмовлено у доступі 403 : ' + err.error + ' : ' + err.title + ' : ' + err.detail;
     } else if (errCode === 404) {

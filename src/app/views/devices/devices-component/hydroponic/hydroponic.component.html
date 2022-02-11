@@ -11,19 +11,19 @@
         <a class="btn btn-sm text-white" id="actionSet" [class.dropdown-toggle]="false" ngbDropdownToggle><i
           class="fa fa-2x fa-ellipsis-v"></i></a>
         <div ngbDropdownMenu aria-labelledby="actionSet">
-          <button ngbDropdownItem [routerLink]="'/charts/devices/'+metadata.uuid+'/values/ph'">
+          <button ngbDropdownItem [routerLink]="'/realtime/charts/linear/hydroponics/'+metadata.uuid+'/values/ph'">
             <i class="fa fa-2x fa-line-chart mr-3"></i> PH Realtime
           </button>
-          <button ngbDropdownItem [routerLink]="'/charts/devices/'+metadata.uuid+'/values/tds'">
+          <button ngbDropdownItem [routerLink]="'/realtime/charts/linear/hydroponics/'+metadata.uuid+'/values/tds'">
             <i class="fa fa-2x fa-line-chart mr-3"></i> TDS Realtime
           </button>
-          <button ngbDropdownItem [routerLink]="'/charts/devices/'+metadata.uuid+'/values/temp'">
+          <button ngbDropdownItem [routerLink]="'/realtime/charts/linear/hydroponics/'+metadata.uuid+'/values/temp'">
             <i class="fa fa-2x fa-line-chart mr-3"></i> Temperature Realtime
           </button>
-          <button ngbDropdownItem [routerLink]="'/data/devices/'+metadata.uuid">
+          <button ngbDropdownItem [routerLink]="'/realtime/charts/linear/hydroponics/'+metadata.uuid">
             <i class="fa fa-2x fa-database mr-3"></i> Дані
           </button>
-          <button ngbDropdownItem [routerLink]="'/settings/devices/'+metadata.uuid">
+          <button ngbDropdownItem [routerLink]="'/settings/devices/hydroponics/'+metadata.uuid">
             <i class="fa fa-2x fa-cog mr-3"></i> Налаштування
           </button>
         </div>

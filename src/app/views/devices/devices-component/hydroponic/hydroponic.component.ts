@@ -7,6 +7,7 @@ import {DeviceMetadataDto, DeviceMetadataService} from '../../../../services/dev
 import {DeviceScheduleService} from '../../../../services/device-schedule.service';
 import {HydroponicDataDto, HydroponicDataService} from '../../../../services/hydroponic-data.service';
 import {HydroponicSettingsDto, HydroponicSettingsService} from '../../../../services/hydroponic-settings.service';
+import {ErrorHandlerService} from '../../../../services/error-handle.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -25,7 +26,8 @@ export class HydroponicComponent implements OnDestroy, OnInit {
               private deviceSchedule: DeviceScheduleService,
               private deviceMetadataService: DeviceMetadataService,
               private hydroDataService: HydroponicDataService,
-              private hydroSettService: HydroponicSettingsService) {
+              private hydroSettService: HydroponicSettingsService,
+              private errorHandler: ErrorHandlerService) {
   }
 
   ngOnInit(): void {
@@ -47,25 +49,13 @@ export class HydroponicComponent implements OnDestroy, OnInit {
     this.subscriptionMap.set('GetHydroponicLastDataRequest',
       this.hydroDataService.getLastDataInDeviceWithUUID(this.metadata.uuid, 0, 1)
         .subscribe(
-          hydroponicData => {
-            this.hydroData = hydroponicData[0];
-          },
-          err => {
-            console.log('Data receive error');
-            console.log(JSON.stringify(err));
-            this.subscriptionMap.get('GetHydroponicLastDataRequest').unsubscribe();
-          }));
+          hydroponicData => this.hydroData = hydroponicData[0],
+          err => this.errorHandler.handleError(err.status, err.error)));
     this.subscriptionMap.set('GetHydroponicLastSettingsRequest',
       this.hydroSettService.getLastSettingsInDeviceWithUUID(this.metadata.uuid, 0, 1)
         .subscribe(
-          hydroponicSettings => {
-            this.hydroSett = hydroponicSettings[0];
-          },
-          err => {
-            console.log('Settings receive error');
-            console.log(JSON.stringify(err));
-            this.subscriptionMap.get('GetHydroponicLastSettingsRequest').unsubscribe();
-          }));
+          hydroponicSettings => this.hydroSett = hydroponicSettings[0],
+          err => this.errorHandler.handleError(err.status, err.error)));
   }
 
   abs(num: number): number {
