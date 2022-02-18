@@ -23,7 +23,7 @@ export class DefaultLayoutComponent implements OnDestroy {
     if (!this.accountService.isAuthorised()) {
       this.accountService.init();
     }
-    const user = this.authStorageService.getUser();
+    const user = this.authStorageService.getUserOrNavigate(this.router);
     if (user === null || user === undefined) {
       this.router.navigate(['/login']);
     }

@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {AccountDto} from '../services/account.service';
 import {StorageService} from './storage.service';
+import {Router} from '@angular/router';
 
 const TOKEN_KEY = 'AUTH-TOKEN';
 const USER_KEY = 'AUTH-USER';
@@ -35,6 +36,14 @@ export class AuthStorageService extends StorageService {
 
   public getUser(): AccountDto {
     return super.get(USER_KEY);
+  }
+
+  public getUserOrNavigate(router: Router): AccountDto {
+    const account = super.get(USER_KEY);
+    if (account === '') {
+      router.navigate(['/login']);
+    }
+    return account;
   }
 
   public saveAccountImage(accountImage: string): string {
