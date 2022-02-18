@@ -6,7 +6,7 @@
           <div class="card-group">
             <div class="card p-4">
               <div class="card-body">
-                <form [formGroup]="logForm">
+                <form [formGroup]="logForm" (keydown)="login($event)">
                   <h1 class="text-capitalize text-center">CyberDone</h1>
                   <div class="input-group mb-1">
                     <img class="mx-auto" src="./assets/favicon.ico" alt="CyberDoneLogo"/>
@@ -43,7 +43,7 @@
                     <div class="col-12">
                       <button
                         [disabled]="(username.invalid && username.touched) || (password.invalid && password.touched)"
-                        type="button" class="btn btn-dark btn-block px-4" (click)="login()">Увійти
+                        type="button" class="btn btn-dark btn-block px-4" (click)="submitLogin()">Увійти
                       </button>
                     </div>
                   </div>

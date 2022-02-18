@@ -62,7 +62,7 @@ export class AccountService {
   }
 
   login(loginUserDto: LoginUserDto): Observable<TokenDto> {
-    return this.http.post<TokenDto>(SERVER.backendServerUrl + '/accounts/authentication/login', loginUserDto, {headers: SERVER.HEADERS});
+    return this.http.post<TokenDto>(SERVER.backendServerUrl + '/accounts/authentication/login', loginUserDto, {headers: SERVER.CONTENT_JSON_HEADERS});
   }
 
   init() {
@@ -70,7 +70,7 @@ export class AccountService {
   }
 
   registration(registrationUserDto): Observable<AccountDto> {
-    return this.http.post<AccountDto>(SERVER.backendServerUrl + '/accounts/registration', registrationUserDto, {headers: SERVER.HEADERS});
+    return this.http.post<AccountDto>(SERVER.backendServerUrl + '/accounts/registration', registrationUserDto, {headers: SERVER.CONTENT_JSON_HEADERS});
   }
 
   isAuthorised(): boolean {
@@ -78,14 +78,24 @@ export class AccountService {
   }
 
   getUserAccount(email: string): Observable<AccountDto> {
-    return this.http.get<AccountDto>(SERVER.backendServerUrl + '/accounts/' + email, {headers: SERVER.HEADERS});
+    return this.http.get<AccountDto>(SERVER.backendServerUrl + '/accounts/' + email, {headers: SERVER.CONTENT_JSON_HEADERS});
+  }
+
+  getSelfAccount(): Observable<AccountDto> {
+    return this.http.get<AccountDto>(SERVER.backendServerUrl + '/accounts/self', {headers: SERVER.CONTENT_JSON_HEADERS});
   }
 
   changeForgotAccountPassword(changePassDto: ChangePasswordDto): Observable<string> {
     return this.http.put<string>(
       SERVER.backendServerUrl + '/accounts/change/password',
       changePassDto,
-      {headers: SERVER.HEADERS}
+      {headers: SERVER.CONTENT_JSON_HEADERS}
+    );
+  }
+
+  getSelfAccountProfileImage(username: string) {
+    return this.http.get(
+      SERVER.backendServerUrl + '/accounts/self/profileImage', {headers: SERVER.CONTENT_TEXT_HEADERS, responseType: 'text'}
     );
   }
 }

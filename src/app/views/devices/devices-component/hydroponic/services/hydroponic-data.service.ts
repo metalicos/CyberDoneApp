@@ -24,13 +24,13 @@ export class HydroponicDataService {
   getHydroponicData(uuid: string): Observable<HydroponicOneData> {
     return this.httpClient
       .get<HydroponicOneData>(SERVER.backendServerUrl + '/hydroponic/data/last',
-        {params: new HttpParams().set('uuid', uuid), headers: SERVER.HEADERS});
+        {params: new HttpParams().set('uuid', uuid), headers: SERVER.CONTENT_JSON_HEADERS});
   }
 
   getHydroponicDataLimitedList(uuid: string, limit: number): Observable<HydroponicOneData[]> {
     return this.httpClient
       .get<HydroponicOneData[]>(SERVER.backendServerUrl + '/hydroponic/data/last/' + limit,
-        {params: new HttpParams().set('uuid', uuid), headers: SERVER.HEADERS});
+        {params: new HttpParams().set('uuid', uuid), headers: SERVER.CONTENT_JSON_HEADERS});
   }
 }
 

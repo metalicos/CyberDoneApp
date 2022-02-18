@@ -31,7 +31,7 @@ export class HydroponicCalibrationService {
   getLastCalibrationDataInDeviceWithUUID(uuid: string, page: number, limit: number) {
     return this.http.get<HydroponicCalibrationDataDto[]>(SERVER.backendServerUrl + '/hydroponic/calibration-data/last',
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('page', String(page)).set('limit', String(limit))
       }
     );
@@ -40,7 +40,7 @@ export class HydroponicCalibrationService {
   deleteCalibrationDataInDeviceWithId(id: number) {
     return this.http.delete(SERVER.backendServerUrl + '/hydroponic/calibration-data',
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('id', String(id))
       }
     );

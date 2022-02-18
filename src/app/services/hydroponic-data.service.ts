@@ -24,7 +24,7 @@ export class HydroponicDataService {
   getLastDataInDeviceWithUUID(uuid: string, page: number, limit: number): Observable<HydroponicDataDto[]> {
     return this.http.get<HydroponicDataDto[]>(SERVER.backendServerUrl + '/hydroponic/data/last',
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams()
           .set('uuid', uuid)
           .set('page', String(page))
@@ -36,7 +36,7 @@ export class HydroponicDataService {
   deleteAllDataInDeviceWithUUID(id: number) {
     return this.http.delete(SERVER.backendServerUrl + '/hydroponic/data',
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('id', String(id))
       }
     );

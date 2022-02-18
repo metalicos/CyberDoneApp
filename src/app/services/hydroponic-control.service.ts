@@ -19,7 +19,7 @@ export class HydroponicControlService {
   updateTimeManually(dto: HydroponicTimeDto) {
     return this.http.put<HydroponicTimeDto>(SERVER.backendServerUrl + '/hydroponic/control/update/time', dto,
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
       }
     );
   }
@@ -27,7 +27,7 @@ export class HydroponicControlService {
   updateZone(uuid: string, value: string) {
     return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/update/zone', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('value', value)
       }
     );
@@ -36,7 +36,7 @@ export class HydroponicControlService {
   updateAutotime(uuid: string, value: string) {
     return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/update/autotime', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('value', value)
       }
     );
@@ -45,7 +45,7 @@ export class HydroponicControlService {
   updatePhUpPumpStatus(uuid: string, value: string) {
     return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/update/pumps/phUp', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('value', value)
       }
     );
@@ -54,7 +54,7 @@ export class HydroponicControlService {
   updatePhDownPumpStatus(uuid: string, value: string) {
     return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/update/pumps/phDown', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('value', value)
       }
     );
@@ -63,7 +63,7 @@ export class HydroponicControlService {
   updateTdsPumpStatus(uuid: string, value: string) {
     return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/update/pumps/tds', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('value', value)
       }
     );
@@ -72,7 +72,7 @@ export class HydroponicControlService {
   restart(uuid: string) {
     return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/update/restart', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid)
       }
     );
@@ -81,7 +81,7 @@ export class HydroponicControlService {
   saveAllSettings(uuid: string) {
     return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/save/settings', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid)
       }
     );
@@ -90,7 +90,7 @@ export class HydroponicControlService {
   readAllSettings(uuid: string) {
     return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/read/settings', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid)
       }
     );
@@ -99,7 +99,7 @@ export class HydroponicControlService {
   calibrateTdsSensor(uuid: string, value: string) {
     return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/calibrate/tds', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('value', value)
       }
     );
@@ -108,7 +108,7 @@ export class HydroponicControlService {
   clrCalibrationTdsSensor(uuid: string) {
     return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/calibrate/tds/clear', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid)
       }
     );
@@ -117,7 +117,7 @@ export class HydroponicControlService {
   calibratePhLow(uuid: string, value: string) {
     return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/calibrate/ph/low', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('value', value)
       }
     );
@@ -126,7 +126,7 @@ export class HydroponicControlService {
   calibratePhHigh(uuid: string, value: string) {
     return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/calibrate/ph/high', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('value', value)
       }
     );
@@ -135,7 +135,7 @@ export class HydroponicControlService {
   clrCalibrationPhSensor(uuid: string) {
     return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/calibrate/ph/clear', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid)
       }
     );
@@ -144,7 +144,7 @@ export class HydroponicControlService {
   updateSetupPhValue(uuid: string, value: string) {
     return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/setup/ph', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('value', value)
       }
     );
@@ -153,7 +153,7 @@ export class HydroponicControlService {
   updateSetupTdsValue(uuid: string, value: string) {
     return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/setup/tds', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('value', value)
       }
     );
@@ -162,7 +162,7 @@ export class HydroponicControlService {
   updateRecheckDispensersAfterTime(uuid: string, value: string) {
     return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/update/dispensers/recheck-time', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('value', value)
       }
     );
@@ -171,7 +171,7 @@ export class HydroponicControlService {
   updatePhUpDose(uuid: string, value: string) {
     return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/update/dose/ph/up', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('value', value)
       }
     );
@@ -180,7 +180,7 @@ export class HydroponicControlService {
   updatePhDownDose(uuid: string, value: string) {
     return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/update/dose/ph/down', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('value', value)
       }
     );
@@ -189,7 +189,7 @@ export class HydroponicControlService {
   updateFertilizerDose(uuid: string, value: string) {
     return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/update/dose/tds', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('value', value)
       }
     );
@@ -198,7 +198,7 @@ export class HydroponicControlService {
   updateRegulatePhError(uuid: string, value: string) {
     return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/update/regulator/error/ph', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('value', value)
       }
     );
@@ -207,7 +207,7 @@ export class HydroponicControlService {
   updateRegulateTdsError(uuid: string, value: string) {
     return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/update/regulator/error/tds', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('value', value)
       }
     );
@@ -216,7 +216,7 @@ export class HydroponicControlService {
   updatePumpSpeed(uuid: string, value: string) {
     return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/update/pump/speed', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('value', value)
       }
     );
@@ -225,7 +225,7 @@ export class HydroponicControlService {
   updateWifiSsid(uuid: string, value: string) {
     return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/update/wifi/ssid', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('value', value)
       }
     );
@@ -234,7 +234,7 @@ export class HydroponicControlService {
   updateWifiPassword(uuid: string, value: string) {
     return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/update/wifi/pass', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('value', value)
       }
     );
@@ -243,7 +243,7 @@ export class HydroponicControlService {
   updateSensorsEnable(uuid: string, value: string) {
     return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/update/enable/sensors', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('value', value)
       }
     );
@@ -252,7 +252,7 @@ export class HydroponicControlService {
   updateDispensersEnable(uuid: string, value: string) {
     return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/update/enable/dispensers', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('value', value)
       }
     );

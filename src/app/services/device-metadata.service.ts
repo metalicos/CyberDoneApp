@@ -23,7 +23,7 @@ export class DeviceMetadataService {
   getMetadataByUuid(uuid: string, value: string) {
     return this.http.get<DeviceMetadataDto>(SERVER.backendServerUrl + '/device/metadata',
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('value', value)
       }
     );
@@ -32,7 +32,7 @@ export class DeviceMetadataService {
   getMetadataListByUser(userId: number) {
     return this.http.get<DeviceMetadataDto[]>(SERVER.backendServerUrl + '/device/metadata/list',
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('userId', String(userId))
       }
     );
@@ -41,7 +41,7 @@ export class DeviceMetadataService {
   createMetadata(deviceMetadataDto: DeviceMetadataDto) {
     return this.http.post(SERVER.backendServerUrl + '/device/metadata', deviceMetadataDto,
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams()
       }
     );
@@ -50,7 +50,7 @@ export class DeviceMetadataService {
   updateMetadata(uuid: string, name: string, description: string) {
     return this.http.patch(SERVER.backendServerUrl + '/device/metadata', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('name', name).set('description', description)
       }
     );
@@ -59,7 +59,7 @@ export class DeviceMetadataService {
   deleteMetadata(uuid: string) {
     return this.http.delete(SERVER.backendServerUrl + '/device/metadata',
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid)
       }
     );
@@ -68,7 +68,7 @@ export class DeviceMetadataService {
   getDeviceTypesList() {
     return this.http.get<string[]>(SERVER.backendServerUrl + '/device/metadata/device-types',
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
       }
     );
   }
@@ -76,7 +76,7 @@ export class DeviceMetadataService {
   unlinkDevice(uuid: string) {
     return this.http.put(SERVER.backendServerUrl + '/device/metadata/unlink', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid)
       }
     );
@@ -85,7 +85,7 @@ export class DeviceMetadataService {
   linkDevice(uuid: string, userId: number) {
     return this.http.put<string>(SERVER.backendServerUrl + '/device/metadata/link', {},
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('userId', String(userId))
       }
     );

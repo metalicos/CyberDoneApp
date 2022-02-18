@@ -46,6 +46,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
             });
           setTimeout(() => this.hydroponicMetadataList = this.hydroponicMetadataList
             .filter(m => m.uuid === this.uuidMap.get(m.uuid)), 2000);
+          console.log(this.hydroponicMetadataList);
         },
         err => this.errorHandler.handleError(err.status, err.error)
       );

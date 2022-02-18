@@ -41,7 +41,7 @@ export class HydroponicSettingsService {
   getLastSettingsInDeviceWithUUID(uuid: string, page: number, limit: number) {
     return this.http.get<HydroponicSettingsDto[]>(SERVER.backendServerUrl + '/hydroponic/settings/last',
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('page', String(page)).set('limit', String(limit))
       }
     );

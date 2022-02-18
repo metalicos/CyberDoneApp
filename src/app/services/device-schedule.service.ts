@@ -48,7 +48,7 @@ export class DeviceScheduleService {
   getSchedulesByKey(uuid: string, key: string): Observable<RegularScheduleDto[]> {
     return this.http.get<RegularScheduleDto[]>(SERVER.backendServerUrl + '/device/regular/schedules',
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('key', key)
       }
     );
@@ -57,7 +57,7 @@ export class DeviceScheduleService {
   createSchedule(schedule: RegularScheduleDto): Observable<RegularScheduleDto> {
     return this.http.post<RegularScheduleDto>(SERVER.backendServerUrl + '/device/regular/schedules', schedule,
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
       }
     );
   }
@@ -65,7 +65,7 @@ export class DeviceScheduleService {
   updateScheduleMetaInfo(schedule: RegularScheduleUpdateDto) {
     return this.http.put<RegularScheduleUpdateDto>(SERVER.backendServerUrl + '/device/regular/schedules', schedule,
       {
-        headers: SERVER.HEADERS,
+        headers: SERVER.CONTENT_JSON_HEADERS,
       }
     );
   }
@@ -73,7 +73,7 @@ export class DeviceScheduleService {
   deleteScheduleById(id: number) {
     return this.http.delete(SERVER.backendServerUrl + '/device/regular/schedules/' + id,
       {
-        headers: SERVER.HEADERS
+        headers: SERVER.CONTENT_JSON_HEADERS
       }
     );
   }

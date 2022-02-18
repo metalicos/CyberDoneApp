@@ -4,6 +4,7 @@ import {StorageService} from './storage.service';
 
 const TOKEN_KEY = 'AUTH-TOKEN';
 const USER_KEY = 'AUTH-USER';
+const ACCOUNT_IMAGE_KEY = 'ACCOUNT-IMAGE';
 
 @Injectable({
   providedIn: 'root'
@@ -34,5 +35,13 @@ export class AuthStorageService extends StorageService {
 
   public getUser(): AccountDto {
     return super.get(USER_KEY);
+  }
+
+  public saveAccountImage(accountImage: string): string {
+    return super.update(ACCOUNT_IMAGE_KEY, accountImage);
+  }
+
+  public getAccountImage(): string {
+    return super.get(ACCOUNT_IMAGE_KEY);
   }
 }
