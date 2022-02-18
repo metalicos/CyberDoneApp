@@ -1,6 +1,9 @@
 <div *ngIf="phOptions">
-  <p class="h4 card-title my-1 text-center text-dark font-weight-bold">PH в реальному часі {{currentDate | date}}</p>
-  <p class="h4 card-title my-1 text-center text-dark font-weight-bold">{{lastPh + ' ph'}}</p>
+  <p class="h4 card-title my-1 text-center text-dark font-weight-bold" *ngIf="currentDate">PH в реальному
+    часі {{currentDate | date}}</p>
+  <p class="h4 card-title my-1 text-center text-dark font-weight-bold" *ngIf="currentlyPoints">Недостатньо даних. На
+    даний момент знайдено {{currentlyPoints}} записів.</p>
+  <p class="h4 card-title my-1 text-center text-dark font-weight-bold" *ngIf="lastPh">{{lastPh + ' ph'}}</p>
 </div>
 <div *ngIf="phOptions" class="bg-light pb-4 rounded">
   <div echarts [options]="phOptions" class="demo-chart"></div>
@@ -11,8 +14,11 @@
 </div>
 
 <div *ngIf="tdsOptions">
-  <p class="h4 card-title my-1 text-center text-dark font-weight-bold">TDS в реальному часі {{currentDate | date}}</p>
-  <p class="h4 card-title my-1 text-center text-dark font-weight-bold">{{lastTds + ' ppm'}}</p>
+  <p class="h4 card-title my-1 text-center text-dark font-weight-bold" *ngIf="currentDate">TDS в реальному
+    часі {{currentDate | date}}</p>
+  <p class="h4 card-title my-1 text-center text-dark font-weight-bold" *ngIf="currentlyPoints">Недостатньо даних. На
+    даний момент знайдено {{currentlyPoints}} записів.</p>
+  <p class="h4 card-title my-1 text-center text-dark font-weight-bold" *ngIf="lastTds">{{lastTds + ' ppm'}}</p>
 </div>
 <div *ngIf="tdsOptions" class="bg-light pb-4 rounded">
   <div echarts [options]="tdsOptions" class="demo-chart"></div>
@@ -23,9 +29,11 @@
 </div>
 
 <div *ngIf="tmpOptions">
-  <p class="h4 card-title my-1 text-center text-dark font-weight-bold">Температура в реальному
+  <p class="h4 card-title my-1 text-center text-dark font-weight-bold" *ngIf="currentDate">Температура в реальному
     часі {{currentDate | date}}</p>
-  <p class="h4 card-title my-1 text-center text-dark font-weight-bold">{{lastTmp + ' °C'}}</p>
+  <p class="h4 card-title my-1 text-center text-dark font-weight-bold" *ngIf="currentlyPoints">Недостатньо даних. На
+    даний момент знайдено {{currentlyPoints}} записів.</p>
+  <p class="h4 card-title my-1 text-center text-dark font-weight-bold" *ngIf="lastTds">{{lastTmp + ' °C'}}</p>
 </div>
 <div *ngIf="tmpOptions" class="bg-light pb-4 rounded">
   <div echarts [options]="tmpOptions" class="demo-chart"></div>

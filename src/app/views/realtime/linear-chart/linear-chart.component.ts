@@ -24,6 +24,7 @@ export class LinearChartComponent implements OnInit, OnDestroy {
   currentDate: string;
   chartPointsNumber: number = 30;
   updateInfoTimer: any;
+  currentlyPoints: number;
 
   constructor(private route: ActivatedRoute, private hydroSettService: HydroponicSettingsService,
               private errorHandler: ErrorHandlerService, private hydroDataService: HydroponicDataService) {
@@ -37,42 +38,50 @@ export class LinearChartComponent implements OnInit, OnDestroy {
     this.updateInfoTimer = setInterval(() => {
       this.hydroponicDataSub = this.hydroDataService.getLastDataInDeviceWithUUID(this.uuid, 0, this.chartPointsNumber).subscribe(
         data => {
-          const hour = data[0].microcontrollerTime[0] === undefined ? '0' : data[0].microcontrollerTime[0];
-          const minute = data[0].microcontrollerTime[1] === undefined ? '0' : data[0].microcontrollerTime[1];
-          const second = data[0].microcontrollerTime[2] === undefined ? '0' : data[0].microcontrollerTime[2];
-          this.currentDate = hour + '.' + minute + '.' + second;
-          if (this.type === 'ph') {
-            this.lastPh = data[this.chartPointsNumber - 1].phValue;
-            const dataSeries = data.map<number>(d => d.phValue <= 0 ? 0 : d.phValue);
-            const timeSeries = data.map<string>(d =>
-              (d.microcontrollerTime[3] === undefined ? '0' : d.microcontrollerTime[3]) + ':' +
-              (d.microcontrollerTime[4] === undefined ? '0' : d.microcontrollerTime[4]) + ':' +
-              (d.microcontrollerTime[5] === undefined ? '0' : d.microcontrollerTime[5]));
-            this.phOptions = this.setupOptions(dataSeries, timeSeries);
-            this.tdsOptions = undefined;
-            this.tmpOptions = undefined;
-          }
-          if (this.type === 'tds') {
-            this.lastTds = data[this.chartPointsNumber - 1].tdsValue;
-            const dataSeries = data.map<number>(d => d.tdsValue <= 0 ? 0 : d.tdsValue);
-            const timeSeries = data.map<string>(d =>
-              (d.microcontrollerTime[3] === undefined ? '0' : d.microcontrollerTime[3]) + ':' +
-              (d.microcontrollerTime[4] === undefined ? '0' : d.microcontrollerTime[4]) + ':' +
-              (d.microcontrollerTime[5] === undefined ? '0' : d.microcontrollerTime[5]));
-            this.tdsOptions = this.setupOptions(dataSeries, timeSeries);
-            this.tmpOptions = undefined;
-            this.phOptions = undefined;
-          }
-          if (this.type === 'temp') {
-            this.lastTmp = data[this.chartPointsNumber - 1].temperatureValue;
-            const dataSeries = data.map<number>(d => d.temperatureValue <= 0 ? 0 : d.temperatureValue);
-            const timeSeries = data.map<string>(d =>
-              (d.microcontrollerTime[3] === undefined ? '0' : d.microcontrollerTime[3]) + ':' +
-              (d.microcontrollerTime[4] === undefined ? '0' : d.microcontrollerTime[4]) + ':' +
-              (d.microcontrollerTime[5] === undefined ? '0' : d.microcontrollerTime[5]));
-            this.tmpOptions = this.setupOptions(dataSeries, timeSeries);
-            this.tdsOptions = undefined;
-            this.phOptions = undefined;
+          if (data.length < this.chartPointsNumber) {
+            this.currentlyPoints = data.length;
+            this.lastPh = undefined;
+            this.lastTds = undefined;
+            this.lastTmp = undefined;
+          } else {
+            this.currentlyPoints = undefined;
+            const hour = data[0].microcontrollerTime[0] === undefined ? '0' : data[0].microcontrollerTime[0];
+            const minute = data[0].microcontrollerTime[1] === undefined ? '0' : data[0].microcontrollerTime[1];
+            const second = data[0].microcontrollerTime[2] === undefined ? '0' : data[0].microcontrollerTime[2];
+            this.currentDate = hour + '.' + minute + '.' + second;
+            if (this.type === 'ph') {
+              this.lastPh = data[this.chartPointsNumber - 1].phValue;
+              const dataSeries = data.map<number>(d => d.phValue <= 0 ? 0 : d.phValue);
+              const timeSeries = data.map<string>(d =>
+                (d.microcontrollerTime[3] === undefined ? '0' : d.microcontrollerTime[3]) + ':' +
+                (d.microcontrollerTime[4] === undefined ? '0' : d.microcontrollerTime[4]) + ':' +
+                (d.microcontrollerTime[5] === undefined ? '0' : d.microcontrollerTime[5]));
+              this.phOptions = this.setupOptions(dataSeries, timeSeries);
+              this.tdsOptions = undefined;
+              this.tmpOptions = undefined;
+            }
+            if (this.type === 'tds') {
+              this.lastTds = data[this.chartPointsNumber - 1].tdsValue;
+              const dataSeries = data.map<number>(d => d.tdsValue <= 0 ? 0 : d.tdsValue);
+              const timeSeries = data.map<string>(d =>
+                (d.microcontrollerTime[3] === undefined ? '0' : d.microcontrollerTime[3]) + ':' +
+                (d.microcontrollerTime[4] === undefined ? '0' : d.microcontrollerTime[4]) + ':' +
+                (d.microcontrollerTime[5] === undefined ? '0' : d.microcontrollerTime[5]));
+              this.tdsOptions = this.setupOptions(dataSeries, timeSeries);
+              this.tmpOptions = undefined;
+              this.phOptions = undefined;
+            }
+            if (this.type === 'temp') {
+              this.lastTmp = data[this.chartPointsNumber - 1].temperatureValue;
+              const dataSeries = data.map<number>(d => d.temperatureValue <= 0 ? 0 : d.temperatureValue);
+              const timeSeries = data.map<string>(d =>
+                (d.microcontrollerTime[3] === undefined ? '0' : d.microcontrollerTime[3]) + ':' +
+                (d.microcontrollerTime[4] === undefined ? '0' : d.microcontrollerTime[4]) + ':' +
+                (d.microcontrollerTime[5] === undefined ? '0' : d.microcontrollerTime[5]));
+              this.tmpOptions = this.setupOptions(dataSeries, timeSeries);
+              this.tdsOptions = undefined;
+              this.phOptions = undefined;
+            }
           }
         },
         err => this.errorHandler.handleError(err.status, err.error)
