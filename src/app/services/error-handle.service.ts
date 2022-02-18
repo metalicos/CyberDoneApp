@@ -21,18 +21,24 @@ export class ErrorHandlerService {
     console.log(JSON.stringify(err));
     if (errCode === 400) {
       errorMsg = 'Запит надісланий на сервер не валідний. 400 : ' + err.error + ' : ' + err.title + ' : ' + err.detail;
+      console.log('400, ' + errorMsg);
     } else if (errCode === 401) {
+      console.log('401');
       this.router.navigate(['/login']);
     } else if (errCode === 403) {
       errorMsg = 'Відмовлено у доступі 403 : ' + err.error + ' : ' + err.title + ' : ' + err.detail;
+      console.log('403, ' + errorMsg);
     } else if (errCode === 404) {
       errorMsg = 'Ресурс не знайдено. 404 : ' + err.error + ' : ' + err.title + ' : ' + err.detail;
+      console.log('404, ' + errorMsg);
     } else if (errCode === 405) {
       errorMsg = 'Метод . 405 : ' + err.error + ' : ' + err.title + ' : ' + err.detail;
+      console.log('405, ' + errorMsg);
     } else if (errCode === 409) {
       errorMsg = 'Конфлікт із існуючим ресурсом. 409 : ' + err.error + ' : ' + err.title + ' : ' + err.detail;
     } else if (errCode === 500) {
       errorMsg = 'Вибачте за тимчасові незручності, у нас серверні неполадки. 500 : ' + err.error + ' : ' + err.title + ' : ' + err.detail;
+      console.log('500, ' + errorMsg);
     }
     return {type: 'danger', msg: errorMsg};
   }

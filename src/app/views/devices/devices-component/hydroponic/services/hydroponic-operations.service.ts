@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
+import {SERVER} from '../../../../../backend-urls';
 
 export interface TimeAndZone {
   microcontrollerTime: number[];
@@ -8,195 +9,199 @@ export interface TimeAndZone {
   UUID: string;
 }
 
-export interface Metadata {
-  id: number;
-  uuid: string;
-  name: string;
-  description: string;
-  deviceType: string;
-  accessEnabled: true,
-  userId: number;
-}
-
 @Injectable({
   providedIn: 'root'
 })
 export class HydroponicOperationsService {
 
-  private httpHeaders = new HttpHeaders({
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*'
-  });
-  private serverUrl = 'http://192.168.1.100:5555';
-
   constructor(private httpClient: HttpClient) {
   }
 
-  controlHydroponicPhUpPump(uuid: string, direction: string) {
-    return this.httpClient
-      .get(this.serverUrl + '/update/pumps/phUp/' + direction, {
-        params: new HttpParams().set('uuid', uuid),
-        headers: this.httpHeaders
-      }).subscribe();
-  }
-
-  controlHydroponicPhDownPump(uuid: string, direction: string) {
-    return this.httpClient
-      .get(this.serverUrl + '/update/pumps/phDown/' + direction, {
-        params: new HttpParams().set('uuid', uuid),
-        headers: this.httpHeaders
-      }).subscribe();
-  }
-
-  controlHydroponicTdsPump(uuid: string, direction: string) {
-    return this.httpClient
-      .get(this.serverUrl + '/update/pumps/tds/' + direction, {
-        params: new HttpParams().set('uuid', uuid),
-        headers: this.httpHeaders
-      }).subscribe();
-  }
-
-  updateSetupValues(uuid: string, setupTdsValue: string, setupPhValue: string) {
-    this.httpClient.get(this.serverUrl + '/update/setup/ph', {
-      params: new HttpParams().set('uuid', uuid).set('value', setupPhValue),
-      headers: this.httpHeaders
-    }).subscribe();
-    this.httpClient.get(this.serverUrl + '/update/setup/tds', {
-      params: new HttpParams().set('uuid', uuid).set('value', setupTdsValue),
-      headers: this.httpHeaders
-    }).subscribe();
-  }
-
-  updateErrorValues(uuid: string, phError: string, tdsError: string) {
-    this.httpClient.get(this.serverUrl + '/update/regulator/error/ph', {
-      params: new HttpParams().set('uuid', uuid).set('value', phError),
-      headers: this.httpHeaders
-    }).subscribe();
-    this.httpClient.get(this.serverUrl + '/update/regulator/error/tds', {
-      params: new HttpParams().set('uuid', uuid).set('value', tdsError),
-      headers: this.httpHeaders
-    }).subscribe();
-  }
-
-  updateDosingValues(uuid: string, phUpDoseMl: string, phDownDoseMl: string,
-                     fertilizerDoseMl: string, recheckDosatorsAfterMs: string) {
-    this.httpClient.get(this.serverUrl + '/update/dose/ph/up', {
-      params: new HttpParams().set('uuid', uuid).set('value', phUpDoseMl),
-      headers: this.httpHeaders
-    }).subscribe();
-    this.httpClient.get(this.serverUrl + '/update/dose/ph/down', {
-      params: new HttpParams().set('uuid', uuid).set('value', phDownDoseMl),
-      headers: this.httpHeaders
-    }).subscribe();
-    this.httpClient.get(this.serverUrl + '/update/dose/tds', {
-      params: new HttpParams().set('uuid', uuid).set('value', fertilizerDoseMl),
-      headers: this.httpHeaders
-    }).subscribe();
-    this.httpClient.get(this.serverUrl + '/update/recheck-time', {
-      params: new HttpParams().set('uuid', uuid).set('value', recheckDosatorsAfterMs),
-      headers: this.httpHeaders
-    }).subscribe();
-  }
-
-  updateWifiValues(uuid: string, wifiSSID: string, wifiPASS: string) {
-    this.httpClient.get(this.serverUrl + '/update/wifi/ssid', {
-      params: new HttpParams().set('uuid', uuid).set('value', wifiSSID),
-      headers: this.httpHeaders
-    }).subscribe();
-    this.httpClient.get(this.serverUrl + '/update/wifi/pass', {
-      params: new HttpParams().set('uuid', uuid).set('value', wifiPASS),
-      headers: this.httpHeaders
-    }).subscribe();
-  }
-
-  calibratePhLow(uuid: string, phLowCalibration: string) {
-    this.httpClient.get(this.serverUrl + '/update/calibrate/ph/low', {
-      params: new HttpParams().set('uuid', uuid).set('value', phLowCalibration),
-      headers: this.httpHeaders
-    }).subscribe();
-  }
-
-  calibratePhHigh(uuid: string, phHighCalibration: string) {
-    this.httpClient.get(this.serverUrl + '/update/calibrate/ph/high', {
-      params: new HttpParams().set('uuid', uuid).set('value', phHighCalibration),
-      headers: this.httpHeaders
-    }).subscribe();
-  }
-
-  calibrateTds(uuid: string, tdsCalibration: string) {
-    this.httpClient.get(this.serverUrl + '/update/calibrate/tds', {
-      params: new HttpParams().set('uuid', uuid).set('value', tdsCalibration),
-      headers: this.httpHeaders
-    }).subscribe();
-  }
-
-  updateMetadata(uuid: string, name: string, description: string) {
-    this.httpClient.post<Metadata>(this.serverUrl + '/metadata', {}, {
-      params: new HttpParams().set('uuid', uuid).set('name', name).set('description', description),
-      headers: this.httpHeaders
-    }).subscribe();
-  }
-
-  getMetadata(uuid: string): Observable<Metadata> {
-    return this.httpClient.get<Metadata>(this.serverUrl + '/metadata', {
-      params: new HttpParams().set('uuid', uuid),
-      headers: this.httpHeaders
+  updateZone(uuid: string, value: string): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/update/zone', {}, {
+      params: new HttpParams().set('uuid', uuid).set('value', value),
+      headers: SERVER.CONTENT_TEXT_HEADERS
     });
   }
 
-  deleteMetadata(uuid: string) {
-    this.httpClient.delete(this.serverUrl + '/metadata', {
+  updateWifiSsid(uuid: string, value: string): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/update/wifi/ssid', {}, {
+      params: new HttpParams().set('uuid', uuid).set('value', value),
+      headers: SERVER.CONTENT_TEXT_HEADERS
+    });
+  }
+
+  updateWifiPassword(uuid: string, value: string): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/update/wifi/pass', {}, {
+      params: new HttpParams().set('uuid', uuid).set('value', value),
+      headers: SERVER.CONTENT_TEXT_HEADERS
+    });
+  }
+
+  updateTime(time: TimeAndZone): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/update/time', time, {
+      headers: SERVER.CONTENT_TEXT_HEADERS
+    });
+  }
+
+  updateRestartMicrocontroller(uuid: string): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/update/restart', {}, {
       params: new HttpParams().set('uuid', uuid),
-      headers: this.httpHeaders
-    }).subscribe();
+      headers: SERVER.CONTENT_TEXT_HEADERS
+    });
   }
 
-  calibratePhClear(uuid: string) {
-    this.httpClient.get(this.serverUrl + '/update/calibrate/ph/clear', {
+  updateRegulatorErrorTds(uuid: string, value: string): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/update/regulator/error/tds', {}, {
+      params: new HttpParams().set('uuid', uuid).set('value', value),
+      headers: SERVER.CONTENT_TEXT_HEADERS
+    });
+  }
+
+  updateRegulatorErrorPh(uuid: string, value: string): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/update/regulator/error/ph', {}, {
+      params: new HttpParams().set('uuid', uuid).set('value', value),
+      headers: SERVER.CONTENT_TEXT_HEADERS
+    });
+  }
+
+  updateHydroponicPumpTds(uuid: string, value: string): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/update/pumps/tds', {}, {
+      params: new HttpParams().set('uuid', uuid).set('value', value),
+      headers: SERVER.CONTENT_TEXT_HEADERS
+    });
+  }
+
+  updateHydroponicPumpPhUp(uuid: string, value: string): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/update/pumps/phUp', {}, {
+      params: new HttpParams().set('uuid', uuid).set('value', value),
+      headers: SERVER.CONTENT_TEXT_HEADERS
+    });
+  }
+
+  updateHydroponicPumpPhDown(uuid: string, value: string): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/update/pumps/phDown', {}, {
+      params: new HttpParams().set('uuid', uuid).set('value', value),
+      headers: SERVER.CONTENT_TEXT_HEADERS
+    });
+  }
+
+  updateHydroponicPumpSpeedMlPerMillisecond(uuid: string, value: string): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/update/pump/speed', {}, {
+      params: new HttpParams().set('uuid', uuid).set('value', value),
+      headers: SERVER.CONTENT_TEXT_HEADERS
+    });
+  }
+
+  updateHydroponicEnableSensors(uuid: string, value: string): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/update/enable/sensors', {}, {
+      params: new HttpParams().set('uuid', uuid).set('value', value),
+      headers: SERVER.CONTENT_TEXT_HEADERS
+    });
+  }
+
+  updateHydroponicEnableDispensers(uuid: string, value: string): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/update/enable/dispensers', {}, {
+      params: new HttpParams().set('uuid', uuid).set('value', value),
+      headers: SERVER.CONTENT_TEXT_HEADERS
+    });
+  }
+
+  updateHydroponicDoseTds(uuid: string, value: string): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/update/dose/tds', {}, {
+      params: new HttpParams().set('uuid', uuid).set('value', value),
+      headers: SERVER.CONTENT_TEXT_HEADERS
+    });
+  }
+
+  updateHydroponicDosePhUp(uuid: string, value: string): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/update/dose/ph/up', {}, {
+      params: new HttpParams().set('uuid', uuid).set('value', value),
+      headers: SERVER.CONTENT_TEXT_HEADERS
+    });
+  }
+
+  updateHydroponicDosePhDown(uuid: string, value: string): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/update/dose/ph/down', {}, {
+      params: new HttpParams().set('uuid', uuid).set('value', value),
+      headers: SERVER.CONTENT_TEXT_HEADERS
+    });
+  }
+
+  updateHydroponicDispensersRecheckTime(uuid: string, value: string): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/update/dispensers/recheck-time', {}, {
+      params: new HttpParams().set('uuid', uuid).set('value', value),
+      headers: SERVER.CONTENT_TEXT_HEADERS
+    });
+  }
+
+  updateHydroponicAutotime(uuid: string, value: string): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/update/autotime', {}, {
+      params: new HttpParams().set('uuid', uuid).set('value', value),
+      headers: SERVER.CONTENT_TEXT_HEADERS
+    });
+  }
+
+  updateHydroponicSetupTds(uuid: string, value: string): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/setup/tds', {}, {
+      params: new HttpParams().set('uuid', uuid).set('value', value),
+      headers: SERVER.CONTENT_TEXT_HEADERS
+    });
+  }
+
+  updateHydroponicSetupPh(uuid: string, value: string): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/setup/ph', {}, {
+      params: new HttpParams().set('uuid', uuid).set('value', value),
+      headers: SERVER.CONTENT_TEXT_HEADERS
+    });
+  }
+
+  updateHydroponicSaveSettings(uuid: string): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/save/settings', {}, {
       params: new HttpParams().set('uuid', uuid),
-      headers: this.httpHeaders
-    }).subscribe();
+      headers: SERVER.CONTENT_TEXT_HEADERS
+    });
   }
 
-  calibrateTdsClear(uuid: string) {
-    this.httpClient.get(this.serverUrl + '/update/calibrate/tds/clear', {
+  updateHydroponicReadSettings(uuid: string): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/read/settings', {}, {
       params: new HttpParams().set('uuid', uuid),
-      headers: this.httpHeaders
-    }).subscribe();
+      headers: SERVER.CONTENT_TEXT_HEADERS
+    });
   }
 
-  updateDateTime(time: TimeAndZone) {
-    this.httpClient.post<TimeAndZone>(this.serverUrl + '/update/time', time, {headers: this.httpHeaders})
-      .subscribe();
+  updateHydroponicCalibrateTds(uuid: string, value: string): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/calibrate/tds', {}, {
+      params: new HttpParams().set('uuid', uuid).set('value', value),
+      headers: SERVER.CONTENT_TEXT_HEADERS
+    });
   }
 
-  updateZone(uuid: string, zone: string) {
-    this.httpClient.get<string>(this.serverUrl + '/update/zone', {
-      params: new HttpParams().set('uuid', uuid).set('value', zone), headers: this.httpHeaders
-    }).subscribe();
+  updateHydroponicCalibratePhHigh(uuid: string, value: string): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/calibrate/ph/high', {}, {
+      params: new HttpParams().set('uuid', uuid).set('value', value),
+      headers: SERVER.CONTENT_TEXT_HEADERS
+    });
   }
 
-  updateAutoTimeSetting(uuid: string, autotime: string) {
-    this.httpClient.get<string>(this.serverUrl + '/update/autotime', {
-      params: new HttpParams().set('uuid', uuid).set('value', autotime), headers: this.httpHeaders
-    }).subscribe();
+  updateHydroponicCalibratePhLow(uuid: string, value: string): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/calibrate/ph/low', {}, {
+      params: new HttpParams().set('uuid', uuid).set('value', value),
+      headers: SERVER.CONTENT_TEXT_HEADERS
+    });
   }
 
-  updateEnableDosators(uuid: string, value: string) {
-    this.httpClient.get<string>(this.serverUrl + '/update/enable/dosators', {
-      params: new HttpParams().set('uuid', uuid).set('value', value), headers: this.httpHeaders
-    }).subscribe();
+  updateHydroponicCalibratePhClear(uuid: string): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/calibrate/ph/clear', {}, {
+      params: new HttpParams().set('uuid', uuid),
+      headers: SERVER.CONTENT_TEXT_HEADERS
+    });
   }
 
-  updateEnableSensors(uuid: string, value: string) {
-    this.httpClient.get<string>(this.serverUrl + '/update/enable/sensors', {
-      params: new HttpParams().set('uuid', uuid).set('value', value), headers: this.httpHeaders
-    }).subscribe();
-  }
-
-  updateEnableDevice(uuid: string, value: string) {
-    this.httpClient.get<string>(this.serverUrl + '/update/enable/device', {
-      params: new HttpParams().set('uuid', uuid).set('value', value), headers: this.httpHeaders
-    }).subscribe();
+  updateHydroponicCalibrateTdsClear(uuid: string): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/calibrate/tds/clear', {}, {
+      params: new HttpParams().set('uuid', uuid),
+      headers: SERVER.CONTENT_TEXT_HEADERS
+    });
   }
 }
