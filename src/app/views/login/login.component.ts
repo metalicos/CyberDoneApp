@@ -20,6 +20,7 @@ export class LoginComponent implements OnDestroy {
   });
   imageBase64: string = 'data:image/png;base64,';
   getAccountProfileImageSub: Subscription;
+  loginSpinner: boolean = false;
 
   constructor(private fb: FormBuilder, private errorHandler: ErrorHandlerService, public accountService: AccountService,
               public authStorageService: AuthStorageService, private router: Router) {
@@ -39,6 +40,7 @@ export class LoginComponent implements OnDestroy {
 
   login(event: any) {
     if (event.keyCode === 13) {
+      this.loginSpinner = true;
       this.loginTokenSubscription = this.accountService.login(this.logForm.value).subscribe(data => {
           console.log(data);
           this.authStorageService.saveToken(data.authToken);
@@ -49,14 +51,19 @@ export class LoginComponent implements OnDestroy {
                   if (this.accountService.isAuthorised()) {
                     this.router.navigate(['/']);
                   }
-                }, err => console.log(err)
+                }, err => {
+                  console.log(err);
+                  this.loginSpinner = false;
+                }
               );
             }, err => {
               this.errorAlert = this.errorHandler.handleError(err.status, err.error);
+              this.loginSpinner = false;
             }
           );
         }, err => {
           this.errorAlert = this.errorHandler.handleError(err.status, err.error);
+          this.loginSpinner = false;
         }
       );
     }

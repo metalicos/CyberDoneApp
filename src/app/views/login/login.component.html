@@ -44,6 +44,9 @@
                       <button
                         [disabled]="(username.invalid && username.touched) || (password.invalid && password.touched)"
                         type="button" class="btn btn-dark btn-block px-4" (click)="submitLogin()">Увійти
+                        <div class="spinner-border spinner-border-sm" role="status" *ngIf="loginSpinner">
+                          <span class="sr-only sr-only-focusable">Loading...</span>
+                        </div>
                       </button>
                     </div>
                   </div>

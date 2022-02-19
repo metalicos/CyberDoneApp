@@ -36,13 +36,13 @@
         <th></th>
         <th *ngIf="hydroSett">Виставлено</th>
         <th *ngIf="!hydroSett">
-          <div class="spinner-grow" role="status">
+          <div class="spinner-border spinner-border-sm" role="status">
             <span class="sr-only"></span>
           </div>
         </th>
         <th *ngIf="hydroSett">Зараз</th>
         <th *ngIf="!hydroSett">
-          <div class="spinner-grow" role="status">
+          <div class="spinner-border spinner-border-sm" role="status">
             <span class="sr-only"></span>
           </div>
         </th>
@@ -53,7 +53,7 @@
         <td>PH</td>
         <td *ngIf="hydroSett">{{hydroSett.setupPhValue}} pH</td>
         <td *ngIf="!hydroSett">
-          <div class="spinner-grow" role="status">
+          <div class="spinner-border spinner-border-sm" role="status">
             <span class="sr-only"></span>
           </div>
         </td>
@@ -61,7 +61,7 @@
             class="text-{{abs(hydroData.phValue - hydroSett.setupPhValue)<=hydroSett.regulateErrorPh?'dark':'danger'}}">
           {{hydroData.phValue > 0 && hydroData.phValue <= 12 ? hydroData.phValue + ' pH' : 'Off'}}</td>
         <td *ngIf="!hydroSett">
-          <div class="spinner-grow" role="status">
+          <div class="spinner-border spinner-border-sm" role="status">
             <span class="sr-only"></span>
           </div>
         </td>
@@ -72,7 +72,7 @@
           *ngIf="hydroSett">{{hydroSett.setupTdsValue}} ppm
         </td>
         <td *ngIf="!hydroSett">
-          <div class="spinner-grow" role="status">
+          <div class="spinner-border spinner-border-sm" role="status">
             <span class="sr-only"></span>
           </div>
         </td>
@@ -82,7 +82,7 @@
           {{hydroData.tdsValue > 0 && hydroData.tdsValue <= 9999 ? hydroData.tdsValue + ' ppm' : 'Off'}}
         </td>
         <td *ngIf="!hydroSett">
-          <div class="spinner-grow" role="status">
+          <div class="spinner-border spinner-border-sm" role="status">
             <span class="sr-only"></span>
           </div>
         </td>
@@ -93,7 +93,7 @@
           *ngIf="hydroSett"> -
         </td>
         <td *ngIf="!hydroSett">
-          <div class="spinner-grow" role="status">
+          <div class="spinner-border spinner-border-sm" role="status">
             <span class="sr-only"></span>
           </div>
         </td>
@@ -102,7 +102,7 @@
           {{hydroData.temperatureValue > 0 && hydroData.temperatureValue <= 60 ? hydroData.temperatureValue + ' °C' : 'Off'}}
         </td>
         <td *ngIf="!hydroSett">
-          <div class="spinner-grow" role="status">
+          <div class="spinner-border spinner-border-sm" role="status">
             <span class="sr-only"></span>
           </div>
         </td>
