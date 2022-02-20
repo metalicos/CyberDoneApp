@@ -82,6 +82,14 @@ export const routes: Routes = [
         path: 'settings',
         loadChildren: () => import('./views/settings/settings.module').then(m => m.SettingsModule)
       },
+      {
+        path: 'automation',
+        loadChildren: () => import('./views/automation/automation.module').then(m => m.AutomationModule)
+      },
+      {
+        path: 'account',
+        loadChildren: () => import('./views/account/account.module').then(m => m.AccountModule)
+      },
     ]
   },
   {path: '**', component: P404Component}

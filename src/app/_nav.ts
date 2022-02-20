@@ -4,35 +4,38 @@ export const navItems: INavData[] = [
   {
     name: 'Пристрої',
     icon: 'cil-screen-smartphone',
-    url: '/devices',
     class: 'USER,ADMIN,OWNER',
     children: [
       {
-        name: 'Мої пристрої',
+        icon: 'cil-line-style',
+        name: 'Панель пристроїв',
         url: '/devices/my',
         class: 'bg-light',
       },
       {
+        icon: 'cil-library-add',
         name: 'Додати/видалити пристрій',
         url: '/devices/add-remove',
       },
     ]
   },
-  // {
-  //   name: 'Події',
-  //   icon: 'cil-av-timer',
-  //   url: '/actions',
-  //   children: [
-  //     {
-  //       name: 'Регулярні події',
-  //       url: '/actions/regular',
-  //     },
-  //     {
-  //       name: 'Одноразові події',
-  //       url: '/actions/one-time',
-  //     },
-  //   ]
-  // },
+  {
+    name: 'Автоматизація',
+    icon: 'cil-lan',
+    class: 'USER,ADMIN,SUPER_ADMIN,OWNER',
+    children: [
+      {
+        icon: 'cil-av-timer',
+        name: 'Регулярна автоматизація, з зміною одного параметра',
+        url: '/automation/regular/single-value',
+      },
+      {
+        icon: 'cil-calendar',
+        name: 'Автоматизація за календарем, з зміною одного параметра',
+        url: '/automation/calendar/single-value',
+      },
+    ]
+  },
   // {
   //   name: 'Шаблони',
   //   url: '/templates',

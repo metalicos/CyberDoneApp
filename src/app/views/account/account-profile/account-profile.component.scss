@@ -1,0 +1,23 @@
+.profile-image {
+  width: 200px;
+  height: 200px;
+  border: 5px solid #eae6e6;
+  display: inline-block;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.btn-icon {
+  width: 35px !important;
+  height: 35px !important;
+  padding: 0 !important;
+  margin: 1px 1px 1px 1px !important;
+}
+
+.label-similar {
+  width: 70px;
+}
+
+.info-box {
+  width: 130px !important;
+}

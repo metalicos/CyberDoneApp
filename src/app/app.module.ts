@@ -33,10 +33,6 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgxEchartsModule} from 'ngx-echarts';
 import {LogoutComponent} from './views/logout/logout.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {LinearChartComponent} from './views/realtime/linear-chart/linear-chart.component';
-import {TableComponent} from './views/realtime/table/table.component';
-import { HydroponicSettingsComponent } from './views/settings/hydroponic-settings/hydroponic-settings.component';
-import { AccountSettingsComponent } from './views/settings/account-settings/account-settings.component';
 import {SettingsModule} from './views/settings/settings.module';
 
 const APP_CONTAINERS = [

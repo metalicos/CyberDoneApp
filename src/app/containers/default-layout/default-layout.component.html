@@ -4,32 +4,31 @@
   [navbarBrandFull]="{src: 'assets/favicon.png', width: 30, height: 30, alt: 'CyberDone Logo'}"
   [navbarBrandMinimized]="{src: 'assets/favicon.png', width: 30, height: 30, alt: 'CyberDone Logo'}"
   [sidebarToggler]="'lg'"
-  [asideMenuToggler]="'lg'" [routerLink]="['/']">
+  [asideMenuToggler]="'lg'">
 
   <ul class="nav navbar-nav d-md-down-none">
     <li class="nav-item px-3">
-      <a class="nav-link" href="/dashboard">Інфо-панель</a>
+      <a class="nav-link" href="/news"><i class="fa fa-file-text-o "></i> Новини</a>
     </li>
     <li class="nav-item px-3">
-      <a class="nav-link" href="/devices">Пристрої</a>
-    </li>
-    <li class="nav-item px-3">
-      <a class="nav-link" href="/settings">Налаштування</a>
+      <a class="nav-link" href="/shop"><i class="fa fa-shopping-cart"> Магазин</i></a>
     </li>
   </ul>
 
   <!--  Профіль-->
   <ul class="nav navbar-nav ml-auto">
     <li class="nav-item dropdown" dropdown placement="bottom right">
-      <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
+      <a class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
          dropdownToggle (click)="false">
-        <img [src]="profileImage" class="img-avatar" alt="Profile Image"/>
+        <img [src]="profileImage" class="img-avatar"
+             style="width: 32px;height: 30px;display: inline-block;border-radius: 50%;object-fit: cover;"
+             alt="Profile Image"/>
       </a>
       <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
         <div class="dropdown-header text-center"><strong>Обліковий запис</strong></div>
         <a class="dropdown-item" href="#"><i class="fa fa-bell-o"></i> Сповіщення<span class="badge badge-info">3</span></a>
         <!--        <div class="dropdown-header text-center"><strong>Налаштування</strong></div>-->
-        <a class="dropdown-item" href="#"><i class="fa fa-user"></i> Профіль</a>
+        <a class="dropdown-item" [routerLink]="['/account/profile']"><i class="fa fa-user"></i> Профіль</a>
         <a class="dropdown-item" href="#"><i class="fa fa-wrench"></i> Налаштування</a>
         <a class="dropdown-item" href="#"><i class="fa fa-usd"></i> Тарифний план</a>
         <a class="dropdown-item" [routerLink]="['/logout']"><i class="fa fa-lock"></i> Вийти</a>
@@ -42,7 +41,7 @@
 <div class="app-body">
 
   <app-sidebar #appSidebar [fixed]="true" [display]="'lg'" [minimized]="sidebarMinimized"
-               (minimizedChange)="toggleMinimize($event)" >
+               (minimizedChange)="toggleMinimize($event)">
     <app-sidebar-nav [navItems]="navItems" [perfectScrollbar] [disabled]="appSidebar.minimized"></app-sidebar-nav>
     <app-sidebar-minimizer></app-sidebar-minimizer>
   </app-sidebar>

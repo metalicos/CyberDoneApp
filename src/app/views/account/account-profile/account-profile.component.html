@@ -1,0 +1,186 @@
+<div class="d-block d-md-flex">
+  <alert [type]="errorAlert.type" *ngIf="errorAlert">{{errorAlert.msg}}</alert>
+  <div class="col-12 col-md-2">
+    <div class="card rounded-0">
+      <div class="card-body">
+        <form [formGroup]="fullNameForm"
+              class="justify-content-center align-items-center align-content-center text-center">
+          <div class="input-group justify-content-between mb-3">
+            <input #profileImageInput type="file" (change)="onFileSelected($event)" hidden>
+            <img
+              src="{{profileImage}}"
+              alt="Profile Image"
+              class="profile-image"
+            >
+            <button class="btn btn-transparent btn-icon rounded-0"
+                    (click)="profileImageInput.click()">
+              <i class="fa fa-edit text-dark"></i>
+            </button>
+          </div>
+          <div class="input-group">
+            <input formControlName="lastName" #lastNameObj
+                   class="form-control form-control-sm font-weight-bold"
+                   [class.is-invalid]="lastName.invalid"
+                   type="text"
+                   placeholder="Прізвище"
+                   value="{{lastName}}" disabled>
+            <button class="btn btn-transparent btn-icon rounded-0"
+                    (click)="lastNameObj.disabled = !lastNameObj.disabled; changeFullNameOnDisabled(lastNameObj.disabled)">
+              <i class="fa fa-edit text-dark"></i>
+            </button>
+          </div>
+          <div class="invalid-feedback text-right" *ngIf="lastName.errors?.pattern">
+            Прізвище не відповідає правилу заповнення та введено не правильно.
+          </div>
+          <div class="invalid-feedback text-right" *ngIf="lastName.errors?.required">
+            Це поле є обов'язковим для введення.
+          </div>
+          <div class="input-group">
+            <input formControlName="firstName" #firstNameObj
+                   class="form-control form-control-sm font-weight-bold"
+                   [class.is-invalid]="firstName.invalid"
+                   type="text"
+                   placeholder="Ім'я"
+                   value="{{firstName}}" disabled>
+            <button class="btn btn-transparent btn-icon rounded-0"
+                    (click)="firstNameObj.disabled = !firstNameObj.disabled; changeFullNameOnDisabled(firstNameObj.disabled)">
+              <i class="fa fa-edit text-dark"></i>
+            </button>
+          </div>
+          <div class="invalid-feedback text-right" *ngIf="firstName.errors">
+            Ім'я не відповідає правилу заповнення та введено не правильно.
+          </div>
+          <div class="invalid-feedback text-right" *ngIf="firstName.errors?.required">
+            Це поле є обов'язковим для введення.
+          </div>
+          <div class="input-group">
+            <input formControlName="patronymic" #patronymicObj
+                   class="form-control form-control-sm font-weight-bold"
+                   [class.is-invalid]="patronymic.invalid"
+                   type="text"
+                   placeholder="По-батькові"
+                   value="{{patronymic}}" disabled>
+            <button class="btn btn-transparent btn-icon rounded-0"
+                    (click)="patronymicObj.disabled = !patronymicObj.disabled; changeFullNameOnDisabled(patronymicObj.disabled)">
+              <i class="fa fa-edit text-dark"></i>
+            </button>
+          </div>
+          <div class="invalid-feedback text-right" *ngIf="patronymic.errors?.pattern">
+            По-батькові не відповідає правилу заповнення та введено не правильно.
+          </div>
+          <div class="invalid-feedback text-right" *ngIf="patronymic.errors?.required">
+            Це поле є обов'язковим для введення.
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-4">
+    <div class="card rounded-0">
+      <div class="card-body">
+        <p class="h5">Ваша адреса</p>
+        <div class="input-group">
+          <label for="city" class="form-text label-similar mr-3">Місто</label>
+          <input class="form-control form-control-sm font-weight-bold"
+                 type="text"
+                 id="city"
+                 placeholder="Місто"
+                 value="Львів" disabled>
+          <button class="btn btn-transparent btn-icon rounded-0">
+            <i class="fa fa-edit text-dark"></i>
+          </button>
+        </div>
+        <div class="input-group">
+          <label for="district" class="form-text label-similar mr-3">Район</label>
+          <input class="form-control form-control-sm font-weight-bold"
+                 type="text"
+                 id="district"
+                 placeholder="Район"
+                 value="Залізничний" disabled>
+          <button class="btn btn-transparent btn-icon rounded-0">
+            <i class="fa fa-edit text-dark"></i>
+          </button>
+        </div>
+        <div class="input-group">
+          <label for="street" class="form-text label-similar mr-3">Вулиця</label>
+          <input class="form-control form-control-sm font-weight-bold"
+                 id="street"
+                 type="text"
+                 placeholder="Вулиця"
+                 value="С. Петлюри" disabled>
+          <button class="btn btn-transparent btn-icon rounded-0">
+            <i class="fa fa-edit text-dark"></i>
+          </button>
+        </div>
+        <div class="input-group">
+          <label for="house" class="form-text label-similar mr-3">Дім</label>
+          <input class="form-control form-control-sm font-weight-bold"
+                 type="text"
+                 id="house"
+                 placeholder="Дім"
+                 value="45" disabled>
+          <button class="btn btn-transparent btn-icon rounded-0">
+            <i class="fa fa-edit text-dark"></i>
+          </button>
+        </div>
+        <div class="input-group">
+          <label for="flat" class="form-text label-similar mr-3">Квартира</label>
+          <input class="form-control form-control-sm font-weight-bold"
+                 type="text"
+                 id="flat"
+                 placeholder="Квартира"
+                 value="82" disabled>
+          <button class="btn btn-transparent btn-icon rounded-0">
+            <i class="fa fa-edit text-dark"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-4">
+    <div class="card rounded-0">
+      <div class="card-body">
+        <p class="h5">Інформація про обліковий запис</p>
+        <div class="d-flex justify-content-between bg-light mb-2">
+          <p class="h6 my-auto pr-1 pt-1 pb-1">Ваша проплата відповідає типу акаунту</p>
+          <p class="h6 my-auto info-box pt-1 pb-1 text-center bg-dark font-weight-bold">ПРЕМІУМ</p>
+        </div>
+        <div class="d-flex justify-content-between bg-light mb-2">
+          <p class="h6 my-auto pr-1 pt-1 pb-1">Наступна оплата</p>
+          <p class="h6 my-auto info-box pt-1 pb-1 text-center bg-dark font-weight-bold">23/22/2022</p>
+        </div>
+        <div class="d-flex justify-content-between bg-light mb-2">
+          <p class="h6 my-auto pr-1 pt-1 pb-1">Тарифна оплата</p>
+          <p class="h6 my-auto info-box pt-1 pb-1 text-center bg-dark font-weight-bold">245 грн. / місяць</p>
+        </div>
+        <div class="d-flex justify-content-between bg-light mb-2">
+          <p class="h6 my-auto pr-1 pt-1 pb-1">Станом на зараз</p>
+          <p class="h6 my-auto info-box pt-1 pb-1 text-center bg-dark font-weight-bold">ОПЛАЧЕНО</p>
+        </div>
+
+
+        <div class="d-flex justify-content-between bg-light mb-2">
+          <p class="h6 my-auto pr-1 pt-1 pb-1">Ви є власником приладів</p>
+          <p class="h6 my-auto info-box pt-1 pb-1 text-center bg-dark font-weight-bold">6</p>
+        </div>
+        <div class="d-flex justify-content-between bg-light mb-2">
+          <p class="h6 my-auto pr-1 pt-1 pb-1">Вам дозволено керувати чужими приладами</p>
+          <p class="h6 my-auto info-box pt-1 pb-1 text-center bg-dark font-weight-bold">0</p>
+        </div>
+        <div class="d-flex justify-content-between bg-light mb-2">
+          <p class="h6 my-auto pr-1 pt-1 pb-1">Ви створили шаблонів</p>
+          <p class="h6 my-auto info-box pt-1 pb-1 text-center bg-dark font-weight-bold">35</p>
+        </div>
+        <div class="d-flex justify-content-between bg-light mb-2">
+          <p class="h6 my-auto pr-1 pt-1 pb-1">Ви створили регулярних автоматиззацій</p>
+          <p class="h6 my-auto info-box pt-1 pb-1 text-center bg-dark font-weight-bold">145</p>
+        </div>
+        <div class="d-flex justify-content-between bg-light mb-2">
+          <p class="h6 my-auto pr-1 pt-1 pb-1">Ви створили календарних автоматиззацій</p>
+          <p class="h6 my-auto info-box pt-1 pb-1 text-center bg-dark font-weight-bold">2</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

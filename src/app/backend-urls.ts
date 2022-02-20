@@ -10,6 +10,9 @@ export class ServerGlobalConstants {
   public CONTENT_JSON_HEADERS = new HttpHeaders({
     'Content-Type': 'application/json',
   });
+  public MULTIPART_DATA_HEADERS = new HttpHeaders({
+    'Content-Type': 'application/json',
+  });
   public CONTENT_TEXT_HEADERS = new HttpHeaders({
     'Content-Type': 'text/plain;charset=UTF-8',
   });

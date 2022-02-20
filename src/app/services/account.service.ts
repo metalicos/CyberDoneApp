@@ -19,6 +19,13 @@ export interface ChangePasswordDto {
   checkNewPassword: string;
 }
 
+export interface ChangeFullNameDto {
+  username: string;
+  firstName: string;
+  lastName: string;
+  patronymic: string;
+}
+
 export interface RegistrationUserDto {
   username: string;
   password: string;
@@ -90,6 +97,22 @@ export class AccountService {
       SERVER.backendServerUrl + '/accounts/change/password',
       changePassDto,
       {headers: SERVER.CONTENT_JSON_HEADERS}
+    );
+  }
+
+  changeFullName(changeFullNameDto: ChangeFullNameDto) {
+    return this.http.put(
+      SERVER.backendServerUrl + '/accounts/change/fullname',
+      changeFullNameDto,
+      {headers: SERVER.CONTENT_JSON_HEADERS, responseType: 'text'}
+    );
+  }
+
+  changeAccountProfileImage(username: string, file: FormData) {
+    return this.http.put(
+      SERVER.backendServerUrl + '/accounts/' + username + '/change/image',
+      file,
+      {responseType: 'text'}
     );
   }
 
