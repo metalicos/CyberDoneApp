@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AuthStorageService} from '../../../security/auth-storage.service';
 import {Subscription} from 'rxjs';
 import {FormBuilder, Validators} from '@angular/forms';
-import {UUID_PATTERN} from '../../../services/validator-utils.service';
+import {NAME_PATTERN, UUID_PATTERN} from '../../../services/validator-utils.service';
 import {ErrorHandlerService} from '../../../services/error-handle.service';
 import {DeviceMetadataDto, DeviceMetadataService} from '../../../services/device-metadata.service';
 
@@ -16,13 +16,27 @@ export class AddRemoveDevicesComponent implements OnInit, OnDestroy {
   metadataList: DeviceMetadataDto[] = [];
   errorAlert: any;
   addForm: any;
+  deviceMetadataForm: any;
 
   constructor(private fb: FormBuilder, private errorHandler: ErrorHandlerService,
               private authStorage: AuthStorageService, private deviceMeta: DeviceMetadataService) {
+    this.deviceMetadataForm = this.fb.group({
+      uuid: ['', [Validators.required, Validators.pattern(UUID_PATTERN)]],
+      name: ['', [Validators.required]],
+      description: ['', [Validators.required]],
+    });
   }
 
   get uuid() {
-    return this.addForm.get('uuid');
+    return this.deviceMetadataForm.get('uuid');
+  }
+
+  get name() {
+    return this.deviceMetadataForm.get('name');
+  }
+
+  get description() {
+    return this.deviceMetadataForm.get('description');
   }
 
   ngOnInit(): void {
@@ -80,5 +94,9 @@ export class AddRemoveDevicesComponent implements OnInit, OnDestroy {
         sub.unsubscribe();
       }
     });
+  }
+
+  onDeviceImageSelected(uuid: string, $event: Event) {
+
   }
 }

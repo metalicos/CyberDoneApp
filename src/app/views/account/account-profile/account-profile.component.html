@@ -5,16 +5,12 @@
       <div class="card-body">
         <form [formGroup]="fullNameForm"
               class="justify-content-center align-items-center align-content-center text-center">
+
           <div class="input-group justify-content-between mb-3">
             <input #profileImageInput type="file" (change)="onFileSelected($event)" hidden>
-            <img
-              src="{{profileImage}}"
-              alt="Profile Image"
-              class="profile-image"
-            >
-            <button class="btn btn-transparent btn-icon rounded-0"
+            <button class="btn btn-transparent profile-image-btn rounded-0"
                     (click)="profileImageInput.click()">
-              <i class="fa fa-edit text-dark"></i>
+              <img src="{{profileImage}}" alt="Profile Image" class="profile-image">
             </button>
           </div>
           <div class="input-group">
@@ -28,7 +24,9 @@
                     (click)="lastNameObj.disabled = !lastNameObj.disabled; changeFullNameOnDisabled(lastNameObj.disabled)">
               <i class="fa fa-edit text-dark"></i>
             </button>
+
           </div>
+
           <div class="invalid-feedback text-right" *ngIf="lastName.errors?.pattern">
             Прізвище не відповідає правилу заповнення та введено не правильно.
           </div>

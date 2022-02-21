@@ -7,6 +7,7 @@ export interface DeviceMetadataDto {
   uuid: string;
   name: string;
   description: string;
+  deviceImage: string;
   deviceType: string;
   accessEnabled: boolean;
   userId: number | undefined;

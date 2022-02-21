@@ -1,0 +1,82 @@
+.device-image-btn {
+  width: 125px;
+  height: 125px;
+}
+
+.device-image {
+  width: 125px;
+  height: 125px;
+  display: inline-block;
+  object-fit: revert;
+}
+
+.btn-icon {
+  width: 35px !important;
+  height: 35px !important;
+  padding: 0 !important;
+  margin: 1px 1px 1px 1px !important;
+}
+
+.label-similar {
+  width: 70px;
+}
+
+.info-box {
+  width: 125px !important;
+}
+
+
+
+@keyframes blink {
+  0% {
+    background-color: white;
+  }
+  50% {
+    background-color: #bfbebe;
+  }
+  100% {
+    background-color: white;
+  }
+}
+
+.img-blinking {
+  animation: blink 1s;
+  animation-iteration-count: infinite;
+}
+
+.pagination > li > a
+{
+  background-color: white;
+  color: #7c7c7c;
+}
+
+.pagination > li > a:focus,
+.pagination > li > a:hover,
+.pagination > li > span:focus,
+.pagination > li > span:hover
+{
+  color: #5a5a5a;
+  background-color: #eee;
+  border-color: #ddd;
+  cursor: pointer;
+}
+
+.pagination > .active > a
+{
+  color: white;
+  background-color: #7c7c7c !Important;
+  border: solid 1px #7c7c7c !Important;
+  cursor: pointer;
+}
+
+.pagination > .active > a:hover
+{
+  color: white;
+  background-color: #7c7c7c !Important;
+  border: solid 1px #7c7c7c;
+  cursor: pointer;
+}
+
+.bg-grey{
+  color: #7c7c7c;
+}
