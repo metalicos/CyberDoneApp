@@ -18,16 +18,23 @@ pipeline {
         checkout scm
       }
     }
-    stage('Create Docker Image') {
+    stage('Install Software') {
       steps {
         script {
-          echo "========================== STARTING DOCKER IMAGE CREATION =========================="
+          echo "========================== INSTALL NEEDED SOFTWARE =========================="
           bat "npm install -g npm@latest"
           echo "==== Installed node.js ==="
 
           bat "npm install -g @angular/cli@latest"
           echo "==== Installed Angular CLI ==="
-
+          echo "======================== SOFTWARE INSTALL IS SUCCESSFUL ======================="
+        }
+      }
+    }
+    stage('Create Docker Image') {
+      steps {
+        script {
+          echo "========================== STARTING DOCKER IMAGE CREATION =========================="
           bat "docker build -t cyberdone-iot-ui-image:latest ."
           echo "======================== DOCKER IMAGE CREATION IS SUCCESSFUL ======================="
         }
