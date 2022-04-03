@@ -55,6 +55,17 @@ export interface AccountDto {
   roles: Role[];
 }
 
+export interface OauthAccountDto {
+  id: string;
+  idToken: string;
+  authToken: string;
+  email: string;
+  photoUrl: string;
+  firstName: string;
+  lastName: string;
+  provider: string;
+}
+
 export interface TokenDto {
   authToken: string;
   tokenLiveTimeInSeconds: number;
@@ -70,6 +81,10 @@ export class AccountService {
 
   login(loginUserDto: LoginUserDto): Observable<TokenDto> {
     return this.http.post<TokenDto>(SERVER.backendServerUrl + '/accounts/authentication/login', loginUserDto, {headers: SERVER.CONTENT_JSON_HEADERS});
+  }
+
+  loginOauth(oauthAccount: OauthAccountDto): Observable<TokenDto> {
+    return this.http.post<TokenDto>(SERVER.backendServerUrl + '/accounts/authentication/oauth', oauthAccount, {headers: SERVER.CONTENT_JSON_HEADERS});
   }
 
   init() {

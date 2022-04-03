@@ -34,6 +34,8 @@ import {NgxEchartsModule} from 'ngx-echarts';
 import {LogoutComponent} from './views/logout/logout.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SettingsModule} from './views/settings/settings.module';
+// @ts-ignore
+import {FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule} from 'angularx-social-login';
 
 const APP_CONTAINERS = [
   DefaultLayoutComponent
@@ -63,6 +65,7 @@ const APP_CONTAINERS = [
     FormsModule,
     ReactiveFormsModule,
     SettingsModule,
+    SocialLoginModule
   ],
   declarations: [
     AppComponent,
@@ -81,6 +84,25 @@ const APP_CONTAINERS = [
     {
       provide: LocationStrategy,
       useClass: HashLocationStrategy,
+    },
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider('1059865245376-6v056guihgp340evlpcro1dnr6po06ac.apps.googleusercontent.com')
+          },
+          {
+            id: FacebookLoginProvider.PROVIDER_ID,
+            provider: new FacebookLoginProvider('507150764144949')
+          },
+        ],
+        onError: (err) => {
+          console.error(err);
+        }
+      } as SocialAuthServiceConfig,
     },
     IconSetService,
   ],

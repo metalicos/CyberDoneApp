@@ -51,6 +51,18 @@
                     </div>
                   </div>
 
+                  <div class="mb-2">
+                    <p class="text-center mb-2">Увійти за допомогою облікового запису:</p>
+                    <div class="d-flex align-content-center justify-content-center">
+                    <button type="button" class="btn btn-dark mx-1" style="height: 50px; width: 50px" (click)="oauth('google')">
+                      <i class="fa fa-google fa-2x"></i>
+                    </button>
+                    <button type="button" class="btn btn-dark mx-1" style="height: 50px; width: 50px" (click)="oauth('facebook')">
+                      <i class="fa fa-facebook fa-2x"></i>
+                    </button>
+                    </div>
+                  </div>
+
                   <div class="row">
                     <div class="col-6 text-left">
                       <button type="button" class="btn btn-link text-dark px-0" [routerLink]="['/change-password']">
