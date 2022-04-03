@@ -3,7 +3,7 @@ FROM node:latest as node
 WORKDIR /app
 COPY . .
 ENV NODE_OPTIONS=--openssl-legacy-provider
-RUN npm install
+RUN npm install -g npm@latest
 RUN npm run build
 #stage 2
 FROM nginx:latest
