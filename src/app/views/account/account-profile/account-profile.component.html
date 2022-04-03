@@ -1,16 +1,15 @@
-<div class="d-block d-md-flex">
+<div class="d-block d-md-flex flex-fill">
   <alert [type]="errorAlert.type" *ngIf="errorAlert">{{errorAlert.msg}}</alert>
-  <div class="col-12 col-md-2">
-    <div class="card rounded-0">
+  <div class="col-12 col-md-3 col-lg-2 p-0">
+    <div class="card rounded-0 m-0 p-0">
       <div class="card-body">
         <form [formGroup]="fullNameForm"
               class="justify-content-center align-items-center align-content-center text-center">
-
-          <div class="input-group justify-content-between mb-3">
+          <div class="input-group mb-3 d-block mx-auto">
             <input #profileImageInput type="file" (change)="onFileSelected($event)" hidden>
-            <button class="btn btn-transparent profile-image-btn rounded-0"
+            <button class="btn btn-transparent profile-image-btn d-block mx-auto"
                     (click)="profileImageInput.click()">
-              <img src="{{profileImage}}" alt="Profile Image" class="profile-image">
+              <img src="{{profileImage}}" alt="Profile Image" class="img-fluid profile-image rounded-circle">
             </button>
           </div>
           <div class="input-group">
@@ -73,9 +72,8 @@
       </div>
     </div>
   </div>
-
-  <div class="col-12 col-md-4">
-    <div class="card rounded-0">
+  <div class="col-12 col-md-4 col-lg-5 p-0">
+    <div class="card rounded-0 m-0 p-0">
       <div class="card-body">
         <p class="h5">Ваша адреса</p>
         <div class="input-group">
@@ -136,8 +134,8 @@
       </div>
     </div>
   </div>
-  <div class="col-12 col-md-4">
-    <div class="card rounded-0">
+  <div class="col-12 col-md-5 col-lg-5 p-0">
+    <div class="card rounded-0 m-0 p-0">
       <div class="card-body">
         <p class="h5">Інформація про обліковий запис</p>
         <div class="d-flex justify-content-between bg-light mb-2">
@@ -171,11 +169,11 @@
           <p class="h6 my-auto info-box pt-1 pb-1 text-center bg-dark font-weight-bold">35</p>
         </div>
         <div class="d-flex justify-content-between bg-light mb-2">
-          <p class="h6 my-auto pr-1 pt-1 pb-1">Ви створили регулярних автоматиззацій</p>
+          <p class="h6 my-auto pr-1 pt-1 pb-1">Ви створили регулярних автоматизацій</p>
           <p class="h6 my-auto info-box pt-1 pb-1 text-center bg-dark font-weight-bold">145</p>
         </div>
         <div class="d-flex justify-content-between bg-light mb-2">
-          <p class="h6 my-auto pr-1 pt-1 pb-1">Ви створили календарних автоматиззацій</p>
+          <p class="h6 my-auto pr-1 pt-1 pb-1">Ви створили календарних автоматизацій</p>
           <p class="h6 my-auto info-box pt-1 pb-1 text-center bg-dark font-weight-bold">2</p>
         </div>
       </div>

@@ -1,15 +1,15 @@
 .profile-image-btn {
   width: 200px;
-  height: 200px;
+  height: auto;
 }
 
 .profile-image {
-  width: 200px;
-  height: 200px;
-  border: 5px solid #eae6e6;
-  display: inline-block;
-  border-radius: 50%;
-  object-fit: fill;
+  width: 12em;
+  height: auto;
+  max-height: 12em;
+  border: 0.2em solid #eae6e6;
+  object-fit: cover;
+  max-width: 100%;
 }
 
 .btn-icon {
