@@ -18,19 +18,6 @@ pipeline {
         checkout scm
       }
     }
-    stage('Install Software') {
-      steps {
-        script {
-          echo "========================== INSTALL NEEDED SOFTWARE =========================="
-          bat "npm install -g npm@latest"
-          echo "==== Installed node.js ==="
-
-          bat "npm install -g @angular/cli@latest"
-          echo "==== Installed Angular CLI ==="
-          echo "======================== SOFTWARE INSTALL IS SUCCESSFUL ======================="
-        }
-      }
-    }
     stage('Create Docker Image') {
       steps {
         script {
