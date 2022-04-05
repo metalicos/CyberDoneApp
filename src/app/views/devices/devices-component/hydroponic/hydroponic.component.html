@@ -2,12 +2,13 @@
   <div class="bg-dark rounded card">
     <div class="d-flex justify-content-between m-0">
       <div class="d-block text-left col-11">
-        <p class="h4 card-title my-1 mb-2 text-white font-weight-bold">Hydroponic</p>
+        <p class="h4 card-title my-1 mb-2 text-white font-weight-bold">Hydroponic <span
+          class="text-danger font-weight-bold" *ngIf="!hydroSett">No Signal</span></p>
         <p class="h6 text-white my-2 font-weight-bold">{{metadata.name == null ? '' : metadata.name + '.'}}
           {{metadata.description == null ? '' : metadata.description}}</p>
       </div>
 
-      <div ngbDropdown class="m-auto btn-group dropleft p-0">
+      <div ngbDropdown class="m-auto btn-group dropleft p-0" *ngIf="hydroSett">
         <a class="btn btn-sm text-white" id="actionSet" [class.dropdown-toggle]="false" ngbDropdownToggle><i
           class="fa fa-2x fa-ellipsis-v"></i></a>
         <div ngbDropdownMenu aria-labelledby="actionSet">
@@ -30,7 +31,7 @@
       </div>
     </div>
 
-    <table class="table table-bordered table-light">
+    <table class="table table-bordered table-light" *ngIf="hydroSett">
       <thead>
       <tr class="bg-light text-uppercase">
         <th></th>
