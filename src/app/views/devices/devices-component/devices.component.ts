@@ -15,7 +15,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
   hydroDataSub: Subscription;
   hydroponicMetadataList: DeviceMetadataDto[];
   relayN4MetadataList: DeviceMetadataDto[];
-
+  errorAlert: any;
   constructor(private authStorage: AuthStorageService,
               private hydroData: HydroponicDataService,
               private deviceMeta: DeviceMetadataService,
@@ -37,7 +37,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
           console.log(this.hydroponicMetadataList);
           this.relayN4MetadataList = metadataArray.filter(m => 'RELAY_N4'.toLowerCase() === m.deviceType.toLowerCase());
           console.log(this.relayN4MetadataList);
-        });
+        }, err => this.errorAlert = this.errorHandler.handleError(err.status, err.error));
     }
   }
 
