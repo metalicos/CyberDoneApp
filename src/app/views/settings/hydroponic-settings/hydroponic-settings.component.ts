@@ -155,7 +155,9 @@ export class HydroponicSettingsComponent implements OnInit, OnDestroy {
     this.editMode = false;
     this.subMap.set('updateHydroponicPumpSpeedMlPerMillisecond',
       this.hydroOperationService.updateHydroponicPumpSpeedMlPerMillisecond(this.uuid, this.getFormSettings().mlPerMillisecond + '').subscribe(
-        data => setTimeout(() => { this.updateInfoWithLastSettingsFromDb(); },500),
+        data => setTimeout(() => {
+          this.updateInfoWithLastSettingsFromDb();
+        }, 500),
         err => this.errorHandler.handleError(err.status, err.error)
       ));
   }
@@ -164,7 +166,9 @@ export class HydroponicSettingsComponent implements OnInit, OnDestroy {
     this.editMode = false;
     this.subMap.set('updateRegulatorErrorPh',
       this.hydroOperationService.updateRegulatorErrorPh(this.uuid, this.getFormSettings().regulateErrorPh + '').subscribe(
-        data => setTimeout(() => { this.updateInfoWithLastSettingsFromDb(); },500),
+        data => setTimeout(() => {
+          this.updateInfoWithLastSettingsFromDb();
+        }, 500),
         err => this.errorHandler.handleError(err.status, err.error)
       ));
   }
@@ -173,7 +177,9 @@ export class HydroponicSettingsComponent implements OnInit, OnDestroy {
     this.editMode = false;
     this.subMap.set('updateRegulatorErrorTds',
       this.hydroOperationService.updateRegulatorErrorTds(this.uuid, this.getFormSettings().regulateErrorFertilizer + '').subscribe(
-        data => setTimeout(() => { this.updateInfoWithLastSettingsFromDb(); },500),
+        data => setTimeout(() => {
+          this.updateInfoWithLastSettingsFromDb();
+        }, 500),
         err => this.errorHandler.handleError(err.status, err.error)
       ));
   }
@@ -182,7 +188,9 @@ export class HydroponicSettingsComponent implements OnInit, OnDestroy {
     this.editMode = false;
     this.subMap.set('updateHydroponicDosePhUp',
       this.hydroOperationService.updateHydroponicDosePhUp(this.uuid, this.getFormSettings().phUpDoseMl + '').subscribe(
-        data => setTimeout(() => { this.updateInfoWithLastSettingsFromDb(); },500),
+        data => setTimeout(() => {
+          this.updateInfoWithLastSettingsFromDb();
+        }, 500),
         err => this.errorHandler.handleError(err.status, err.error)
       ));
   }
@@ -191,7 +199,9 @@ export class HydroponicSettingsComponent implements OnInit, OnDestroy {
     this.editMode = false;
     this.subMap.set('updateHydroponicDosePhDown',
       this.hydroOperationService.updateHydroponicDosePhDown(this.uuid, this.getFormSettings().phDownDoseMl + '').subscribe(
-        data => setTimeout(() => { this.updateInfoWithLastSettingsFromDb(); },500),
+        data => setTimeout(() => {
+          this.updateInfoWithLastSettingsFromDb();
+        }, 500),
         err => this.errorHandler.handleError(err.status, err.error)
       ));
 
@@ -201,7 +211,9 @@ export class HydroponicSettingsComponent implements OnInit, OnDestroy {
     this.editMode = false;
     this.subMap.set('updateHydroponicDoseTds',
       this.hydroOperationService.updateHydroponicDoseTds(this.uuid, this.getFormSettings().fertilizerDoseMl + '').subscribe(
-        data => setTimeout(() => { this.updateInfoWithLastSettingsFromDb(); },500),
+        data => setTimeout(() => {
+          this.updateInfoWithLastSettingsFromDb();
+        }, 500),
         err => this.errorHandler.handleError(err.status, err.error)
       ));
 
@@ -211,7 +223,9 @@ export class HydroponicSettingsComponent implements OnInit, OnDestroy {
     this.editMode = false;
     this.subMap.set('updateHydroponicDispensersRecheckTime',
       this.hydroOperationService.updateHydroponicDispensersRecheckTime(this.uuid, this.getFormSettings().recheckDispensersAfterMs + '').subscribe(
-        data => setTimeout(() => { this.updateInfoWithLastSettingsFromDb(); },500),
+        data => setTimeout(() => {
+          this.updateInfoWithLastSettingsFromDb();
+        }, 500),
         err => this.errorHandler.handleError(err.status, err.error)
       ));
 
@@ -221,7 +235,9 @@ export class HydroponicSettingsComponent implements OnInit, OnDestroy {
     this.editMode = false;
     this.subMap.set('updateHydroponicSetupPh',
       this.hydroOperationService.updateHydroponicSetupPh(this.uuid, this.getFormSettings().setupPhValue + '').subscribe(
-        data => setTimeout(() => { this.updateInfoWithLastSettingsFromDb(); },500),
+        data => setTimeout(() => {
+          this.updateInfoWithLastSettingsFromDb();
+        }, 500),
         err => this.errorHandler.handleError(err.status, err.error)
       ));
 
@@ -231,7 +247,9 @@ export class HydroponicSettingsComponent implements OnInit, OnDestroy {
     this.editMode = false;
     this.subMap.set('updateHydroponicSetupTds',
       this.hydroOperationService.updateHydroponicSetupTds(this.uuid, this.getFormSettings().setupTdsValue + '').subscribe(
-        data => setTimeout(() => { this.updateInfoWithLastSettingsFromDb(); },500),
+        data => setTimeout(() => {
+          this.updateInfoWithLastSettingsFromDb();
+        }, 500),
         err => this.errorHandler.handleError(err.status, err.error)
       ));
   }
@@ -240,7 +258,9 @@ export class HydroponicSettingsComponent implements OnInit, OnDestroy {
     this.editMode = false;
     this.subMap.set('updateHydroponicEnableDispensers',
       this.hydroOperationService.updateHydroponicEnableDispensers(this.uuid, (this.getFormSettings().dispensersEnable ? 1 : 0) + '').subscribe(
-        data => setTimeout(() => { this.updateInfoWithLastSettingsFromDb(); },500),
+        data => setTimeout(() => {
+          this.updateInfoWithLastSettingsFromDb();
+        }, 500),
         err => this.errorHandler.handleError(err.status, err.error)
       ));
   }
@@ -249,22 +269,31 @@ export class HydroponicSettingsComponent implements OnInit, OnDestroy {
     this.editMode = false;
     this.subMap.set('updateHydroponicEnableSensors',
       this.hydroOperationService.updateHydroponicEnableSensors(this.uuid, (this.getFormSettings().sensorsEnable ? 1 : 0) + '').subscribe(
-        data => setTimeout(() => { this.updateInfoWithLastSettingsFromDb(); },500),
+        data => setTimeout(() => {
+          this.updateInfoWithLastSettingsFromDb();
+        }, 500),
         err => this.errorHandler.handleError(err.status, err.error)
       ));
   }
 
   changeRestartCounter() {
     this.editMode = false;
-
-
+    this.subMap.set('updateRestartCounter',
+      this.hydroOperationService.updateRestartCounter(this.uuid, this.getFormSettings().restartCounter + '').subscribe(
+        data => setTimeout(() => {
+          this.updateInfoWithLastSettingsFromDb();
+        }, 500),
+        err => this.errorHandler.handleError(err.status, err.error)
+      ));
   }
 
   changeWifiSSID() {
     this.editMode = false;
     this.subMap.set('updateWifiSsid',
       this.hydroOperationService.updateWifiSsid(this.uuid, this.getFormSettings().wifiSSID).subscribe(
-        data => setTimeout(() => { this.updateInfoWithLastSettingsFromDb(); },500),
+        data => setTimeout(() => {
+          this.updateInfoWithLastSettingsFromDb();
+        }, 500),
         err => this.errorHandler.handleError(err.status, err.error)
       ));
 
@@ -274,7 +303,9 @@ export class HydroponicSettingsComponent implements OnInit, OnDestroy {
     this.editMode = false;
     this.subMap.set('updateWifiPassword',
       this.hydroOperationService.updateWifiPassword(this.uuid, this.getFormSettings().wifiPASS).subscribe(
-        data => setTimeout(() => { this.updateInfoWithLastSettingsFromDb(); },500),
+        data => setTimeout(() => {
+          this.updateInfoWithLastSettingsFromDb();
+        }, 500),
         err => this.errorHandler.handleError(err.status, err.error)
       ));
   }
@@ -283,7 +314,9 @@ export class HydroponicSettingsComponent implements OnInit, OnDestroy {
     this.editMode = false;
     this.subMap.set('updateZone',
       this.hydroOperationService.updateZone(this.uuid, this.getFormSettings().timeZone).subscribe(
-        data => setTimeout(() => { this.updateInfoWithLastSettingsFromDb(); },500),
+        data => setTimeout(() => {
+          this.updateInfoWithLastSettingsFromDb();
+        }, 500),
         err => this.errorHandler.handleError(err.status, err.error)
       ));
   }
@@ -292,7 +325,9 @@ export class HydroponicSettingsComponent implements OnInit, OnDestroy {
     this.editMode = false;
     this.subMap.set('updateHydroponicAutotime',
       this.hydroOperationService.updateHydroponicAutotime(this.uuid, (this.getFormSettings().autotime ? 1 : 0) + '').subscribe(
-        data => setTimeout(() => { this.updateInfoWithLastSettingsFromDb(); },500),
+        data => setTimeout(() => {
+          this.updateInfoWithLastSettingsFromDb();
+        }, 500),
         err => this.errorHandler.handleError(err.status, err.error)
       ));
   }

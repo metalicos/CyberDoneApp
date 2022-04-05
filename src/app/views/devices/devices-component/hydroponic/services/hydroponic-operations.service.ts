@@ -51,6 +51,13 @@ export class HydroponicOperationsService {
     });
   }
 
+  updateRestartCounter(uuid: string, value: string): Observable<string> {
+    return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/update/restart-counter', {}, {
+      params: new HttpParams().set('uuid', uuid).set('value', value),
+      headers: SERVER.CONTENT_TEXT_HEADERS
+    });
+  }
+
   updateRegulatorErrorTds(uuid: string, value: string): Observable<string> {
     return this.httpClient.put<string>(SERVER.backendServerUrl + '/hydroponic/control/update/regulator/error/tds', {}, {
       params: new HttpParams().set('uuid', uuid).set('value', value),

@@ -109,24 +109,4 @@ export const navItems: INavData[] = [
       },
     ]
   },
-  {
-    name: 'Сторінки',
-    url: '/pages',
-    icon: 'icon-star',
-    class: 'USER,ADMIN,OWNER',
-    children: [
-      {
-        name: 'Увійти',
-        url: '/login',
-      },
-      {
-        name: 'Зареєструватися',
-        url: '/register',
-      },
-      {
-        name: 'Змінити пароль',
-        url: '/change-password',
-      },
-    ]
-  },
 ];

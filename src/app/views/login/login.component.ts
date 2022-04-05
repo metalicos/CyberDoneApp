@@ -49,7 +49,6 @@ export class LoginComponent implements OnDestroy {
     if (event.keyCode === 13) {
       this.loginSpinner = true;
       this.loginTokenSubscription = this.accountService.login(this.logForm.value).subscribe(data => {
-          console.log(data);
           this.loginWithRetrievedToken(data.authToken);
         }, err => {
           this.errorAlert = this.errorHandler.handleError(err.status, err.error);
@@ -63,7 +62,6 @@ export class LoginComponent implements OnDestroy {
     if ('google' === provider) {
       this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID).then(
         data => {
-          console.log(data);
           this.oauthAccount = {
             id: data.id,
             idToken: data.idToken,
@@ -74,9 +72,7 @@ export class LoginComponent implements OnDestroy {
             lastName: data.lastName,
             provider: data.provider
           };
-          console.log(this.oauthAccount);
           this.accountService.loginOauth(this.oauthAccount).subscribe(tokenDto => {
-              console.log(tokenDto);
               this.loginWithRetrievedToken(tokenDto.authToken);
             }, err => {
               this.errorAlert = this.errorHandler.handleError(err.status, err.error);
@@ -85,19 +81,28 @@ export class LoginComponent implements OnDestroy {
           );
         }
       );
-
-      // this.loginTokenSubscription = this.accountService.loginOauth('google').subscribe(data => {
-      //     console.log(data);
-      //     this.loginWithRetrievedToken(data.authToken);
-      //   }, err => {
-      //     this.errorAlert = this.errorHandler.handleError(err.status, err.error);
-      //     this.loginSpinner = false;
-      //   }
-      // );
     }
     if ('facebook' === provider) {
       this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID).then(
-        data => console.log(data)
+        data => {
+          this.oauthAccount = {
+            id: data.id,
+            idToken: data.idToken,
+            authToken: data.authToken,
+            email: data.email,
+            photoUrl: data.photoUrl,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            provider: data.provider
+          };
+          this.accountService.loginOauth(this.oauthAccount).subscribe(tokenDto => {
+              this.loginWithRetrievedToken(tokenDto.authToken);
+            }, err => {
+              this.errorAlert = this.errorHandler.handleError(err.status, err.error);
+              this.loginSpinner = false;
+            }
+          );
+        }
       );
     }
   }

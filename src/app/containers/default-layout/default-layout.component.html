@@ -4,7 +4,9 @@
   [navbarBrandFull]="{src: 'assets/img/brand/favicon.png', width: 30, height: 30, alt: 'CyberDone Logo'}"
   [navbarBrandMinimized]="{src: 'assets/img/brand/favicon.png', width: 30, height: 30, alt: 'CyberDone Logo'}"
   [sidebarToggler]="'lg'"
-  [asideMenuToggler]="'lg'">
+  [asideMenuToggler]="false"
+  [mobileAsideMenuToggler]="false">
+  <!--  [asideMenuToggler]="'lg'">-->
 
   <ul class="nav navbar-nav d-md-down-none">
     <li class="nav-item px-3">
@@ -26,11 +28,11 @@
       </a>
       <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
         <div class="dropdown-header text-center"><strong>Обліковий запис</strong></div>
-        <a class="dropdown-item" href="#"><i class="fa fa-bell-o"></i> Сповіщення<span class="badge badge-info">3</span></a>
+        <!--        <a class="dropdown-item" href="#"><i class="fa fa-bell-o"></i> Сповіщення<span class="badge badge-info">3</span></a>-->
         <!--        <div class="dropdown-header text-center"><strong>Налаштування</strong></div>-->
         <a class="dropdown-item" [routerLink]="['/account/profile']"><i class="fa fa-user"></i> Профіль</a>
-        <a class="dropdown-item" href="#"><i class="fa fa-wrench"></i> Налаштування</a>
-        <a class="dropdown-item" href="#"><i class="fa fa-usd"></i> Тарифний план</a>
+        <!--        <a class="dropdown-item" href="#"><i class="fa fa-wrench"></i> Налаштування</a>-->
+        <!--        <a class="dropdown-item" href="#"><i class="fa fa-usd"></i> Тарифний план</a>-->
         <a class="dropdown-item" [routerLink]="['/logout']"><i class="fa fa-lock"></i> Вийти</a>
       </div>
     </li>
@@ -54,86 +56,86 @@
     </div>
   </main>
 
-  <app-aside [fixed]="true" [display]="false" [ngClass]="'test'">
-    <tabset>
-      <tab>
-        <ng-template tabHeading><i class="icon-settings"></i></ng-template>
-        <div class="p-3">
-          <h6>Налаштування</h6>
+  <!--  <app-aside [fixed]="true" [display]="false" [ngClass]="'test'">-->
+  <!--    <tabset>-->
+  <!--      <tab>-->
+  <!--        <ng-template tabHeading><i class="icon-settings"></i></ng-template>-->
+  <!--        <div class="p-3">-->
+  <!--          <h6>Налаштування</h6>-->
 
-          <hr>
+  <!--          <hr>-->
 
-          <div class="aside-options">
-            <div class="clearfix mt-4">
-              <small><b>Сповіщення про стан</b></small>
-              <label class="switch switch-label switch-pill switch-success switch-sm float-right">
-                <input type="checkbox" class="switch-input" checked>
-                <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
-              </label>
-            </div>
-            <div>
-              <small class="text-muted">Сповіщення на E-mail, про будь-які зміни налаштувань, у будь-яких
-                пристроях.</small>
-            </div>
-          </div>
+  <!--          <div class="aside-options">-->
+  <!--            <div class="clearfix mt-4">-->
+  <!--              <small><b>Сповіщення про стан</b></small>-->
+  <!--              <label class="switch switch-label switch-pill switch-success switch-sm float-right">-->
+  <!--                <input type="checkbox" class="switch-input" checked>-->
+  <!--                <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>-->
+  <!--              </label>-->
+  <!--            </div>-->
+  <!--            <div>-->
+  <!--              <small class="text-muted">Сповіщення на E-mail, про будь-які зміни налаштувань, у будь-яких-->
+  <!--                пристроях.</small>-->
+  <!--            </div>-->
+  <!--          </div>-->
 
-          <hr>
+  <!--          <hr>-->
 
-          <div class="aside-options">
-            <div class="clearfix mt-3">
-              <small><b>Сповіщення про оновлення</b></small>
-              <label class="switch switch-label switch-pill switch-success switch-sm float-right">
-                <input type="checkbox" class="switch-input">
-                <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
-              </label>
-            </div>
-            <div>
-              <small class="text-muted">Сповіщення на E-mail, про новий функціонал.</small>
-            </div>
-          </div>
+  <!--          <div class="aside-options">-->
+  <!--            <div class="clearfix mt-3">-->
+  <!--              <small><b>Сповіщення про оновлення</b></small>-->
+  <!--              <label class="switch switch-label switch-pill switch-success switch-sm float-right">-->
+  <!--                <input type="checkbox" class="switch-input">-->
+  <!--                <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>-->
+  <!--              </label>-->
+  <!--            </div>-->
+  <!--            <div>-->
+  <!--              <small class="text-muted">Сповіщення на E-mail, про новий функціонал.</small>-->
+  <!--            </div>-->
+  <!--          </div>-->
 
-          <hr>
+  <!--          <hr>-->
 
-        </div>
-      </tab>
+  <!--        </div>-->
+  <!--      </tab>-->
 
-      <tab>
-        <ng-template tabHeading><i class="icon-list"></i></ng-template>
-        <div class="list-group list-group-accent">
-          <div
-            class="list-group-item list-group-item-accent-secondary bg-light text-center font-weight-bold text-muted text-uppercase small">
-            Наступна регулярна подія
-          </div>
+  <!--      <tab>-->
+  <!--        <ng-template tabHeading><i class="icon-list"></i></ng-template>-->
+  <!--        <div class="list-group list-group-accent">-->
+  <!--          <div-->
+  <!--            class="list-group-item list-group-item-accent-secondary bg-light text-center font-weight-bold text-muted text-uppercase small">-->
+  <!--            Наступна регулярна подія-->
+  <!--          </div>-->
 
-          <div class="list-group-item list-group-item-accent-warning list-group-item-divider">
-            <div>Встановити Ph:
-              <strong>6.7</strong>
-            </div>
-            <div class="text-muted mr-3">Дні: Пн, Вт, Ср, Чт, Пт, Сб, Нд
-            </div>
-            <div class="text-muted mr-3">
-              <i class="cil-av-timer"></i> 15:45:22
-            </div>
-          </div>
+  <!--          <div class="list-group-item list-group-item-accent-warning list-group-item-divider">-->
+  <!--            <div>Встановити Ph:-->
+  <!--              <strong>6.7</strong>-->
+  <!--            </div>-->
+  <!--            <div class="text-muted mr-3">Дні: Пн, Вт, Ср, Чт, Пт, Сб, Нд-->
+  <!--            </div>-->
+  <!--            <div class="text-muted mr-3">-->
+  <!--              <i class="cil-av-timer"></i> 15:45:22-->
+  <!--            </div>-->
+  <!--          </div>-->
 
 
-          <div
-            class="list-group-item list-group-item-accent-secondary bg-light text-center font-weight-bold text-muted text-uppercase small">
-            Наступна одноразова подія
-          </div>
-          <div class="list-group-item list-group-item-accent-warning list-group-item-divider">
-            <div>Встановити Ph:
-              <strong>6.7</strong>
-            </div>
-            <div class="text-muted mr-3">
-              <i class="cil-calendar"></i> 03.09.2022 15:45:22
-            </div>
-          </div>
-        </div>
-      </tab>
+  <!--          <div-->
+  <!--            class="list-group-item list-group-item-accent-secondary bg-light text-center font-weight-bold text-muted text-uppercase small">-->
+  <!--            Наступна одноразова подія-->
+  <!--          </div>-->
+  <!--          <div class="list-group-item list-group-item-accent-warning list-group-item-divider">-->
+  <!--            <div>Встановити Ph:-->
+  <!--              <strong>6.7</strong>-->
+  <!--            </div>-->
+  <!--            <div class="text-muted mr-3">-->
+  <!--              <i class="cil-calendar"></i> 03.09.2022 15:45:22-->
+  <!--            </div>-->
+  <!--          </div>-->
+  <!--        </div>-->
+  <!--      </tab>-->
 
-    </tabset>
-  </app-aside>
+  <!--    </tabset>-->
+  <!--  </app-aside>-->
 </div>
 <app-footer>
   <span><a href="/">CyberDone</a> &copy; 2021</span>

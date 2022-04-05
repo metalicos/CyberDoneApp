@@ -14,7 +14,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
   deviceMetadataSub: Subscription;
   hydroDataSub: Subscription;
   hydroponicMetadataList: DeviceMetadataDto[];
-  uuidMap: Map<string, string> = new Map<string, string>();
+  relayN4MetadataList: DeviceMetadataDto[];
 
   constructor(private authStorage: AuthStorageService,
               private hydroData: HydroponicDataService,
@@ -29,30 +29,17 @@ export class DevicesComponent implements OnInit, OnDestroy {
   private generateLinkedDevicesList() {
     const user = this.authStorage.getUser();
     if (user != null) {
-      this.deviceMetadataSub = this.deviceMeta.getMetadataListByUser(user.id).subscribe(
-        data => {
-          this.hydroponicMetadataList = data.filter(m => 'HYDROPONIC_V1'.toLowerCase() === m.deviceType.toLowerCase())
-            .filter(m => {
-              this.hydroDataSub = this.hydroData.getLastDataInDeviceWithUUID(m.uuid, 1, 1).subscribe(
-                set => {
-                  if (set.length === 1) {
-                    this.uuidMap.set(set[0].uuid, set[0].uuid);
-                    console.log(this.uuidMap);
-                  }
-                },
-                err => this.errorHandler.handleError(err.status, err.error)
-              );
-              return true;
-            });
-          setTimeout(() => this.hydroponicMetadataList = this.hydroponicMetadataList
-            .filter(m => m.uuid === this.uuidMap.get(m.uuid)), 2000);
+      this.deviceMeta.getMetadataListByUser(user.id).toPromise().then(
+        metadata => {
+          const metadataArray = new Array<DeviceMetadataDto>(metadata.length);
+          metadata.forEach(m => metadataArray.push(m));
+          this.hydroponicMetadataList = metadataArray.filter(m => 'HYDROPONIC_V1'.toLowerCase() === m.deviceType.toLowerCase());
           console.log(this.hydroponicMetadataList);
-        },
-        err => this.errorHandler.handleError(err.status, err.error)
-      );
+          this.relayN4MetadataList = metadataArray.filter(m => 'RELAY_N4'.toLowerCase() === m.deviceType.toLowerCase());
+          console.log(this.relayN4MetadataList);
+        });
     }
   }
-
 
   ngOnDestroy(): void {
     setTimeout(() => {
