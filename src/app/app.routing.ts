@@ -90,6 +90,10 @@ export const routes: Routes = [
         path: 'account',
         loadChildren: () => import('./views/account/account.module').then(m => m.AccountModule)
       },
+      {
+        path: 'calibration',
+        loadChildren: () => import('./views/calibration/calibration.module').then(m => m.CalibrationModule)
+      },
     ]
   },
   {path: '**', component: P404Component}

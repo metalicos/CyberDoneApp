@@ -8,6 +8,24 @@ export interface HydroponicTimeDto {
   uuid: string;
 }
 
+export interface DatabasePhCalibrationDto {
+  uuid: string;
+  calibrationValuePoint: number;
+  calibrationReferenceValue1: number;
+  calibrationReferenceValue2: number;
+  calibrationAdcValue1: number;
+  calibrationAdcValue2: number;
+  calibrationSlope: number;
+  calibrationValueOffset: number;
+  oversampling: number;
+}
+
+export interface DatabaseTdsCalibrationDto {
+  uuid: string;
+  calibrationCoefficientValue: number;
+  oversampling: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -255,6 +273,18 @@ export class HydroponicControlService {
         headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('value', value)
       }
+    );
+  }
+
+  updatePhCalibrationFromDatabase(databasePhCalibrationDto: DatabasePhCalibrationDto) {
+    return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/calibrate/ph/database', databasePhCalibrationDto,
+      {headers: SERVER.CONTENT_JSON_HEADERS}
+    );
+  }
+
+  updateTdsCalibrationFromDatabase(databaseTdsCalibrationDto: DatabaseTdsCalibrationDto) {
+    return this.http.put(SERVER.backendServerUrl + '/hydroponic/control/calibrate/tds/database', databaseTdsCalibrationDto,
+      {headers: SERVER.CONTENT_JSON_HEADERS}
     );
   }
 }

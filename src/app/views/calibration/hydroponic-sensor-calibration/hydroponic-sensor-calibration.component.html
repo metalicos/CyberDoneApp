@@ -1,0 +1,96 @@
+<div class="d-block d-md-flex">
+  <form [formGroup]="phSensorCalibrationForm" class="card col-12 col-md-4 pb-3 rounded-0">
+    <h4 class="text-center my-2">Калібрування сенсора PH</h4>
+
+    <div class="card-body p-0">
+      <div class="input-group">
+        <h6 class="col-8 form-text text-left bg-dark py-2 my-0">Поточне значення PH:</h6>
+        <h6
+          class="col-4 form-text text-right bg-dark py-2 my-0">{{currentHydroponicData.phValue < 0 ? 0 : (currentHydroponicData.phValue > 10 ? 10 : currentHydroponicData.phValue)}}
+          pH</h6>
+
+        <h6 class="col-8 form-text text-left bg-dark py-2 my-0">Поточне значення T:</h6>
+        <h6 class="col-4 form-text text-right bg-dark py-2 my-0">{{currentHydroponicData.temperatureValue}} °С</h6>
+      </div>
+        <h6 class="col-12 form-text text-center bg-secondary py-2 my-0">Еталоний розчин (low - перша точка)</h6>
+      <div class="input-group">
+        <input #calibrateLow type="number" formControlName="mlPerMillisecond" step="1" min="0" max="10"
+               class="form-control rounded-0 border-dark col-6 h-auto"
+               value="4.01">
+        <button class="btn btn-dark rounded-0 border-dark shadow-none col-6" data-bs-toggle="tooltip"
+                data-bs-placement="top" title="Калібрувати сенсор"
+                (click)="calibrateLowPoint(calibrateLow.value)">
+          Калібрувати
+        </button>
+        <h6 class="col-12 form-text text-center bg-secondary py-2 my-0">Еталоний розчин (high - друга точка)</h6>
+      </div>
+      <div class="input-group">
+        <input #calibrateHigh type="number" formControlName="mlPerMillisecond"
+               class="form-control rounded-0 border-dark col-6 h-auto" step="1" min="0" max="10"
+               value="6.86">
+        <button class="btn btn-dark rounded-0 border-dark shadow-none col-6" data-bs-toggle="tooltip"
+                data-bs-placement="top" title="Калібрувати сенсор"
+                (click)="calibrateHighPoint(calibrateHigh.value)">
+          Калібрувати
+        </button>
+      </div>
+
+      <div class="input-group">
+        <button class="btn btn-success rounded-0 border-dark shadow-none col-6" data-bs-toggle="tooltip"
+                data-bs-placement="top" title="Зберегти калібрування"
+                (click)="saveCalibrationData()">
+          Зберегти калібрування
+        </button>
+        <button class="btn btn-danger rounded-0 border-dark shadow-none col-6" data-bs-toggle="tooltip"
+                data-bs-placement="top" title="Скасувати калібрування"
+                (click)="clearPhCalibration()">
+          Скасувати калібрування
+        </button>
+      </div>
+    </div>
+
+  </form>
+</div>
+<div class="d-block d-md-flex">
+  <form [formGroup]="phSensorCalibrationForm" class="card col-12 col-md-4 pb-3 rounded-0">
+    <h4 class="text-center my-2">Калібрування сенсора TDS</h4>
+
+    <div class="card-body p-0">
+      <div class="input-group">
+        <h6 class="col-8 form-text text-left bg-dark py-2 my-0">Поточне значення TDS:</h6>
+        <h6
+          class="col-4 form-text text-right bg-dark py-2 my-0">{{currentHydroponicData.tdsValue < 0 ? 0 : (currentHydroponicData.tdsValue > 10 ? 10 : currentHydroponicData.tdsValue)}}
+          ppm</h6>
+
+        <h6 class="col-8 form-text text-left bg-dark py-2 my-0">Поточне значення T:</h6>
+        <h6 class="col-4 form-text text-right bg-dark py-2 my-0">{{currentHydroponicData.temperatureValue}} °С</h6>
+      </div>
+
+        <h6 class="col-12 form-text text-center bg-secondary py-2 my-0">Еталоний розчин TDS (температура 25 °С)</h6>
+      <div class="input-group">
+        <input #calibrateTds type="number" formControlName="mlPerMillisecond"
+               class="form-control rounded-0 border-dark col-6 h-auto" step="1" min="1" max="2000"
+               value="1000">
+        <button class="btn btn-dark rounded-0 border-dark shadow-none col-6" data-bs-toggle="tooltip"
+                data-bs-placement="top" title="Калібрувати сенсор"
+                (click)="calibrateLowPoint(calibrateTds.value)">
+          Калібрувати
+        </button>
+      </div>
+
+      <div class="input-group">
+        <button class="btn btn-success rounded-0 border-dark shadow-none col-6" data-bs-toggle="tooltip"
+                data-bs-placement="top" title="Зберегти калібрування"
+                (click)="saveCalibrationData()">
+          Зберегти калібрування
+        </button>
+        <button class="btn btn-danger rounded-0 border-dark shadow-none col-6" data-bs-toggle="tooltip"
+                data-bs-placement="top" title="Скасувати калібрування"
+                (click)="clearTdsCalibration()">
+          Скасувати калібрування
+        </button>
+      </div>
+    </div>
+
+  </form>
+</div>

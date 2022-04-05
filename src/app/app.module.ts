@@ -83,7 +83,7 @@ const APP_CONTAINERS = [
     authInterceptorProviders,
     {
       provide: LocationStrategy,
-      useClass: HashLocationStrategy,
+      useClass: HashLocationStrategy, // PathLocationStrategy,
     },
     {
       provide: 'SocialAuthServiceConfig',

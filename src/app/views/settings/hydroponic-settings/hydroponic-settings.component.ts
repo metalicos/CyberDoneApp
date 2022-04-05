@@ -19,26 +19,6 @@ export class HydroponicSettingsComponent implements OnInit, OnDestroy {
   currentSettings: HydroponicSettingsDto;
   hydroSettForm: any;
   editMode: boolean = false;
-  // lockMap: Map<string, boolean> = new Map<string, boolean>([
-  //   ['mlPerMillisecond', true],
-  //   ['regulateErrorPh', true],
-  //   ['regulateErrorFertilizer', true],
-  //   ['phUpDoseMl', true],
-  //   ['phDownDoseMl', true],
-  //   ['fertilizerDoseMl', true],
-  //   ['recheckDispensersAfterMs', true],
-  //   ['setupPhValue', true],
-  //   ['setupTdsValue', true],
-  //   ['setupTemperatureValue', true],
-  //   ['deviceEnable', true],
-  //   ['dispensersEnable', true],
-  //   ['sensorsEnable', true],
-  //   ['restartCounter', true],
-  //   ['wifiSSID', true],
-  //   ['wifiPASS', true],
-  //   ['autotime', true],
-  //   ['timeZone', true],
-  // ]);
 
   lockMap: Map<string, any> = new Map<string, any>([
     ['mlPerMillisecond', {}],
