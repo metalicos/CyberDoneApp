@@ -40,7 +40,7 @@ export class DeviceMetadataService {
   }
 
   createMetadata(deviceMetadataDto: DeviceMetadataDto) {
-    return this.http.post(SERVER.backendServerUrl + '/device/metadata', deviceMetadataDto,
+    return this.http.post<DeviceMetadataDto>(SERVER.backendServerUrl + '/device/metadata', deviceMetadataDto,
       {
         headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams()
@@ -49,10 +49,20 @@ export class DeviceMetadataService {
   }
 
   updateMetadata(uuid: string, name: string, description: string) {
-    return this.http.patch(SERVER.backendServerUrl + '/device/metadata', {},
+    return this.http.put(SERVER.backendServerUrl + '/device/metadata', {},
       {
         headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams().set('uuid', uuid).set('name', name).set('description', description)
+      }
+    );
+  }
+
+  updateDeviceImage(uuid: string, file: FormData) {
+    return this.http.put<DeviceMetadataDto>(
+      SERVER.backendServerUrl + '/device/metadata/' + uuid + '/image',
+      file,
+      {
+        responseType: 'json'
       }
     );
   }

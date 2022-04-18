@@ -65,8 +65,10 @@ export class HydroponicSensorCalibrationComponent implements OnInit, OnDestroy {
   }
 
   clearTdsCalibration() {
-    this.hydroponicControlService.clrCalibrationTdsSensor(this.uuid).toPromise().then(calibration => console.log(calibration),
+    this.hydroponicControlService.updateDispensersEnable(this.uuid, 0 + '').toPromise().then(calibration => console.log(calibration),
       err => this.errorHandler.handleError(err.status, err.error));
+    // this.hydroponicControlService.clrCalibrationTdsSensor(this.uuid).toPromise().then(calibration => console.log(calibration),
+    //   err => this.errorHandler.handleError(err.status, err.error));
   }
 
   saveCalibrationData() {
@@ -75,7 +77,9 @@ export class HydroponicSensorCalibrationComponent implements OnInit, OnDestroy {
   }
 
   clearPhCalibration() {
-    this.hydroponicControlService.clrCalibrationPhSensor(this.uuid).toPromise().then(calibration => console.log(calibration),
+    this.hydroponicControlService.updateDispensersEnable(this.uuid, 1 + '').toPromise().then(calibration => console.log(calibration),
       err => this.errorHandler.handleError(err.status, err.error));
+    // this.hydroponicControlService.clrCalibrationPhSensor(this.uuid).toPromise().then(calibration => console.log(calibration),
+    //   err => this.errorHandler.handleError(err.status, err.error));
   }
 }

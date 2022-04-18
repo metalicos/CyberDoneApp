@@ -1,17 +1,19 @@
+<alert [type]="errorAlert.type" *ngIf="errorAlert">{{errorAlert.msg}}</alert>
 <div class="d-block d-md-flex">
-  <alert [type]="errorAlert.type" *ngIf="errorAlert">{{errorAlert.msg}}</alert>
   <div class="card rounded-0 bg-light col-12 col-md-4 p-1 m-0 mb-auto">
+    <p class="h6 text-uppercase my-2 py-0">Додати новий пристрій</p>
+    <!-- Додавання власного пристрою -->
     <div class="card-body p-0 m-0 flex-grow-0">
       <form [formGroup]="deviceMetadataForm"
             class="justify-content-between">
         <div class="d-block d-md-flex">
           <!-- Картинка пристрою-->
           <div>
-            <input #deviceImageInput type="file" (change)="onDeviceImageSelected(uuid, $event)" hidden>
+            <input #deviceImageInput type="file" (change)="onDeviceImageAfterFormCompletionSelected($event)" hidden>
             <button class="btn btn-transparent rounded-0 device-image-btn m-auto p-0"
                     [disabled]="uuid.invalid || name.invalid || description.invalid"
                     (click)="deviceImageInput.click()">
-              <img src="assets/img/photo-camera-squared.svg" alt="Device Image" class="device-image" #imageElement
+              <img src="{{deviceImage}}" alt="Device Image" class="device-image"
                    [class.img-blinking]="!(uuid.invalid || name.invalid || description.invalid)">
             </button>
           </div>
@@ -41,6 +43,7 @@
               Введений вами UUID пристрою містить помилку.
             </div>
             <button class="form-control form-control-sm btn btn-sm btn-dark font-weight-bold rounded-0 mt-1"
+                    (click)="linkDeviceToUser()"
                     [disabled]="uuid.invalid || name.invalid || description.invalid">
               Додати новий пристрій
             </button>
@@ -48,41 +51,86 @@
         </div>
       </form>
     </div>
+    <!-- Кінець Додавання власного пристрою -->
+
+    <p class="h6 text-uppercase my-2 py-0">Створити запит на керування чужим пристроєм</p>
+    <!-- Запит на керування чужим пристроєм -->
+    <div class="card-body p-0 m-0 flex-grow-0">
+      <form [formGroup]="delegateControlRequest"
+            class="justify-content-between">
+        <div class="d-block d-md-flex">
+          <div class="flex-grow-1 pl-1">
+            <input formControlName="comment"
+                   [class.is-invalid]="delegatedDeviceComment.invalid && delegatedDeviceComment.touched"
+                   class="form-control form-control-sm font-weight-bold rounded-0 mt-1"
+                   type="text" placeholder="Додайте коментар. Чому ви бажаєте отримати контроль над пристроєм?">
+            <div class="invalid-feedback text-right" *ngIf="delegatedDeviceComment.errors?.required">
+              Це поле є обов'язковим для введення.
+            </div>
+
+            <input formControlName="uuid"
+                   [class.is-invalid]="delegatedDeviceUuid.invalid && delegatedDeviceUuid.touched"
+                   class="form-control form-control-sm font-weight-bold rounded-0 mt-1"
+                   type="text" placeholder="Введіть UUID пристрою для якого виконуєте запит дозволу на керування.">
+            <div class="invalid-feedback text-right" *ngIf="delegatedDeviceUuid.errors?.required">
+              Це поле є обов'язковим для введення.
+            </div>
+            <div class="invalid-feedback text-right" *ngIf="delegatedDeviceUuid.errors?.pattern">
+              Введений вами UUID пристрою містить помилку.
+            </div>
+            <button class="form-control form-control-sm btn btn-sm btn-dark font-weight-bold rounded-0 mt-1"
+                    (click)="sendDelegatedControlRequest()"
+                    [disabled]="delegatedDeviceUuid.invalid || delegatedDeviceComment.invalid">
+              Надіслати запит на дозвіл керування пристроєм його власнику
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <!-- Кінець Запит на керування чужим пристроєм -->
   </div>
 
+  <!-- Ваші пристрої -->
   <div class="card rounded-0 bg-light col-12 col-md-4 pb-1 pl-1 pr-1 pt-0 m-0">
+    <p class="h6 text-uppercase my-2 py-0">Мої пристрої</p>
     <p class="h5 text-center p-3" [hidden]="metadataList.length > 0">Нажаль, Ви ще не додали жодного пристрою 😟</p>
     <div class="card-body mb-0 ml-0 mr-0 mt-1 p-0" *ngFor="let meta of metadataList">
       <div class="d-flex justify-content-between align-content-center">
         <!-- Картинка пристрою-->
         <div class="">
-          <input #deviceImageInput type="file" (change)="onDeviceImageSelected('meta.uuid', $event)" hidden>
+          <input #deviceImageInput type="file" (change)="changeDeviceImage(meta.uuid, $event)" hidden>
           <button class="btn btn-transparent rounded-0 device-image-btn m-auto p-0"
                   (click)="deviceImageInput.click()">
             <img
-              src="{{meta.deviceImage !== null && meta.deviceImage !== undefined ? meta.deviceImage : 'assets/img/photo-camera-squared.svg'}}"
+              src="{{meta.deviceImage !== null && meta.deviceImage !== undefined ? imageBase64 + meta.deviceImage : 'assets/img/photo-camera-squared.svg'}}"
               alt="Device Image" class="device-image">
           </button>
         </div>
         <!--     Кінець Картинка пристрою-->
-        <div class="my-auto pb-0 pt-0 pl-1 pr-0 col-6 col-md-8">
+        <form [formGroup]="metadataFormMap.get(meta)" class="my-auto pb-0 pt-0 pl-1 pr-0 col-6 col-md-8">
           <div class="input-group">
-            <input class="form-control form-control-sm font-weight-bold"
+            <input formControlName="name" #name
+                   class="form-control form-control-sm font-weight-bold"
                    type="text"
                    placeholder="Назва пристрою"
-                   value="{{meta.name}}" disabled>
+                   value="{{metadataFormMap.get(meta).value.name}}" disabled>
             <button class="btn btn-transparent btn-icon rounded-0" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Редагувати назву пристрою">
+                    title="Редагувати назву пристрою"
+                    (click)="name.disabled = !name.disabled;
+                      changeDeviceMetadataOnDisabled(name.disabled, metadataFormMap.get(meta).value)">
               <i class="fa fa-edit text-dark"></i>
             </button>
           </div>
           <div class="input-group">
-            <input class="form-control form-control-sm font-weight-bold"
+            <input formControlName="description" #description
+                   class="form-control form-control-sm font-weight-bold"
                    type="text"
                    placeholder="Опис пристрою"
-                   value="{{meta.description}}" disabled>
+                   value="{{metadataFormMap.get(meta).value.description}}" disabled>
             <button class="btn btn-transparent btn-icon rounded-0" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Редагувати опис пристрою">
+                    title="Редагувати опис пристрою"
+                    (click)="description.disabled = !description.disabled;
+                      changeDeviceMetadataOnDisabled(description.disabled, metadataFormMap.get(meta).value)">
               <i class="fa fa-edit text-dark"></i>
             </button>
           </div>
@@ -90,13 +138,121 @@
             <input class="form-control form-control-sm font-weight-bold"
                    type="text"
                    placeholder="UUID пристрою"
-                   value="{{meta.uuid}}" disabled>
-            <button class="btn btn-transparent btn-icon rounded-0" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Детальна інформація про пристрій">
-              <i class="fa fa-info text-dark"></i>
+                   value="{{metadataFormMap.get(meta).value.uuid}}" disabled>
+            <button class="btn btn-transparent btn-icon rounded-0"
+                    (click)="copyMessage(metadataFormMap.get(meta).value.uuid)"
+                    data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Копіювати">
+              <i class="fa fa-copy text-dark"></i>
             </button>
           </div>
+        </form>
+        <div class="my-auto">
+          <button class="btn btn-transparent btn-icon rounded-0" data-bs-toggle="tooltip" data-bs-placement="top"
+                  title="Видалити пристрій" (click)="deleteDeviceModal.show()">
+            <i class="fa fa-trash text-dark"></i>
+          </button>
         </div>
+        <div bsModal #deleteDeviceModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+             aria-labelledby="myModalLabel"
+             aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title text-dark">Ви впевнені, що хочете видалити пристрій з вашого акаунту?</h4>
+                <button type="button" class="close" (click)="deleteDeviceModal.hide();"
+                        aria-label="Закрити">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body btn-group">
+                <button class="btn btn-sm btn-primary form-control" (click)="deleteDeviceModal.hide()">Скасувати
+                </button>
+                <button class="btn btn-sm btn-danger form-control" (click)="unlinkDevice(meta.uuid)">Видалити</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="bg-grey py-1 mt-1" [hidden]="metadataList.length < 5">
+      <ul class="pagination rounded-0 my-0 p-0 justify-content-center">
+        <li class="page-item rounded-0">
+          <a class="page-link rounded-0" href="#" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <li class="page-item rounded-0"><a class="page-link">1</a></li>
+        <li class="page-item rounded-0"><a class="page-link">2</a></li>
+        <li class="page-item rounded-0 active"><a class="page-link">3</a></li>
+        <li class="page-item rounded-0">
+          <a class="page-link rounded-0" href="#" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <!-- Кінець ваші пристрої -->
+
+  <!-- Запити на керування чужими пристроями -->
+  <div class="card rounded-0 bg-light col-12 col-md-4 pb-1 pl-1 pr-1 pt-0 m-0">
+    <p class="h6 text-uppercase my-2 py-0">Запити на керування чужими пристроями</p>
+    <p class="h5 text-center p-3" [hidden]="metadataList.length > 0">Нажаль, Ви ще не додали жодного пристрою 😟</p>
+    <div class="card-body mb-0 ml-0 mr-0 mt-1 p-0" *ngFor="let meta of metadataList">
+      <div class="d-flex justify-content-between align-content-center">
+        <!-- Картинка пристрою-->
+        <div class="">
+          <input #deviceImageInput type="file" (change)="changeDeviceImage(meta.uuid, $event)" hidden>
+          <button class="btn btn-transparent rounded-0 device-image-btn m-auto p-0"
+                  (click)="deviceImageInput.click()">
+            <img
+              src="{{meta.deviceImage !== null && meta.deviceImage !== undefined ? imageBase64 + meta.deviceImage : 'assets/img/photo-camera-squared.svg'}}"
+              alt="Device Image" class="device-image">
+          </button>
+        </div>
+        <!--     Кінець Картинка пристрою-->
+        <form [formGroup]="metadataFormMap.get(meta)" class="my-auto pb-0 pt-0 pl-1 pr-0 col-6 col-md-8">
+          <div class="input-group">
+            <input formControlName="name" #name
+                   class="form-control form-control-sm font-weight-bold"
+                   type="text"
+                   placeholder="Назва пристрою"
+                   value="{{metadataFormMap.get(meta).value.name}}" disabled>
+            <button class="btn btn-transparent btn-icon rounded-0" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Редагувати назву пристрою"
+                    (click)="name.disabled = !name.disabled;
+                      changeDeviceMetadataOnDisabled(name.disabled, metadataFormMap.get(meta).value)">
+              <i class="fa fa-edit text-dark"></i>
+            </button>
+          </div>
+          <div class="input-group">
+            <input formControlName="description" #description
+                   class="form-control form-control-sm font-weight-bold"
+                   type="text"
+                   placeholder="Опис пристрою"
+                   value="{{metadataFormMap.get(meta).value.description}}" disabled>
+            <button class="btn btn-transparent btn-icon rounded-0" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Редагувати опис пристрою"
+                    (click)="description.disabled = !description.disabled;
+                      changeDeviceMetadataOnDisabled(description.disabled, metadataFormMap.get(meta).value)">
+              <i class="fa fa-edit text-dark"></i>
+            </button>
+          </div>
+          <div class="input-group">
+            <input class="form-control form-control-sm font-weight-bold"
+                   type="text"
+                   placeholder="UUID пристрою"
+                   value="{{metadataFormMap.get(meta).value.uuid}}" disabled>
+            <button class="btn btn-transparent btn-icon rounded-0"
+                    (click)="copyMessage(metadataFormMap.get(meta).value.uuid)"
+                    data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Копіювати">
+              <i class="fa fa-copy text-dark"></i>
+            </button>
+          </div>
+        </form>
         <div class="my-auto">
           <button class="btn btn-transparent btn-icon rounded-0" data-bs-toggle="tooltip" data-bs-placement="top"
                   title="Видалити пристрій" (click)="deleteDeviceModal.show()">
