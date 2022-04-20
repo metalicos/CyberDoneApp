@@ -35,15 +35,13 @@ export class DelegateDeviceControlService {
   constructor(private http: HttpClient) {
   }
 
-  getDelegatedDeviceControlForUserByToken(page: number, size: number, direction: string, sortBy: string) {
+  getDelegatedDeviceControlForUserByToken(page: number, size: number) {
     return this.http.get<PageableDelegatedDeviceControlDto>(SERVER.backendServerUrl + '/delegated-device-controls/self',
       {
         headers: SERVER.CONTENT_JSON_HEADERS,
         params: new HttpParams()
           .set('page', page + '')
           .set('size', size + '')
-          .set('direction', direction)
-          .set('sortBy', sortBy)
       }
     );
   }

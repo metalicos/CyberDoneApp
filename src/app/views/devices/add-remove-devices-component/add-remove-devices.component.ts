@@ -4,7 +4,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UUID_PATTERN} from '../../../services/validator-utils.service';
 import {ErrorHandlerService} from '../../../services/error-handle.service';
 import {DeviceMetadataDto, DeviceMetadataService} from '../../../services/device-metadata.service';
-import {DelegateDeviceControlService} from '../../../services/delegate-device-control.service';
+import {DelegateDeviceControlService, PageableDelegatedDeviceControlDto} from '../../../services/delegate-device-control.service';
 
 @Component({
   selector: 'app-add-remove-devices-component',
@@ -17,6 +17,10 @@ export class AddRemoveDevicesComponent implements OnInit {
   metadataFormMap: Map<DeviceMetadataDto, FormGroup> = new Map<DeviceMetadataDto, FormGroup>();
   deviceMetadataForm: any;
   delegateControlRequest: any;
+  pageableDelegatedDevice: PageableDelegatedDeviceControlDto;
+  elements: number = 2;
+  page: number = 0;
+  items = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'];
   imageBase64: string = 'data:image/png;base64,';
   deviceImage: string = 'assets/img/photo-camera-squared.svg';
 
@@ -99,8 +103,18 @@ export class AddRemoveDevicesComponent implements OnInit {
             description: [meta.description, [Validators.required]],
           }));
         }
-        console.log(this.metadataList);
-        console.log(this.metadataFormMap);
+      },
+      err => {
+        console.log(err);
+        this.errorAlert = this.errorHandler.handleError(err.status, err.error);
+        this.generateLinkedDevicesList();
+      });
+
+
+    this.delegateDeviceControlService.getDelegatedDeviceControlForUserByToken(this.page, this.elements).toPromise().then(
+      data => {
+        this.pageableDelegatedDevice = data;
+        console.log(this.pageableDelegatedDevice);
       },
       err => {
         console.log(err);
@@ -160,5 +174,16 @@ export class AddRemoveDevicesComponent implements OnInit {
     this.delegateDeviceControlService.createDelegatedDeviceControl(form.comment, form.uuid).toPromise().then(
       data => this.generateLinkedDevicesList(),
       err => this.errorAlert = this.errorHandler.handleError(err.status, err.error));
+  }
+
+  setDelegatedDeviceElementsOnPage(value: number) {
+    this.elements = value;
+    this.generateLinkedDevicesList();
+  }
+
+  delegatePaginationChange(event) {
+    console.log(this.pageableDelegatedDevice.totallyPages);
+    this.page = event - 1;
+    this.generateLinkedDevicesList();
   }
 }

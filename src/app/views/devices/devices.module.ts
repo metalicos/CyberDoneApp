@@ -8,7 +8,7 @@ import {
   NgbButtonsModule,
   NgbCollapseModule,
   NgbDatepickerModule,
-  NgbDropdownModule,
+  NgbDropdownModule, NgbPaginationModule,
   NgbTimepickerModule,
   NgbTooltipModule,
   NgbTypeaheadModule
@@ -40,6 +40,7 @@ import {AlertModule} from 'ngx-bootstrap/alert';
     ReactiveFormsModule,
     AlertModule,
     FormsModule,
+    NgbPaginationModule,
   ],
   declarations: [
     DevicesComponent,
